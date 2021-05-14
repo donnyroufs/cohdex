@@ -2,7 +2,7 @@ import { Box, Heading, Text } from '@chakra-ui/layout'
 
 export const Welcome = () => (
   <Box
-    pos="absolute"
+    pos={{ base: 'static', md: 'absolute' }}
     top="16"
     left="-10"
     zIndex="3"
@@ -10,6 +10,7 @@ export const Welcome = () => (
     borderColor="primary.600"
     paddingLeft={6}
     paddingY={4}
+    mb={{ base: '2rem', md: '0' }}
   >
     <Heading
       color="primary.400"

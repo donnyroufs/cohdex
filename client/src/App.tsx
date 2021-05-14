@@ -14,11 +14,14 @@ function App() {
     >
       <Box pos="relative">
         <Box
+          // display={{ base: 'none', md: 'block' }}
           alt="coh2 wallpaper"
           background="radial-gradient(40.26% 51.11% at 50% 50%, rgba(15, 18, 24, 0) 0%, #0a0c10 100%), url(landing-img.png)"
           opacity="0.45"
-          width="1280px"
-          height="720px"
+          width={{ lg: '960px', xl: '1280px' }}
+          height={{ lg: '500px', xl: '720px' }}
+          // width="1280px"
+          // height="720px"
         ></Box>
         <Welcome />
         <Menu />

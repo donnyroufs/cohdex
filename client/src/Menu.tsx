@@ -2,7 +2,7 @@ import { Box, Link } from '@chakra-ui/layout'
 
 export const Menu = () => (
   <Box
-    pos="absolute"
+    pos={{ base: 'static', md: 'absolute' }}
     bottom="24"
     right="5"
     zIndex="3"
