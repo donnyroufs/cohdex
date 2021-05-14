@@ -1,8 +1,5 @@
 declare module '@kondah/core' {
-  interface AppContext {
-    welcome(): void
-  }
-
+  // interface AppContext {}
   // interface IAppConfig {}
 }
 
