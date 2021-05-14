@@ -24,6 +24,8 @@ export const Menu = () => (
         w="100%"
         display="flex"
         justifyContent="center"
+        fontFamily="play"
+        letterSpacing="wider"
         alignItems="center"
         _hover={{
           textDecor: 'none',
@@ -33,12 +35,14 @@ export const Menu = () => (
         register
       </Link>
       <Link
+        fontFamily="play"
         textDecoration="none"
         href="/"
         textTransform="uppercase"
         backgroundColor="transparent"
         border="2px"
         borderColor="primary.600"
+        letterSpacing="wider"
         fontWeight="bold"
         color="vintage.100"
         fontSize="xl"

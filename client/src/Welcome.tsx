@@ -14,7 +14,7 @@ export const Welcome = () => (
     <Heading
       color="primary.400"
       textTransform="uppercase"
-      mb={2}
+      mb={4}
       fontSize="xxx-large"
       letterSpacing="wider"
     >
