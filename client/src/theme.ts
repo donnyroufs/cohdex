@@ -37,7 +37,7 @@ export const theme = extendTheme({
       600: '#4a5266',
       700: '#353b48',
       800: '#1f232b',
-      900: '#0a0c10',
+      900: '#0a0c10', // !
     },
     vintage: {
       50: '#f8f0f2',
@@ -67,6 +67,7 @@ export const theme = extendTheme({
   components: {
     Text: {
       baseStyle: {
+        lineHeight: '165%',
         color: 'text.600',
       },
     },
