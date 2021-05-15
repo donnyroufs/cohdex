@@ -1,10 +1,25 @@
 import { HttpContext } from '@kondah/http-context'
-import { Controller, Get } from '@kondah/http-controller'
+import { Controller, Delete, Get, Middleware } from '@kondah/http-controller'
 
-@Controller()
+import { Request, Response } from 'express'
+import passport from 'passport'
+
+@Controller('/auth')
 export class AuthController {
-  @Get('/')
-  index(httpContext: HttpContext) {
-    httpContext.res.send('hello from kondah!')
+  @Get('/login')
+  @Middleware([passport.authenticate('steam')])
+  login(ctx: HttpContext) {}
+
+  @Delete('/logout')
+  logout(ctx: HttpContext) {
+    ctx.req.logout()
+    ctx.res.sendStatus(204)
   }
+
+  @Get('/callback')
+  @Middleware([
+    passport.authenticate('steam'),
+    (req: Request, res: Response) => res.redirect(process.env.REDIRECT_URI),
+  ])
+  callback(ctx: HttpContext) {}
 }
