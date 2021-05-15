@@ -4,16 +4,19 @@
   "main": "bootstrap.ts",
   "author": "kondah",
   "scripts": {
-    "dev": "ts-node-dev --respawn --transpile-only --no-notify src/bootstrap.ts",
+    "dev": "ts-node-dev --respawn --transpile-only --no-notify --exit-child src/bootstrap.ts",
     "migrate": "prisma migrate dev",
     "test": "jest --collect-coverage",
     "test:watch": "jest --watch",
-    "lint": "eslint . --ext .ts"
+    "lint": "eslint . --ext .ts",
+    "gen:env": "npx gen-env-types .env"
   },
   "license": "MIT",
   "devDependencies": {
     "@types/connect-redis": "^0.0.16",
+    "@types/cookie-parser": "^1.4.2",
     "@types/cors": "^2.8.10",
+    "@types/csurf": "^1.11.1",
     "@types/express-session": "^1.17.3",
     "@types/jest": "^26.0.23",
     "@types/morgan": "^1.9.2",

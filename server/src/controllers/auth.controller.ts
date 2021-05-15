@@ -3,6 +3,7 @@ import { Controller, Delete, Get, Middleware } from '@kondah/http-controller'
 
 import { Request, Response } from 'express'
 import passport from 'passport'
+import { isAuthGuard } from '../plugins/is-auth.guard'
 
 @Controller('/auth')
 export class AuthController {
@@ -22,4 +23,14 @@ export class AuthController {
     (req: Request, res: Response) => res.redirect(process.env.REDIRECT_URI),
   ])
   callback(ctx: HttpContext) {}
+
+  @Get('/me')
+  @Middleware([isAuthGuard])
+  async me({ req, res }: HttpContext) {
+    res.json({
+      data: {
+        user: req.user,
+      },
+    })
+  }
 }
