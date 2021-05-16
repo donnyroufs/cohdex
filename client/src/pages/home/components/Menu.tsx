@@ -29,7 +29,7 @@ export const Menu = () => {
         <Box animation={animation} opacity={0} transform="translate(30%)">
           <Link
             textDecoration="none"
-            href="#disabled"
+            href="http://localhost:5000/api/v1/auth/login"
             textTransform="uppercase"
             backgroundColor="primary.600"
             color="vintage.100"
