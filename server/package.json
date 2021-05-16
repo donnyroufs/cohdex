@@ -44,9 +44,9 @@
     ]
   },
   "dependencies": {
-    "@kondah/core": "latest",
-    "@kondah/http-context": "latest",
-    "@kondah/http-controller": "latest",
+    "@kondah/core": "0.0.9",
+    "@kondah/http-context": "0.0.6",
+    "@kondah/http-controller": "0.0.9",
     "@prisma/client": "^2.22.1",
     "connect-redis": "^5.2.0",
     "cookie-parser": "^1.4.5",

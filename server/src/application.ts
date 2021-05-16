@@ -7,7 +7,7 @@ export class Application extends Kondah {
   protected async configureServices(services: Energizor) {}
 
   protected async setup({ server, addControllers }: AppContext) {
-    await addControllers()
+    await addControllers('/api/v1')
     server.run(5000)
   }
 }

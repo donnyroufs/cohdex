@@ -504,31 +504,31 @@
     "@types/yargs" "^15.0.0"
     chalk "^4.0.0"
 
-"@kondah/core@^0.0.8", "@kondah/core@latest":
-  version "0.0.8"
-  resolved "https://registry.yarnpkg.com/@kondah/core/-/core-0.0.8.tgz#e21916076eb2cb4739c874d78dc627be7bddc42f"
-  integrity sha512-oBdWL1WK3ghlmEYk/yOjFyaAr3/axejBXHIG+c7ahABM8I6Gm+WDn1HleCf4mrF/7RoQZ8wquezzfflMcRRiWw==
+"@kondah/core@0.0.9", "@kondah/core@^0.0.9":
+  version "0.0.9"
+  resolved "https://registry.yarnpkg.com/@kondah/core/-/core-0.0.9.tgz#2f76aa9a39c0e30c0c5a62c7f781e1d014824208"
+  integrity sha512-t+4vUGhxxLqwZ2JsRtYbuRaCXhE0aJwwX6oVVrgODwJ0VK+uztuxUZoxi/yBBFwRkzjjlL/6DppRkUS7THyLUg==
   dependencies:
     "@types/express" "^4.17.11"
     chalk "^4.1.1"
     express "^4.17.1"
     reflect-metadata "^0.1.13"
 
-"@kondah/http-context@^0.0.5", "@kondah/http-context@latest":
-  version "0.0.5"
-  resolved "https://registry.yarnpkg.com/@kondah/http-context/-/http-context-0.0.5.tgz#1f50a5d286d086b998bb2f009441d41c83696597"
-  integrity sha512-BqYeoLWQr0uPocVYlKDb2HILwzxxY7LXuVKmZ/Ag7ue7tnf8sbQ2zOL4e2Kuc6ePVAhdcavxYnZ/AgyUqNKH9A==
+"@kondah/http-context@0.0.6", "@kondah/http-context@^0.0.6":
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/@kondah/http-context/-/http-context-0.0.6.tgz#0f011cdb25b084a46e30ba5d2428f0b679f0d7e4"
+  integrity sha512-3z2aPn2EYoFtqtpAIxqNE71dhAFn8L7N1xusehhxT8rpVQMyvRWyti++A87sutD3rLMJ1+cMbO5IOIUMZ7ZEvQ==
   dependencies:
-    "@kondah/core" "^0.0.8"
+    "@kondah/core" "^0.0.9"
     reflect-metadata "^0.1.13"
 
-"@kondah/http-controller@latest":
-  version "0.0.8"
-  resolved "https://registry.yarnpkg.com/@kondah/http-controller/-/http-controller-0.0.8.tgz#133d852bce0a4c4167d72e1f59fe0e6a250fb739"
-  integrity sha512-okPXBK70fd+hoIuBm94zNjb5lLsTVihaB6KD9O3cFeqSvvC2/zc3fWW2iO24xKv7gOKk6msyHeelJPzuurBVzg==
+"@kondah/http-controller@0.0.9":
+  version "0.0.9"
+  resolved "https://registry.yarnpkg.com/@kondah/http-controller/-/http-controller-0.0.9.tgz#f1860727825df959d45cb2d152d92c8d72afe258"
+  integrity sha512-PClsREkfYEbPq7jL2CUR22VEmrmMMb1NVv2Yk+JTdNG7hcP/4LZljC9UlPKHAtXZf2+M4j2f+7PtCY2+8zG3OA==
   dependencies:
-    "@kondah/core" "^0.0.8"
-    "@kondah/http-context" "^0.0.5"
+    "@kondah/core" "^0.0.9"
+    "@kondah/http-context" "^0.0.6"
     reflect-metadata "^0.1.13"
 
 "@nodelib/fs.scandir@2.1.4":
