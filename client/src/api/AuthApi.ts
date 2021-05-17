@@ -1,5 +1,5 @@
 import { BaseApi } from '../lib/BaseApi'
-import { IGetMeResponseDto } from '../types'
+import { IGetMeResponseDto } from '@cohdex/shared'
 
 export const authApi = new (class AuthApi extends BaseApi {
   prefix = 'auth'

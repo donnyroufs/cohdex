@@ -1,8 +1,8 @@
 {
-  "name": "kondah-app",
+  "name": "@cohdex/server",
   "version": "1.0.0",
   "main": "bootstrap.ts",
-  "author": "kondah",
+  "author": "donny roufs <iamchets@yahoo.com>",
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only --no-notify --exit-child src/bootstrap.ts",
     "migrate": "prisma migrate dev",
@@ -26,7 +26,6 @@
     "@typescript-eslint/eslint-plugin": "^4.22.1",
     "@typescript-eslint/parser": "^4.22.1",
     "eslint": "^7.26.0",
-    "husky": "^6.0.0",
     "jest": "^26.6.3",
     "lint-staged": ">=11",
     "prettier": "^2.2.1",
@@ -35,13 +34,6 @@
     "ts-node-dev": "^1.1.6",
     "tsconfig-paths": "^3.9.0",
     "typescript": "^4.2.4"
-  },
-  "lint-staged": {
-    "**/*.{js,jsx,ts,tsx}": [
-      "yarn eslint",
-      "yarn prettier --write",
-      "yarn test --watchAll=false --findRelatedTests --bail"
-    ]
   },
   "dependencies": {
     "@kondah/core": "0.0.9",
@@ -58,6 +50,7 @@
     "morgan": "^1.10.0",
     "passport": "^0.4.1",
     "passport-steam": "^1.0.15",
-    "redis": "^3.1.2"
+    "redis": "^3.1.2",
+    "@cohdex/shared": "1.0.0"
   }
 }

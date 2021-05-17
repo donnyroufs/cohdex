@@ -1,16 +1,5 @@
 import { FunctionComponent } from 'react'
-
-export interface IGetMeResponseDto {
-  data: {
-    user: IUser
-  }
-}
-
-export interface IUser {
-  avatar: string
-  profileUrl: string
-  steamId: string
-}
+import { IUser } from '@cohdex/shared'
 
 export interface IAuthState {
   isLoading: boolean

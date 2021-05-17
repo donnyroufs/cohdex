@@ -1,0 +1,13 @@
+{
+  "private": true,
+  "scripts": {
+    "client": "yarn workspace @cohdex/client start",
+    "server": "yarn workspace @cohdex/server dev",
+    "shared": "yarn workspace @cohdex/shared watch"
+  },
+  "workspaces": [
+    "client",
+    "server",
+    "shared"
+  ]
+}

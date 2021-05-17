@@ -3,6 +3,7 @@ import { Controller, Delete, Get, Middleware } from '@kondah/http-controller'
 
 import { Request, Response } from 'express'
 import passport from 'passport'
+import { IGetMeResponseDto } from '../../../shared/dist'
 import { isAuthGuard } from '../guards/is-auth.guard'
 
 @Controller('/auth')
@@ -31,6 +32,6 @@ export class AuthController {
       data: {
         user: req.user,
       },
-    })
+    } as IGetMeResponseDto)
   }
 }
