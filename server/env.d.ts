@@ -6,5 +6,7 @@ declare namespace NodeJS {
     SESSION_SECRET: string;
     API_KEY_STEAM: string;
     REDIRECT_URI: string;
+    CALLBACK_URI: string;
+    BASE_URI: string;
   }
 }

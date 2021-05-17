@@ -22,8 +22,8 @@ export class SteamAuthPlugin extends KondahPlugin {
     passport.use(
       new SteamStrategy(
         {
-          returnURL: 'http://localhost:5000/auth/callback',
-          realm: 'http://localhost:5000/',
+          returnURL: process.env.CALLBACK_URI,
+          realm: process.env.BASE_URI,
           apiKey: process.env.API_KEY_STEAM,
         },
         async (identifier: string, profile: SteamProfile, done: any) => {
