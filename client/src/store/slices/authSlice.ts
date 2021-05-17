@@ -1,7 +1,6 @@
-import { createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { authApi } from '../../api'
 import { IAuthState } from '../../types'
-import { RootState } from '../store'
 
 export const fetchMe = createAsyncThunk('auth/fetchMe', async () => {
   const { data } = await authApi.me()
@@ -11,8 +10,9 @@ export const fetchMe = createAsyncThunk('auth/fetchMe', async () => {
   }
 })
 
-// const userSelector = (state: RootState) => state.auth.user
-// export const isAuthenticated = createSelector(userSelector, (user) => !!user)
+export const logout = createAsyncThunk('auth/logout', async () => {
+  await authApi.logout()
+})
 
 export const initialState: IAuthState = {
   isLoading: true,
@@ -35,6 +35,14 @@ export const slice = createSlice({
 
     builder.addCase(fetchMe.rejected, (state) => {
       state.isLoading = false
+    })
+
+    builder.addCase(logout.fulfilled, (state) => {
+      state.user = null
+    })
+
+    builder.addCase(logout.rejected, (state) => {
+      state.user = null
     })
   },
 })

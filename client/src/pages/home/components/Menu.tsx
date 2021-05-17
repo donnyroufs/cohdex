@@ -1,5 +1,6 @@
 import { Link as ReactLink } from 'react-router-dom'
 import { Box, Link, keyframes, usePrefersReducedMotion } from '@chakra-ui/react'
+import { useAppSelector } from '../../../store/store'
 
 const slide = keyframes`
   from { transform: translateX(30%); opacity: 0; }
@@ -7,6 +8,7 @@ const slide = keyframes`
 `
 
 export const Menu = () => {
+  const user = useAppSelector((state) => state.auth.user)
   const prefersReducedMotion = usePrefersReducedMotion()
 
   const animation = prefersReducedMotion
@@ -28,34 +30,63 @@ export const Menu = () => {
     >
       <Box w={60}>
         <Box animation={animation} opacity={0} transform="translate(30%)">
-          <Link
-            textDecoration="none"
-            href="http://localhost:5000/api/v1/auth/login"
-            textTransform="uppercase"
-            backgroundColor="primary.600"
-            color="vintage.100"
-            fontWeight="bold"
-            fontSize="xl"
-            mb={4}
-            h={20}
-            w="100%"
-            display="flex"
-            justifyContent="center"
-            fontFamily="play"
-            letterSpacing="wider"
-            alignItems="center"
-            _hover={{
-              textDecor: 'none',
-              transform: 'scale(1.05)',
-            }}
-          >
-            get started
-          </Link>
+          {user && (
+            <Link
+              as={ReactLink}
+              to="/strategies"
+              textDecoration="none"
+              textTransform="uppercase"
+              backgroundColor="primary.600"
+              color="vintage.100"
+              fontWeight="bold"
+              fontSize="xl"
+              mb={4}
+              h={20}
+              w="100%"
+              display="flex"
+              justifyContent="center"
+              fontFamily="play"
+              letterSpacing="wider"
+              alignItems="center"
+              _hover={{
+                textDecor: 'none',
+                transform: 'scale(1.05)',
+              }}
+            >
+              get started
+            </Link>
+          )}
+
+          {!user && (
+            <Link
+              textDecoration="none"
+              href="http://localhost:5000/api/v1/auth/login"
+              textTransform="uppercase"
+              backgroundColor="primary.600"
+              color="vintage.100"
+              fontWeight="bold"
+              fontSize="xl"
+              mb={4}
+              h={20}
+              w="100%"
+              display="flex"
+              justifyContent="center"
+              fontFamily="play"
+              letterSpacing="wider"
+              alignItems="center"
+              _hover={{
+                textDecor: 'none',
+                transform: 'scale(1.05)',
+              }}
+            >
+              get started
+            </Link>
+          )}
         </Box>
         <Box opacity={0} transform="translate(30%)" animation={animation1}>
           <Link
             as={ReactLink}
-            to="/test"
+            to="/strategies"
             fontFamily="play"
             textDecoration="none"
             textTransform="uppercase"

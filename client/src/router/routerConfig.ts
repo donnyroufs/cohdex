@@ -1,5 +1,5 @@
 import { IRoute } from '../types'
-import { Home, Test } from '../pages'
+import { Home, Strategies } from '../pages'
 
 export const routerConfig: IRoute[] = [
   {
@@ -9,9 +9,9 @@ export const routerConfig: IRoute[] = [
     exact: true,
   },
   {
-    path: '/test',
-    component: Test,
-    withAuth: true,
+    path: '/strategies',
+    component: Strategies,
+    withAuth: false,
     exact: true,
   },
 ]
