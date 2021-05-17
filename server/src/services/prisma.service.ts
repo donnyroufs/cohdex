@@ -12,9 +12,9 @@ export class PrismaService extends PrismaClient {
   async connect() {
     try {
       await this.$connect()
-      this._appContext.logger.info('connected', 'PRISMA')
+      this._appContext.logger.info('initialized', 'PRISMA')
     } catch (err) {
-      this._appContext.logger.error('could not connect', 'PRISMA')
+      this._appContext.logger.error('could not initialize', 'PRISMA')
     }
   }
 }
