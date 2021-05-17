@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   Box,
   Container,
@@ -24,12 +24,7 @@ export const Home = () => {
   useEffect(() => {
     const img = new Image()
     img.src = 'landing-img.png'
-    img.onload = () => {
-      // To prevent flickering, might not be the case in production tho.
-      setTimeout(() => {
-        setLoading(false)
-      }, 300)
-    }
+    img.onload = () => setLoading(false)
   }, [])
 
   if (loading) {

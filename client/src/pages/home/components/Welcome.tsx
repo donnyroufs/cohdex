@@ -29,9 +29,18 @@ export const Welcome = () => {
       borderLeft="4px"
       borderColor="primary.600"
       paddingLeft={6}
-      paddingY={4}
+      paddingY={5}
       mb={{ base: '2rem', md: '0' }}
     >
+      <Heading
+        color="vintage.600"
+        textTransform="uppercase"
+        mb={0}
+        fontSize="sm"
+        letterSpacing="wider"
+      >
+        beta
+      </Heading>
       <Heading
         color="primary.400"
         textTransform="uppercase"
@@ -41,9 +50,9 @@ export const Welcome = () => {
       >
         Cohdex
       </Heading>
-      <Text fontSize="x-large" color="vintage.100" maxW="36ch">
-        Create COH strategies online with ease. Learn strategies of others,
-        share yours and be better than yesterday!
+      <Text fontSize="x-large" color="vintage.100" maxW="38ch">
+        Create, improve and compare Company Of Heroes 2 strategies with an
+        interactive tactical map in the browser for free!
       </Text>
     </Box>
   )

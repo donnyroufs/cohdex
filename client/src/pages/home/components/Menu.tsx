@@ -1,3 +1,4 @@
+import { Link as ReactLink } from 'react-router-dom'
 import { Box, Link, keyframes, usePrefersReducedMotion } from '@chakra-ui/react'
 
 const slide = keyframes`
@@ -48,14 +49,15 @@ export const Menu = () => {
               transform: 'scale(1.05)',
             }}
           >
-            register
+            get started
           </Link>
         </Box>
         <Box opacity={0} transform="translate(30%)" animation={animation1}>
           <Link
+            as={ReactLink}
+            to="/test"
             fontFamily="play"
             textDecoration="none"
-            href="https://discord.gg/7rPUZCBWNN"
             textTransform="uppercase"
             backgroundColor="transparent"
             border="2px"
@@ -74,7 +76,7 @@ export const Menu = () => {
               transform: 'scale(1.05)',
             }}
           >
-            join discord
+            go to website
           </Link>
         </Box>
       </Box>
