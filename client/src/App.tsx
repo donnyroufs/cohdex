@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { Spinner } from './components/generic/Spinner'
-import { Home } from './pages'
+import { Router } from './router'
 import { fetchMe } from './store/slices/authSlice'
 import { useAppDispatch, useAppSelector } from './store/store'
 
@@ -13,14 +13,10 @@ function App() {
   }, [dispatch])
 
   if (loading) {
-    return <Spinner withMessage={true} />
+    return <Spinner withMessage />
   }
 
-  return (
-    <>
-      <Home />
-    </>
-  )
+  return <Router />
 }
 
 export default App
