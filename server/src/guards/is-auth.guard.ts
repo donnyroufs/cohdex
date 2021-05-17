@@ -1,6 +1,9 @@
-export function isAuthGuard(req, res, next) {
+import { Request, Response, NextFunction } from 'express'
+import { NotAuthenticatedException } from '../exceptions'
+
+export function isAuthGuard(req: Request, res: Response, next: NextFunction) {
   if (!req.isAuthenticated()) {
-    throw new Error('Not authenticated')
+    throw new NotAuthenticatedException()
   }
 
   return next()

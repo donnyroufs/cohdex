@@ -13,6 +13,7 @@ import passport from 'passport'
 
 import { SteamProfile } from './types'
 import { PrismaService } from './services/prisma.service'
+import { NotAuthenticatedException } from './exceptions'
 
 export class Application extends Kondah {
   protected async configureServices(services: Energizor) {
@@ -22,18 +23,20 @@ export class Application extends Kondah {
   protected async setup({ server, addControllers, energizor }: AppContext) {
     const prisma = energizor.get(PrismaService)
 
-    server.addGlobalMiddleware(morgan('short'), cookieParser(), express.json())
-    server.addGlobalMiddleware(
-      cors({
-        origin: process.env.ORIGIN,
-        credentials: true,
-      })
-    )
-
     const RedisStore = connectRedis(session)
     const store = new RedisStore({ client: redis.createClient() })
 
+    const csrf = csurf({
+      cookie: {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'prod',
+      },
+    })
+
     server.addGlobalMiddleware(
+      morgan('short'),
+      cookieParser(),
+      express.json(),
       session({
         secret: process.env.SESSION_SECRET,
         name: 'sid',
@@ -46,8 +49,21 @@ export class Application extends Kondah {
           httpOnly: true,
           sameSite: true,
         },
-      })
+      }),
+      cors({
+        origin: process.env.ORIGIN,
+        credentials: true,
+      }),
+      passport.initialize(),
+      passport.session(),
+      csrf,
+      (req, res, next) => {
+        const csrfToken = req.csrfToken()
+        res.cookie('xsrf-token', csrfToken)
+        next()
+      }
     )
+
     passport.serializeUser(function (user, done) {
       done(null, user)
     })
@@ -56,8 +72,6 @@ export class Application extends Kondah {
       done(null, obj)
     })
 
-    await prisma.connect()
-
     passport.use(
       new SteamStrategy(
         {
@@ -65,7 +79,7 @@ export class Application extends Kondah {
           realm: process.env.BASE_URI,
           apiKey: process.env.API_KEY_STEAM,
         },
-        async (identifier: string, profile: SteamProfile, done: any) => {
+        async (_: string, profile: SteamProfile, done: any) => {
           const user = await prisma.client.user.upsert({
             where: {
               steamId: profile._json.steamid,
@@ -90,27 +104,17 @@ export class Application extends Kondah {
       )
     )
 
-    server.addGlobalMiddleware(passport.initialize())
-    server.addGlobalMiddleware(passport.session())
-
-    const csrf = csurf({
-      cookie: {
-        // httpOnly: true,
-        // secure: process.env.NODE_ENV === 'prod',
-      },
-    })
-
-    server.addGlobalMiddleware(csrf, (req, res, next) => {
-      const csrfToken = req.csrfToken()
-      console.log(req.cookies)
-      res.cookie('xsrf-token', csrfToken)
-      next()
-    })
-
-    server.addGlobalMiddleware(csrf)
-
     await addControllers('/api/v1')
 
+    server.handleGlobalExceptions((err, req, res, next) => {
+      if (err instanceof NotAuthenticatedException) {
+        return res.status(err.code).json(err.message)
+      }
+
+      return res.status(500).json(err.message)
+    })
+
+    await prisma.connect()
     server.run(5000)
   }
 }
