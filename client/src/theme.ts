@@ -1,7 +1,5 @@
 import { extendTheme } from '@chakra-ui/react'
 
-// header #101319 .900
-
 export const theme = extendTheme({
   styles: {
     global: {
@@ -63,6 +61,8 @@ export const theme = extendTheme({
       800: '#21252d',
       900: '#0b0b17',
     },
+    header: '#101319',
+    border: '#1F2938',
   },
   components: {
     Text: {
