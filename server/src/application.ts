@@ -40,10 +40,7 @@ export class Application extends Kondah {
     const store = new RedisStore({ client: redis.createClient() })
 
     const csrf = csurf({
-      cookie: {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'prod',
-      },
+      cookie: true,
     })
 
     server.addGlobalMiddleware(

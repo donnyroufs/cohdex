@@ -6,6 +6,7 @@ export abstract class BaseApi {
   constructor() {
     this.axios = axios.create({
       withCredentials: true,
+      xsrfCookieName: 'csrf-token',
     })
   }
 
