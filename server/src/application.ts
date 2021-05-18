@@ -12,8 +12,8 @@ import { Strategy as SteamStrategy } from 'passport-steam'
 import passport from 'passport'
 
 import { SteamProfile } from './types'
-import { PrismaService } from './services/prisma.service'
-import { NotAuthenticatedException } from './exceptions'
+import { PrismaService } from './logic/services/prisma.service'
+import { NotAuthenticatedException } from './web/exceptions'
 
 export class Application extends Kondah {
   protected async configureServices(services: Energizor) {
