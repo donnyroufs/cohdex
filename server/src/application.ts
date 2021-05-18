@@ -12,12 +12,25 @@ import { Strategy as SteamStrategy } from 'passport-steam'
 import passport from 'passport'
 
 import { SteamProfile } from './types'
-import { PrismaService } from './logic/services/prisma.service'
+import { PrismaService } from './core/prisma.service'
 import { NotAuthenticatedException } from './web/exceptions'
+import { StrategyRepository } from './core/strategies/strategy.repository'
+import { StrategyService } from './core/strategies/strategy.service'
+import { UserService } from './core/users/user.service'
+import { UserRepository } from './core/users/user.repository'
+import { CreateUserDto } from './core/users/dtos/create-user.dto'
 
 export class Application extends Kondah {
   protected async configureServices(services: Energizor) {
+    services.setDefaultScope('singleton')
+
     services.register(PrismaService)
+
+    services.register(UserRepository)
+    services.register(UserService)
+
+    services.register(StrategyRepository)
+    services.register(StrategyService)
   }
 
   protected async setup({ server, addControllers, energizor }: AppContext) {
@@ -59,7 +72,7 @@ export class Application extends Kondah {
       csrf,
       (req, res, next) => {
         const csrfToken = req.csrfToken()
-        res.cookie('xsrf-token', csrfToken)
+        res.cookie('csrf-token', csrfToken)
         next()
       }
     )
@@ -72,6 +85,8 @@ export class Application extends Kondah {
       done(null, obj)
     })
 
+    const userService = energizor.get(UserService)
+
     passport.use(
       new SteamStrategy(
         {
@@ -80,24 +95,9 @@ export class Application extends Kondah {
           apiKey: process.env.API_KEY_STEAM,
         },
         async (_: string, profile: SteamProfile, done: any) => {
-          const user = await prisma.client.user.upsert({
-            where: {
-              steamId: profile._json.steamid,
-            },
-            create: {
-              avatar: profile._json.avatarfull,
-              profileUrl: profile._json.profileurl,
-              steamId: profile._json.steamid,
-            },
-            update: {
-              profileUrl: profile._json.profileurl,
-            },
-            select: {
-              avatar: true,
-              profileUrl: true,
-              steamId: true,
-            },
-          })
+          const user = await userService.createOrUpdate(
+            CreateUserDto.from(profile)
+          )
 
           done(null, user)
         }
