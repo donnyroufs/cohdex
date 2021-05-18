@@ -113,6 +113,15 @@ export class Application extends Kondah {
 
     await prisma.connect()
 
+    energizor.get(StrategyService).create({
+      alliesFactionId: 3,
+      axisFactionId: 2,
+      factionId: 2,
+      mapId: 1,
+      title: 'testing',
+      userId: 1,
+    })
+
     server.run(5000)
   }
 }

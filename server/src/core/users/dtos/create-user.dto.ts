@@ -11,7 +11,6 @@ export class CreateUserDto {
     this.profileUrl = props.profileUrl
   }
 
-  // SteamProfile is really infra, but not sure how to get this into core for now since it's being implemented in Web
   static from(props: SteamProfile) {
     return new CreateUserDto({
       avatar: props._json.avatarfull,

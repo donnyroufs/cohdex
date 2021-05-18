@@ -59,6 +59,7 @@ model Strategy {
   @@unique([title, userId, factionId, alliesFactionId, axisFactionId])
 }
 
+// Add faction image
 model Faction {
   id Int @id @default(autoincrement())
 
