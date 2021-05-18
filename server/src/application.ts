@@ -115,6 +115,7 @@ export class Application extends Kondah {
     })
 
     await prisma.connect()
+
     server.run(5000)
   }
 }
