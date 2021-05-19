@@ -13,7 +13,10 @@ import passport from 'passport'
 
 import { SteamProfile } from './types'
 import { PrismaService } from './core/prisma.service'
-import { NotAuthenticatedException } from './web/exceptions'
+import {
+  BadRequestException,
+  NotAuthenticatedException,
+} from './web/exceptions'
 import { StrategyRepository } from './core/strategies/strategy.repository'
 import { StrategyService } from './core/strategies/strategy.service'
 import { UserService } from './core/users/user.service'
@@ -33,7 +36,12 @@ export class Application extends Kondah {
     services.register(StrategyService)
   }
 
-  protected async setup({ server, addControllers, energizor }: AppContext) {
+  protected async setup({
+    server,
+    addControllers,
+    energizor,
+    addToHttpContext,
+  }: AppContext) {
     const prisma = energizor.get(PrismaService)
 
     const RedisStore = connectRedis(session)
@@ -65,14 +73,16 @@ export class Application extends Kondah {
         credentials: true,
       }),
       passport.initialize(),
-      passport.session(),
-      csrf,
-      (req, res, next) => {
+      passport.session()
+    )
+
+    if (process.env.NODE_ENV === 'prod') {
+      server.addGlobalMiddleware(csrf, (req, res, next) => {
         const csrfToken = req.csrfToken()
         res.cookie('csrf-token', csrfToken)
         next()
-      }
-    )
+      })
+    }
 
     passport.serializeUser(function (user, done) {
       done(null, user)
@@ -105,10 +115,20 @@ export class Application extends Kondah {
 
     server.handleGlobalExceptions((err, req, res, next) => {
       if (err instanceof NotAuthenticatedException) {
-        return res.status(err.code).json(err.message)
+        return res.status(err.code).json({
+          error: err.message,
+        })
       }
 
-      return res.status(500).json(err.message)
+      if (err instanceof BadRequestException) {
+        return res.status(err.code).json({
+          error: err.message,
+        })
+      }
+
+      return res.status(500).json({
+        error: err.message,
+      })
     })
 
     await prisma.connect()
