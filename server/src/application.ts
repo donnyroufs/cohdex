@@ -22,6 +22,7 @@ import { StrategyService } from './core/strategies/strategy.service'
 import { UserService } from './core/users/user.service'
 import { UserRepository } from './core/users/user.repository'
 import { CreateUserDto } from './core/users/dtos/create-user.dto'
+import { InputValidationException } from './web/exceptions/input-validation.exception'
 
 export class Application extends Kondah {
   protected async configureServices(services: Energizor) {
@@ -120,7 +121,11 @@ export class Application extends Kondah {
         })
       }
 
-      if (err instanceof BadRequestException) {
+      if (err instanceof InputValidationException) {
+        return res.status(err.code).json({
+          error: err.errors,
+        })
+      } else if (err instanceof BadRequestException) {
         return res.status(err.code).json({
           error: err.message,
         })

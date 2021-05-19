@@ -11,7 +11,7 @@ export class StrategyController {
   constructor(private readonly _strategyService: StrategyService) {}
 
   @Post('/')
-  @Middleware([isAuthGuard, validateBody(CreateStrategyDto)])
+  @Middleware(isAuthGuard, validateBody(CreateStrategyDto))
   async store(ctx: HttpContext<CreateStrategyDto>) {
     await this._strategyService.create(ctx.data).catch((e) => {
       throw new BadRequestException(e.message)

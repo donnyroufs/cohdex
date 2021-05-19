@@ -9,7 +9,7 @@ import { isAuthGuard } from '../guards/is-auth.guard'
 @Controller('/auth')
 export class AuthController {
   @Get('/login')
-  @Middleware([passport.authenticate('steam')])
+  @Middleware(passport.authenticate('steam'))
   login(ctx: HttpContext) {}
 
   @Delete('/logout')
@@ -19,14 +19,13 @@ export class AuthController {
   }
 
   @Get('/callback')
-  @Middleware([
-    passport.authenticate('steam'),
-    (req: Request, res: Response) => res.redirect(process.env.REDIRECT_URI),
-  ])
+  @Middleware(passport.authenticate('steam'), (req: Request, res: Response) =>
+    res.redirect(process.env.REDIRECT_URI)
+  )
   callback(ctx: HttpContext) {}
 
   @Get('/me')
-  @Middleware([isAuthGuard])
+  @Middleware(isAuthGuard)
   async me({ req, res }: HttpContext) {
     res.json({
       data: {
