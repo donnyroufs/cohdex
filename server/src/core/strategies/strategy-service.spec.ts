@@ -32,6 +32,10 @@ describe('strategy service', () => {
     expect(service).toBeDefined()
   })
 
+  describe('create strategy', () => {
+    it.skip('should add a default title when first strategy', () => {})
+  })
+
   describe('create strategy validation should throw when', () => {
     const service = new StrategyService(mockedRepo)
 
@@ -90,5 +94,7 @@ describe('strategy service', () => {
         )
       ).rejects.toThrowError(new InvalidTeamsException())
     })
+
+    it.skip('already exists', () => {})
   })
 })

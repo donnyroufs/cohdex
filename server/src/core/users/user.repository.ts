@@ -24,6 +24,7 @@ export class UserRepository {
         profileUrl: data.profileUrl,
       },
       select: {
+        id: true,
         avatar: true,
         profileUrl: true,
         steamId: true,
