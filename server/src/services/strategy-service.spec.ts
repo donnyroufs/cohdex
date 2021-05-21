@@ -37,9 +37,6 @@ describe('strategy service', () => {
   })
 
   describe('create strategy', () => {
-    // client probably
-    it.skip('should add a default title when first strategy', () => {})
-
     it('should create a strategy', async () => {
       const service = new StrategyService(mockedRepo)
       const data = await service.create(createProps)
