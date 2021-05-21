@@ -3,8 +3,9 @@ import { Controller, Delete, Get, Middleware } from '@kondah/http-controller'
 
 import { Request, Response } from 'express'
 import passport from 'passport'
-import { IGetMeResponseDto } from '@cohdex/shared'
+import { IGetMeResponseDto, IUser } from '@cohdex/shared'
 import { isAuthGuard } from '../guards/is-auth.guard'
+import { BaseHttpResponse } from '../lib/base-http-response'
 
 @Controller('/auth')
 export class AuthController {
@@ -27,10 +28,10 @@ export class AuthController {
   @Get('/me')
   @Middleware(isAuthGuard)
   async me({ req, res }: HttpContext) {
-    res.json({
-      data: {
-        user: req.user!,
-      },
-    } as IGetMeResponseDto)
+    res.json(
+      new BaseHttpResponse<Partial<IGetMeResponseDto>>({
+        user: req.user as IUser,
+      })
+    )
   }
 }

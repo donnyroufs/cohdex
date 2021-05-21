@@ -1,9 +1,12 @@
 import { User } from '@prisma/client'
 
-export interface IUser extends Omit<User, 'id'> {}
+export interface IUser extends Pick<User, 'id' | 'avatar' | 'profileUrl'> {}
 
 export interface IGetMeResponseDto {
-  data: {
-    user: IUser
-  }
+  user: IUser
+}
+
+export interface BaseHttpResponse<T, U = string> {
+  data: T
+  error: U
 }
