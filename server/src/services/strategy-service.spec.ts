@@ -4,6 +4,7 @@ import {
   ChosenFactionDoesNotExistException,
   InvalidFactionsException,
   InvalidTeamsException,
+  StrategyAlreadyExistsException,
 } from '../exceptions'
 import { StrategyService } from './strategy.service'
 
@@ -25,6 +26,7 @@ const mockedRepo = {
     { id: 4, team: 'ALLIES' },
     { id: 5, team: 'ALLIES' },
   ],
+  notUnique: async () => false,
 } as any
 
 describe('strategy service', () => {
@@ -35,68 +37,85 @@ describe('strategy service', () => {
   })
 
   describe('create strategy', () => {
+    // client probably
     it.skip('should add a default title when first strategy', () => {})
-  })
 
-  describe('create strategy validation should throw when', () => {
-    const service = new StrategyService(mockedRepo)
+    it('should create a strategy', async () => {
+      const service = new StrategyService(mockedRepo)
+      const data = await service.create(createProps)
 
-    it('has the same faction for both allies and axis', async () => {
-      await expect(
-        service.create(
-          new CreateStrategyDto({
-            ...createProps,
-            alliesFactionId: 1,
-            axisFactionId: 1,
-          })
-        )
-      ).rejects.toThrowError(new InvalidFactionsException())
+      expect(data).toBeTruthy()
     })
 
-    it('has a faction that does not exist', async () => {
-      await expect(
-        service.create(
-          new CreateStrategyDto({
-            ...createProps,
-            factionId: 8,
-          })
-        )
-      ).rejects.toThrowError(new ChosenFactionDoesNotExistException())
+    describe('create strategy validation should throw when', () => {
+      const service = new StrategyService(mockedRepo)
 
-      await expect(
-        service.create(
-          new CreateStrategyDto({
-            ...createProps,
-            alliesFactionId: 8,
-            axisFactionId: 1,
-          })
-        )
-      ).rejects.toThrowError(new ChosenFactionDoesNotExistException())
+      it('has the same faction for both allies and axis', async () => {
+        await expect(
+          service.create(
+            new CreateStrategyDto({
+              ...createProps,
+              alliesFactionId: 1,
+              axisFactionId: 1,
+            })
+          )
+        ).rejects.toThrowError(new InvalidFactionsException())
+      })
 
-      await expect(
-        service.create(
-          new CreateStrategyDto({
-            ...createProps,
-            alliesFactionId: 1,
-            axisFactionId: 8,
-          })
+      it('has a faction that does not exist', async () => {
+        await expect(
+          service.create(
+            new CreateStrategyDto({
+              ...createProps,
+              factionId: 8,
+            })
+          )
+        ).rejects.toThrowError(new ChosenFactionDoesNotExistException())
+
+        await expect(
+          service.create(
+            new CreateStrategyDto({
+              ...createProps,
+              alliesFactionId: 8,
+              axisFactionId: 1,
+            })
+          )
+        ).rejects.toThrowError(new ChosenFactionDoesNotExistException())
+
+        await expect(
+          service.create(
+            new CreateStrategyDto({
+              ...createProps,
+              alliesFactionId: 1,
+              axisFactionId: 8,
+            })
+          )
+        ).rejects.toThrowError(new ChosenFactionDoesNotExistException())
+      })
+
+      it('does not have an axis and allies faction', async () => {
+        await expect(
+          service.create(
+            new CreateStrategyDto({
+              ...createProps,
+              alliesFactionId: 2,
+              axisFactionId: 1,
+              factionId: 2,
+            })
+          )
+        ).rejects.toThrowError(new InvalidTeamsException())
+      })
+
+      it('already exists', () => {
+        const service = new StrategyService({
+          ...mockedRepo,
+          notUnique: () => true,
+        })
+
+        expect(service.create(createProps)).rejects.toThrowError(
+          new StrategyAlreadyExistsException()
         )
-      ).rejects.toThrowError(new ChosenFactionDoesNotExistException())
+      })
     })
-
-    it('does not have an axis and allies faction', async () => {
-      await expect(
-        service.create(
-          new CreateStrategyDto({
-            ...createProps,
-            alliesFactionId: 2,
-            axisFactionId: 1,
-            factionId: 2,
-          })
-        )
-      ).rejects.toThrowError(new InvalidTeamsException())
-    })
-
-    it.skip('already exists', () => {})
   })
 })

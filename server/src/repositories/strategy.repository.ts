@@ -31,4 +31,14 @@ export class StrategyRepository {
   async getAllFactions() {
     return this.faction.findMany({})
   }
+
+  async notUnique(data: CreateStrategyDto) {
+    const result = await this.strategy.findFirst({
+      where: {
+        ...data,
+      },
+    })
+
+    return result != null
+  }
 }

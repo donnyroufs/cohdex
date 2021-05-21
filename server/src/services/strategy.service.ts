@@ -4,6 +4,7 @@ import {
   InvalidFactionsException,
   InvalidTeamsException,
   ChosenFactionDoesNotExistException,
+  StrategyAlreadyExistsException,
 } from '../exceptions'
 import { StrategyRepository } from '../repositories/strategy.repository'
 
@@ -27,6 +28,12 @@ export class StrategyService {
 
     if (alliesFaction.team !== 'ALLIES' || axisFaction.team !== 'AXIS') {
       throw new InvalidTeamsException()
+    }
+
+    const isNotUnique = await this._strategyRepo.notUnique(data)
+
+    if (isNotUnique) {
+      throw new StrategyAlreadyExistsException()
     }
 
     return this._strategyRepo.create(data)

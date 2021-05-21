@@ -38,6 +38,11 @@ model Strategy {
 
   // units Unit[]
 
+  // # Required for later
+
+  // commanderId Int?
+  // tierId Int?
+
   User   User? @relation(fields: [userId], references: [id])
   userId Int
 
@@ -66,6 +71,8 @@ model Faction {
   name         String @unique
   abbreviation String @unique
   imgUrl       String @unique
+
+
 
   team Team
 
