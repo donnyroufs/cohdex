@@ -11,7 +11,11 @@ import { milliseconds } from 'date-fns'
 import { Strategy as SteamStrategy } from 'passport-steam'
 import passport from 'passport'
 
-import { IValidationError, SteamProfile } from './types'
+import {
+  IValidationError,
+  IValidationErrorResponse,
+  SteamProfile,
+} from './types'
 import { PrismaService } from './prisma.service'
 import { BadRequestException, NotAuthenticatedException } from './exceptions'
 import { StrategyRepository } from './repositories/strategy.repository'
@@ -20,6 +24,7 @@ import { UserService } from './services/user.service'
 import { UserRepository } from './repositories/user.repository'
 import { CreateUserDto } from './dtos/create-user.dto'
 import { InputValidationException } from './exceptions/input-validation.exception'
+import { BaseHttpResponse } from './lib/base-http-response'
 
 export class Application extends Kondah {
   protected async configureServices(services: Energizor) {
@@ -101,27 +106,26 @@ export class Application extends Kondah {
 
     server.handleGlobalExceptions((err, req, res, next) => {
       if (err instanceof NotAuthenticatedException) {
-        return res.status(err.code).json({
-          error: err.message,
-        })
+        const response = new BaseHttpResponse<string>(undefined, err.message)
+        return res.status(err.code).json(response)
       }
 
       if (err instanceof InputValidationException) {
-        return res.status(err.code).json({
-          error: err.errors.map((e: IValidationError) => ({
+        const response = new BaseHttpResponse<IValidationErrorResponse[]>(
+          undefined,
+          err.errors.map((e: IValidationError) => ({
             property: e.property,
             messages: e.constraints,
-          })),
-        })
+          }))
+        )
+
+        return res.status(err.code).json(response)
       } else if (err instanceof BadRequestException) {
-        return res.status(err.code).json({
-          error: err.message,
-        })
+        const response = new BaseHttpResponse<string>(undefined, err.message)
+        return res.status(err.code).json(response)
       }
 
-      return res.status(500).json({
-        error: err.message,
-      })
+      return res.status(500).json(new BaseHttpResponse(undefined, err.message))
     })
 
     await prisma.connect()

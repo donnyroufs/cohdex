@@ -37,3 +37,8 @@ export interface IValidationError {
     [key: string]: string
   }
 }
+
+export interface IValidationErrorResponse {
+  property: string
+  messages: Record<string, string>
+}
