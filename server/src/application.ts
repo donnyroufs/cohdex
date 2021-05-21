@@ -11,7 +11,7 @@ import { milliseconds } from 'date-fns'
 import { Strategy as SteamStrategy } from 'passport-steam'
 import passport from 'passport'
 
-import { SteamProfile } from './types'
+import { IValidationError, SteamProfile } from './types'
 import { PrismaService } from './core/prisma.service'
 import {
   BadRequestException,
@@ -123,7 +123,10 @@ export class Application extends Kondah {
 
       if (err instanceof InputValidationException) {
         return res.status(err.code).json({
-          error: err.errors,
+          error: err.errors.map((e: IValidationError) => ({
+            property: e.property,
+            messages: e.constraints,
+          })),
         })
       } else if (err instanceof BadRequestException) {
         return res.status(err.code).json({

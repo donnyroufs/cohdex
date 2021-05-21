@@ -14,12 +14,7 @@ export function validateBody(dto: new (args: any) => any) {
         target: false,
       },
     }).catch((err) => {
-      throw new InputValidationException(
-        err.map((e: IValidationError) => ({
-          property: e.property,
-          messages: e.constraints,
-        }))
-      )
+      throw new InputValidationException(err)
     })
 
     // TODO: Kondah expose types!
