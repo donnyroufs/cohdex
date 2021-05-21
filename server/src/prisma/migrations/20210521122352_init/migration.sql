@@ -46,6 +46,7 @@ CREATE TABLE "Faction" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
     "abbreviation" TEXT NOT NULL,
+    "imgUrl" TEXT NOT NULL,
     "team" "Team" NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -75,6 +76,9 @@ CREATE UNIQUE INDEX "Faction.name_unique" ON "Faction"("name");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Faction.abbreviation_unique" ON "Faction"("abbreviation");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Faction.imgUrl_unique" ON "Faction"("imgUrl");
 
 -- AddForeignKey
 ALTER TABLE "Strategy" ADD FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;

@@ -65,6 +65,7 @@ model Faction {
 
   name         String @unique
   abbreviation String @unique
+  imgUrl       String @unique
 
   team Team
 

@@ -11,26 +11,31 @@ async function seed() {
           name: 'Wehrmacht',
           abbreviation: 'WEHR',
           team: 'AXIS',
+          imgUrl: '/public/wehr.svg',
         },
         {
           name: 'Oberkommando West',
           abbreviation: 'OKW',
           team: 'AXIS',
+          imgUrl: '/public/okw.svg',
         },
         {
           name: 'US Forces',
           abbreviation: 'USF',
           team: 'ALLIES',
+          imgUrl: '/public/usf.svg',
         },
         {
           name: 'British Forces',
           abbreviation: 'UKF',
           team: 'ALLIES',
+          imgUrl: '/public/ukf.svg',
         },
         {
           name: 'Soviet Union',
           abbreviation: 'SOV',
           team: 'ALLIES',
+          imgUrl: '/public/soviets.svg',
         },
       ],
     })
