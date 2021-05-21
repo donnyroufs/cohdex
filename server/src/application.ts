@@ -4,6 +4,7 @@ import cors from 'cors'
 import morgan from 'morgan'
 import cookieParser from 'cookie-parser'
 import session from 'express-session'
+import path from 'path'
 import redis from 'redis'
 import connectRedis from 'connect-redis'
 import { milliseconds } from 'date-fns'
@@ -38,6 +39,11 @@ export class Application extends Kondah {
 
     const RedisStore = connectRedis(session)
     const store = new RedisStore({ client: redis.createClient() })
+
+    server.addMiddleware(
+      '/public',
+      express.static(path.join(__dirname, '../public'))
+    )
 
     server.addGlobalMiddleware(
       morgan('short'),
