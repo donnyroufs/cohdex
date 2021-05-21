@@ -1,7 +1,7 @@
 import { Injectable } from '@kondah/core'
 import slugify from 'slugify'
 import { PrismaService } from '../prisma.service'
-import { CreateStrategyDto } from './dtos/create-strategy.dto'
+import { CreateStrategyDto } from '../dtos/create-strategy.dto'
 
 @Injectable()
 export class StrategyRepository {

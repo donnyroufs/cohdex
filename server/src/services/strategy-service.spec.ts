@@ -1,8 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ChosenFactionDoesNotExistException } from '../lib/chosen-faction-does-not-exist.exception'
-import { InvalidFactionsException } from '../lib/invalid-factions.exception'
-import { InvalidTeamsException } from '../lib/invalid-teams.exception'
-import { CreateStrategyDto } from './dtos/create-strategy.dto'
+import { CreateStrategyDto } from '../dtos/create-strategy.dto'
+import {
+  ChosenFactionDoesNotExistException,
+  InvalidFactionsException,
+  InvalidTeamsException,
+} from '../exceptions'
 import { StrategyService } from './strategy.service'
 
 const createProps = {

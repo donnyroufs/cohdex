@@ -1,6 +1,6 @@
 import { Injectable } from '@kondah/core'
 import { PrismaService } from '../prisma.service'
-import { CreateUserDto } from './dtos/create-user.dto'
+import { CreateUserDto } from '../dtos/create-user.dto'
 
 @Injectable()
 export class UserRepository {

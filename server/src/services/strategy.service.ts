@@ -1,9 +1,11 @@
 import { Injectable } from '@kondah/core'
-import { ChosenFactionDoesNotExistException } from '../lib/chosen-faction-does-not-exist.exception'
-import { InvalidFactionsException } from '../lib/invalid-factions.exception'
-import { InvalidTeamsException } from '../lib/invalid-teams.exception'
-import { CreateStrategyDto } from './dtos/create-strategy.dto'
-import { StrategyRepository } from './strategy.repository'
+import { CreateStrategyDto } from '../dtos/create-strategy.dto'
+import {
+  InvalidFactionsException,
+  InvalidTeamsException,
+  ChosenFactionDoesNotExistException,
+} from '../exceptions'
+import { StrategyRepository } from '../repositories/strategy.repository'
 
 @Injectable()
 export class StrategyService {

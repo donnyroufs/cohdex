@@ -1,6 +1,6 @@
 import { Injectable } from '@kondah/core'
-import { CreateUserDto } from './dtos/create-user.dto'
-import { UserRepository } from './user.repository'
+import { CreateUserDto } from '../dtos/create-user.dto'
+import { UserRepository } from '../repositories/user.repository'
 
 @Injectable()
 export class UserService {

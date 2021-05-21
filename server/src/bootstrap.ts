@@ -14,7 +14,7 @@ new Application({
   plugins: [HttpControllerPlugin],
   config: {
     'http-controller': {
-      controllersPath: [path.join(__dirname, '../src/web/controllers')],
+      controllersPath: [path.join(__dirname, '../src/controllers')],
       catchExceptions: true,
     },
   },

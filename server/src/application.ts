@@ -1,7 +1,6 @@
 import { AppContext, Energizor, Kondah } from '@kondah/core'
 import express from 'express'
 import cors from 'cors'
-import csurf from 'csurf'
 import morgan from 'morgan'
 import cookieParser from 'cookie-parser'
 import session from 'express-session'
@@ -12,17 +11,14 @@ import { Strategy as SteamStrategy } from 'passport-steam'
 import passport from 'passport'
 
 import { IValidationError, SteamProfile } from './types'
-import { PrismaService } from './core/prisma.service'
-import {
-  BadRequestException,
-  NotAuthenticatedException,
-} from './web/exceptions'
-import { StrategyRepository } from './core/strategies/strategy.repository'
-import { StrategyService } from './core/strategies/strategy.service'
-import { UserService } from './core/users/user.service'
-import { UserRepository } from './core/users/user.repository'
-import { CreateUserDto } from './core/users/dtos/create-user.dto'
-import { InputValidationException } from './web/exceptions/input-validation.exception'
+import { PrismaService } from './prisma.service'
+import { BadRequestException, NotAuthenticatedException } from './exceptions'
+import { StrategyRepository } from './repositories/strategy.repository'
+import { StrategyService } from './services/strategy.service'
+import { UserService } from './services/user.service'
+import { UserRepository } from './repositories/user.repository'
+import { CreateUserDto } from './dtos/create-user.dto'
+import { InputValidationException } from './exceptions/input-validation.exception'
 
 export class Application extends Kondah {
   protected async configureServices(services: Energizor) {
@@ -37,20 +33,11 @@ export class Application extends Kondah {
     services.register(StrategyService)
   }
 
-  protected async setup({
-    server,
-    addControllers,
-    energizor,
-    addToHttpContext,
-  }: AppContext) {
+  protected async setup({ server, addControllers, energizor }: AppContext) {
     const prisma = energizor.get(PrismaService)
 
     const RedisStore = connectRedis(session)
     const store = new RedisStore({ client: redis.createClient() })
-
-    const csrf = csurf({
-      cookie: true,
-    })
 
     server.addGlobalMiddleware(
       morgan('short'),
@@ -66,7 +53,7 @@ export class Application extends Kondah {
           maxAge: milliseconds({ days: 7 }),
           secure: process.env.NODE_ENV === 'prod',
           httpOnly: true,
-          sameSite: true,
+          sameSite: 'strict',
         },
       }),
       cors({
@@ -76,14 +63,6 @@ export class Application extends Kondah {
       passport.initialize(),
       passport.session()
     )
-
-    if (process.env.NODE_ENV === 'prod') {
-      server.addGlobalMiddleware(csrf, (req, res, next) => {
-        const csrfToken = req.csrfToken()
-        res.cookie('csrf-token', csrfToken)
-        next()
-      })
-    }
 
     passport.serializeUser(function (user, done) {
       done(null, user)

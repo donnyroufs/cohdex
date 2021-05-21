@@ -1,3 +1,3 @@
-import { Exception } from './exception'
+import { Exception } from '../lib'
 
 export class InvalidFactionsException extends Exception('Invalid factions') {}

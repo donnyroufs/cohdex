@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
 import { validateOrReject } from 'class-validator'
-import { IValidationError } from '../../types'
+import { IValidationError } from '../types'
 import { InputValidationException } from '../exceptions/input-validation.exception'
 
 // TODO: Move to kondah plugin

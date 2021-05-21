@@ -1,4 +1,4 @@
-import { SteamProfile } from '../../../types'
+import { SteamProfile } from '../types'
 
 export class CreateUserDto {
   steamId: string
