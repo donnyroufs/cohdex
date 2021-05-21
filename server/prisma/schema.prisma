@@ -22,8 +22,10 @@ model User {
   updatedAt DateTime @updatedAt
 }
 
+// Should keep track of map version
 model Map {
-  id Int @id @default(autoincrement())
+  id   Int    @id @default(autoincrement())
+  name String @unique
 
   strategy Strategy[]
 

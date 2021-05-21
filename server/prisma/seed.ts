@@ -42,8 +42,9 @@ async function seed() {
   }
 
   // not implemented yet but required for strategies.
-  await prisma.map.create({
-    data: {},
+  // add real maps.
+  await prisma.map.createMany({
+    data: [{ name: 'langres' }, { name: 'semoisky' }, { name: 'crossroads' }],
   })
 }
 

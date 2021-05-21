@@ -13,6 +13,10 @@ export class StrategyRepository {
     return this._prismaService.faction
   }
 
+  get map() {
+    return this._prismaService.map
+  }
+
   constructor(private readonly _prismaService: PrismaService) {}
 
   async create(data: CreateStrategyDto) {
@@ -40,5 +44,14 @@ export class StrategyRepository {
     })
 
     return result != null
+  }
+
+  async getAllMaps() {
+    return this.map.findMany({
+      select: {
+        id: true,
+        name: true,
+      },
+    })
   }
 }

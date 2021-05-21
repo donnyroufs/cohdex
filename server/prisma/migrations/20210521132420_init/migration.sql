@@ -19,6 +19,7 @@ CREATE TABLE "User" (
 -- CreateTable
 CREATE TABLE "Map" (
     "id" SERIAL NOT NULL,
+    "name" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -67,6 +68,9 @@ CREATE TABLE "Command" (
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User.steamId_unique" ON "User"("steamId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Map.name_unique" ON "Map"("name");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Strategy.title_userId_factionId_alliesFactionId_axisFactionId_unique" ON "Strategy"("title", "userId", "factionId", "alliesFactionId", "axisFactionId");

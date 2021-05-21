@@ -38,4 +38,8 @@ export class StrategyService {
 
     return this._strategyRepo.create(data)
   }
+
+  async getAllMaps() {
+    return this._strategyRepo.getAllMaps()
+  }
 }
