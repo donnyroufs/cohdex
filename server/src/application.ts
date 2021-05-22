@@ -16,7 +16,7 @@ import {
   IValidationErrorResponse,
   SteamProfile,
 } from './types'
-import { PrismaService } from './prisma.service'
+import { PrismaService } from './services/prisma.service'
 import { BadRequestException, NotAuthenticatedException } from './exceptions'
 import { StrategyRepository } from './repositories/strategy.repository'
 import { StrategyService } from './services/strategy.service'
