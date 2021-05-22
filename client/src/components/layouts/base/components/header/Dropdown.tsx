@@ -15,6 +15,7 @@ import { Avatar } from './Avatar'
 export const Dropdown = () => {
   const history = useHistory()
   const dispatch = useAppDispatch()
+  console.count('render')
 
   function onStrategies() {
     history.push('/strategies')

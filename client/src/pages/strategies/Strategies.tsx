@@ -2,8 +2,8 @@ import { BaseLayout } from '../../components/layouts'
 
 export const Strategies = () => {
   return (
-    <BaseLayout>
+    <BaseLayout.Container>
       <mark>strategies</mark>
-    </BaseLayout>
+    </BaseLayout.Container>
   )
 }
