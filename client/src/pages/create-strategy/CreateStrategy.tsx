@@ -59,11 +59,13 @@ export const CreateStrategy = () => {
   useEffect(() => {
     // As of now the needed data won't change therefore we can skip
     // fetching again when we have them in our store.
-    if (status !== 'init') return
-
     dispatch(fetchFactions())
     dispatch(fetchMaps())
-  }, [dispatch, status])
+
+    return () => {
+      dispatch(restore())
+    }
+  }, [dispatch])
 
   useEffect(() => {
     if (Object.keys(state).length < 5) return

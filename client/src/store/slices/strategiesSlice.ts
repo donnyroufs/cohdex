@@ -33,7 +33,7 @@ export const slice = createSlice({
     restore(state) {
       state.slug = null
       state.error = null
-      state.status = 'init'
+      state.status = 'idle'
     },
     nullifyError(state) {
       state.error = null
