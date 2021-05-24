@@ -49,7 +49,7 @@ function createErrorMessage(field: MissingFieldsState) {
 export const CreateStrategy = () => {
   const [state, setState] = useState<IStrategiesLocalState>({})
   const [missingFields, setMissingFields] = useState<MissingFieldsState[]>([])
-  const isLoading = useAppSelector((state) => state.strategies.isLoading)
+  const status = useAppSelector((state) => state.strategies.status)
   const error = useAppSelector((state) => state.strategies.error)
   const slug = useAppSelector((state) => state.strategies.slug)
   const history = useHistory()
@@ -59,11 +59,11 @@ export const CreateStrategy = () => {
   useEffect(() => {
     // As of now the needed data won't change therefore we can skip
     // fetching again when we have them in our store.
-    if (!isLoading) return
+    if (status !== 'init') return
 
     dispatch(fetchFactions())
     dispatch(fetchMaps())
-  }, [dispatch, isLoading])
+  }, [dispatch, status])
 
   useEffect(() => {
     if (Object.keys(state).length < 5) return
@@ -117,7 +117,7 @@ export const CreateStrategy = () => {
     setMissingFields(uniq(values) as MissingFieldsState[])
   }
 
-  if (isLoading) {
+  if (status === 'init') {
     return <Spinner withMessage />
   }
 

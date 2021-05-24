@@ -18,9 +18,8 @@ export const fetchCreateStrategy = createAsyncThunk(
     strategiesApi.createStrategy(payload).then((res) => res)
 )
 
-// TODO: Move to a more generic loading state
 export const initialState: IStrategiesState = {
-  isLoading: true,
+  status: 'init',
   slug: null,
   factions: [],
   maps: [],
@@ -34,7 +33,7 @@ export const slice = createSlice({
     restore(state) {
       state.slug = null
       state.error = null
-      state.isLoading = true
+      state.status = 'init'
     },
     nullifyError(state) {
       state.error = null
@@ -42,38 +41,33 @@ export const slice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchFactions.pending, (state) => {
-        state.isLoading = true
-      })
+      .addCase(fetchFactions.pending, (state) => {})
       .addCase(fetchFactions.fulfilled, (state, { payload }) => {
-        state.isLoading = false
+        state.status = 'idle'
         state.factions = payload.data.factions
       })
       .addCase(fetchFactions.rejected, (state) => {
-        state.isLoading = false
+        state.status = 'idle'
       })
 
     builder
-      .addCase(fetchMaps.pending, (state) => {
-        state.isLoading = true
-      })
+      .addCase(fetchMaps.pending, (state) => {})
       .addCase(fetchMaps.fulfilled, (state, { payload }) => {
-        state.isLoading = false
+        state.status = 'idle'
         state.maps = payload.data.maps
       })
       .addCase(fetchMaps.rejected, (state) => {
-        state.isLoading = false
+        state.status = 'idle'
       })
 
     builder
       .addCase(fetchCreateStrategy.pending, (state) => {
-        state.isLoading = true
+        state.status = 'create-strategy'
       })
       .addCase(fetchCreateStrategy.fulfilled, (state, { payload }) => {
-        state.isLoading = false
+        state.status = 'idle'
 
         if (payload.error) {
-          state.isLoading = false
           state.error = payload.error
           return
         }
@@ -81,6 +75,7 @@ export const slice = createSlice({
         state.slug = payload.data.strategy.slug
       })
       .addCase(fetchCreateStrategy.rejected, (state, payload) => {
+        state.status = 'idle'
         state.error = payload.error?.message || 'something went wrong'
       })
   },

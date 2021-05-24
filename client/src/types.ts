@@ -8,7 +8,7 @@ export interface IAuthState {
 }
 
 export interface IStrategiesState {
-  isLoading: boolean
+  status: StrategiesLoadingType
   slug: string | null
   maps: IMap[]
   error: string | null
@@ -57,3 +57,5 @@ export interface IStrategiesLocalState {
 export type MissingFieldsState = Partial<
   keyof Omit<IStrategiesLocalState, 'factionId'>
 >
+
+export type StrategiesLoadingType = 'init' | 'idle' | 'create-strategy'

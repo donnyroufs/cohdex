@@ -15,6 +15,7 @@ import {
   IFactionOptions,
   IStrategiesLocalState,
 } from '../../../../types'
+import { Spinner } from '../../../../components'
 
 export interface ICreateModalProps {
   isOpen: boolean
@@ -30,6 +31,7 @@ export const CreateModal: React.FC<ICreateModalProps> = ({
   setState,
 }) => {
   const factions = useAppSelector((state) => state.strategies.factions)
+  const status = useAppSelector((state) => state.strategies.status)
 
   const factionOptions: IFactionOptions[] = useMemo(
     () =>
@@ -50,23 +52,32 @@ export const CreateModal: React.FC<ICreateModalProps> = ({
       <ModalOverlay />
       <ModalContent
         padding={8}
+        minWidth={{ md: '400px ' }}
+        minHeight={{ md: '283px' }}
         maxWidth="fit-content"
         backgroundColor="background.900"
+        position="relative"
       >
-        <ModalHeader>
-          <Heading color="text.600" textAlign="center">
-            Choose Faction
-          </Heading>
-        </ModalHeader>
-        <ModalBody>
-          <ChooseFactionMenu
-            options={factionOptions}
-            onSelect={(payload: Identifier) => {
-              setState((curr) => ({ ...curr, factionId: payload }))
-            }}
-            selected={state.factionId}
-          />
-        </ModalBody>
+        {status === 'create-strategy' ? (
+          <Spinner withMessage={true} absolute={true} opacity={1} />
+        ) : (
+          <>
+            <ModalHeader>
+              <Heading color="text.600" textAlign="center">
+                Choose Faction
+              </Heading>
+            </ModalHeader>
+            <ModalBody>
+              <ChooseFactionMenu
+                options={factionOptions}
+                onSelect={(payload: Identifier) => {
+                  setState((curr) => ({ ...curr, factionId: payload }))
+                }}
+                selected={state.factionId}
+              />
+            </ModalBody>
+          </>
+        )}
       </ModalContent>
     </Modal>
   )
