@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { difference, uniq } from 'lodash'
 import { Spinner, Title } from '../../components'
 import { BaseLayout } from '../../components/layouts'
 import {
@@ -15,14 +16,42 @@ import {
   Footer,
   StrategyTitle,
 } from './components'
-import { Container } from '@chakra-ui/layout'
+import { Box, Container } from '@chakra-ui/layout'
 import { useDisclosure } from '@chakra-ui/react'
 import { ChooseAxisFaction } from './components'
 import { IStrategiesLocalState } from '../../types'
 import { useHistory } from 'react-router-dom'
 
+export type MissingFieldsState = Partial<
+  keyof Omit<IStrategiesLocalState, 'factionId'>
+>
+
+function createErrorMessage(field: MissingFieldsState) {
+  // Remove id suffix
+  const _field = field.includes('title') ? field : field.slice(0, -2)
+
+  if (_field.includes('map')) {
+    return 'You have not yet chosen a map'
+  }
+
+  if (_field.includes('axis')) {
+    return 'You forgot to select an Axis faction'
+  }
+
+  if (_field.includes('allies')) {
+    return 'You forgot to select an Allies faction'
+  }
+
+  if (_field.includes('title')) {
+    return 'You forgot to enter a title'
+  }
+
+  return `Missing input for ${_field}`
+}
+
 export const CreateStrategy = () => {
   const [state, setState] = useState<IStrategiesLocalState>({})
+  const [missingFields, setMissingFields] = useState<MissingFieldsState[]>([])
   const isLoading = useAppSelector((state) => state.strategies.isLoading)
   const slug = useAppSelector((state) => state.strategies.slug)
   const history = useHistory()
@@ -59,19 +88,24 @@ export const CreateStrategy = () => {
   }, [slug, history, dispatch])
 
   function handleFinalStep() {
-    if (
-      [
-        state.alliesFactionId,
-        state.axisFactionId,
-        state.mapId,
-        state.title,
-      ].every((v) => v)
-    ) {
+    const fields = ['alliesFactionId', 'axisFactionId', 'title', 'mapId']
+
+    const _missingFields = difference(
+      fields,
+      Object.keys(state)
+    ) as MissingFieldsState[]
+
+    if (_missingFields.length <= 0 && Object.values(state).every((v) => v)) {
+      setMissingFields([])
       return onOpen()
     }
 
-    // TODO: Let the user know they missed something
-    console.log('missing options')
+    const emptyValues = Object.entries(state)
+      .filter(([k, v]) => !v)
+      .map(([k, v]) => k)
+
+    const values = [...emptyValues, ..._missingFields]
+    setMissingFields(uniq(values) as MissingFieldsState[])
   }
 
   if (isLoading) {
@@ -90,6 +124,18 @@ export const CreateStrategy = () => {
         h={{ base: '100%', md: 'calc(100% - 128px)' }}
       >
         <Title value="Create Strategy" />
+        <Box
+          display={`${missingFields.length > 0 ? 'flex' : 'none'}`}
+          background="header"
+          p={6}
+          textAlign="center"
+          color="vintage.300"
+          border="1px solid"
+          borderColor="primary.600"
+          mt={4}
+        >
+          {missingFields.length > 0 && createErrorMessage(missingFields[0])}
+        </Box>
         <ChooseAxisFaction {...stateProps} />
         <ChooseAlliesFaction {...stateProps} />
         <StrategyTitle {...stateProps} />
