@@ -14,10 +14,6 @@ import { Container } from '@chakra-ui/layout'
 import { useDisclosure } from '@chakra-ui/react'
 import { ChooseAxisFaction } from './components'
 
-// Add title
-// Pick map (with searchable)
-// Modal to pick your faction
-
 export const CreateStrategy = () => {
   const dispatch = useAppDispatch()
   const strategies = useAppSelector((state) => state.strategies)

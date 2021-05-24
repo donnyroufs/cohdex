@@ -26,9 +26,9 @@ export const ChooseFactionMenuItem: React.FC<IChooseFactionMenuItemProps> = ({
       alt={alt}
       onClick={() => onSelect(id, alt)}
       backgroundColor="badge"
-      h={48}
-      w={48}
-      p={6}
+      h={{ sm: 24, md: 32 }}
+      w={{ sm: 24, md: 32 }}
+      p={4}
       border="1px solid"
       borderColor={isSelected ? 'primary.600' : 'border'}
       opacity={isSelected ? '1' : '0.5'}
