@@ -1,5 +1,6 @@
-import { Image } from '@chakra-ui/react'
+import { Image, Skeleton } from '@chakra-ui/react'
 import { useMemo } from 'react'
+import { useLoadImage } from '../../../../hooks'
 import {
   Identifier,
   IFactionOptions,
@@ -18,26 +19,35 @@ export const ChooseFactionMenuItem: React.FC<IChooseFactionMenuItemProps> = ({
   onSelect,
   selected,
 }) => {
+  const [isLoaded] = useLoadImage(imgUrl)
   const isSelected = useMemo(() => selected && selected === id, [id, selected])
 
   return (
-    <Image
-      src={process.env.REACT_APP_BASE_URL + imgUrl}
-      alt={alt}
-      onClick={() => onSelect(id, alt)}
-      backgroundColor="badge"
+    <Skeleton
       h={{ sm: 24, md: 32 }}
       w={{ sm: 24, md: 32 }}
-      p={4}
-      border="1px solid"
-      borderColor={isSelected ? 'primary.600' : 'border'}
-      opacity={isSelected ? '1' : '0.5'}
-      transition="all .2s ease"
-      _hover={{
-        cursor: 'pointer',
-        opacity: 1,
-        borderColor: 'primary.600',
-      }}
-    />
+      isLoaded={isLoaded}
+      startColor="background.700"
+      endColor="background.800"
+    >
+      <Image
+        src={process.env.REACT_APP_BASE_URL + imgUrl}
+        alt={alt}
+        onClick={() => onSelect(id, alt)}
+        backgroundColor="badge"
+        h={{ sm: 24, md: 32 }}
+        w={{ sm: 24, md: 32 }}
+        p={4}
+        border="1px solid"
+        borderColor={isSelected ? 'primary.600' : 'border'}
+        opacity={isSelected ? '1' : '0.5'}
+        transition="all .2s ease"
+        _hover={{
+          cursor: 'pointer',
+          opacity: 1,
+          borderColor: 'primary.600',
+        }}
+      />
+    </Skeleton>
   )
 }
