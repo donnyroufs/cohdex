@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { preloadImage } from '../utils'
 
 export function useLoadImage(imgUrl: string) {
