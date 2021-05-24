@@ -33,7 +33,15 @@ export class StrategyRepository {
   }
 
   async getAllFactions() {
-    return this.faction.findMany({})
+    return this.faction.findMany({
+      select: {
+        abbreviation: true,
+        id: true,
+        imgUrl: true,
+        name: true,
+        team: true,
+      },
+    })
   }
 
   async notUnique(data: CreateStrategyDto) {

@@ -6,19 +6,30 @@ import { isAuthGuard } from '../guards/is-auth.guard'
 import { validateBody } from '../lib'
 import { BadRequestException } from '../exceptions'
 import { BaseHttpResponse } from '../lib/base-http-response'
-import { IGetMapsResponseDto } from '@cohdex/shared'
+import { IGetFactionsResponseDto, IGetMapsResponseDto } from '@cohdex/shared'
 
-@Controller('/strategy')
+@Controller('/strategies')
 export class StrategyController {
   constructor(private readonly _strategyService: StrategyService) {}
 
   @Get('/maps')
-  async getAllMaps(ctx: HttpContext) {
+  async allMaps(ctx: HttpContext) {
     const maps = await this._strategyService.getAllMaps()
 
     ctx.res.json(
       new BaseHttpResponse<IGetMapsResponseDto>({
         maps,
+      })
+    )
+  }
+
+  @Get('/factions')
+  async allFactions(ctx: HttpContext) {
+    const factions = await this._strategyService.getAllFactions()
+
+    ctx.res.json(
+      new BaseHttpResponse<IGetFactionsResponseDto>({
+        factions,
       })
     )
   }

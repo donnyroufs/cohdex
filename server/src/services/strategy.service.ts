@@ -42,4 +42,8 @@ export class StrategyService {
   async getAllMaps() {
     return this._strategyRepo.getAllMaps()
   }
+
+  async getAllFactions() {
+    return this._strategyRepo.getAllFactions()
+  }
 }

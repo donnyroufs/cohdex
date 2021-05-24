@@ -60,7 +60,7 @@ export const Menu = () => {
           {!user && (
             <Link
               textDecoration="none"
-              href="http://localhost:5000/api/v1/auth/login"
+              href={process.env.REACT_APP_BASE_URL + '/api/v1/auth/login'}
               textTransform="uppercase"
               backgroundColor="primary.600"
               color="vintage.100"

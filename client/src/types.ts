@@ -1,10 +1,21 @@
-import { FunctionComponent, ReactNode } from 'react'
-import { IUser } from '@cohdex/shared'
+import React, { FunctionComponent, ReactNode } from 'react'
+import { IFaction, IMap, IUser } from '@cohdex/shared'
 import { RouteComponentProps } from 'react-router-dom'
 
 export interface IAuthState {
   isLoading: boolean
   user: IUser | null
+}
+
+export interface IStrategiesState {
+  isLoading: boolean
+  maps: IMap[]
+  factions: IFaction[]
+  title: string
+  alliesFactionId?: Identifier
+  axisFactionId?: Identifier
+  factionId?: Identifier
+  mapId?: Identifier
 }
 
 export interface IRoute {
@@ -25,3 +36,18 @@ export interface IAuthRouteProps {
   component: React.FC<RouteComponentProps>
   withAuth: boolean
 }
+
+export type Identifier = string | number
+
+export interface IFactionOptions {
+  id: Identifier
+  imgUrl: string
+  alt: FactionTeam
+}
+
+export type OnFactionSelectFn = (id: Identifier, team: FactionTeam) => void
+
+export type FactionTeam = 'ALLIES' | 'AXIS'
+
+// export type SelectedFaction = Partial<Record<FactionTeam, Identifier>>
+// export type SelectedFaction = Partial<Record<FactionTeam, Identifier>>

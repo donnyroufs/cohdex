@@ -5,6 +5,7 @@
   "private": true,
   "dependencies": {
     "@chakra-ui/react": "^1.6.1",
+    "@cohdex/shared": "1.0.0",
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
     "@fontsource/karla": "^4.3.0",
@@ -25,9 +26,9 @@
     "react-redux": "^7.2.4",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
+    "react-select": "^4.3.1",
     "typescript": "^4.1.2",
-    "web-vitals": "^1.0.1",
-    "@cohdex/shared": "1.0.0"
+    "web-vitals": "^1.0.1"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -54,7 +55,8 @@
     ]
   },
   "devDependencies": {
-    "@types/react-router-dom": "^5.1.7"
+    "@types/react-router-dom": "^5.1.7",
+    "@types/react-select": "^4.0.15"
   },
   "proxy": "http://localhost:5000/api/v1"
 }

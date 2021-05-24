@@ -63,6 +63,7 @@ export const theme = extendTheme({
     },
     header: '#101319',
     border: '#1F2938',
+    badge: '#14181D',
   },
   components: {
     Text: {

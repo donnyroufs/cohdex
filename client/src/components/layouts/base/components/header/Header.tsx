@@ -61,7 +61,7 @@ export const Header = () => {
           {!user && (
             <Link
               display="flex"
-              href="http://localhost:5000/api/v1/auth/login"
+              href={process.env.REACT_APP_BASE_URL + '/api/v1/auth/login'}
               background="background.800"
               py={6}
               px={10}

@@ -27,5 +27,9 @@ export const BaseLayout: CompoundComponent<IBaseLayoutProps> = ({
 }
 
 BaseLayout.Container = ({ children }) => {
-  return <ChakraContainer maxW="1700px">{children}</ChakraContainer>
+  return (
+    <ChakraContainer maxW="1700px" mt={12}>
+      {children}
+    </ChakraContainer>
+  )
 }

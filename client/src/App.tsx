@@ -1,11 +1,10 @@
-import { FunctionComponent, useEffect } from 'react'
+import { useEffect } from 'react'
 import { Spinner } from './components/generic/Spinner'
 import { fetchMe } from './store/slices/authSlice'
 import { useAppDispatch, useAppSelector } from './store/store'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import { AuthRoute, routerConfig } from './router'
 import { BaseLayout } from './components/layouts'
-import { IAuthRouteProps } from './types'
 
 function App() {
   const dispatch = useAppDispatch()
