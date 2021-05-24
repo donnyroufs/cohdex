@@ -18,6 +18,10 @@ export const Footer: React.FC<IFooterProps> = ({ handleFinalStep }) => {
         _hover={{
           background: 'primary.500',
         }}
+        _focus={{
+          borderColor: 'none',
+          background: 'primary.500',
+        }}
       >
         Create
       </Button>
@@ -27,6 +31,10 @@ export const Footer: React.FC<IFooterProps> = ({ handleFinalStep }) => {
         display="block"
         my={4}
         target="_blank"
+        _focus={{
+          border: '1px solid',
+          borderColor: 'primary.500',
+        }}
       >
         Map not here? Suggest it on
         <Box as="span" fontWeight="bold" color="primary.600" ml={1}>

@@ -36,8 +36,8 @@ export const StrategyTitle: React.FC<IStrategyTitleProps> = ({
           borderColor: 'border',
         }}
         _focus={{
-          outline: 'none',
-          borderColor: 'border',
+          outline: 'primary.600',
+          borderColor: 'primary.600',
         }}
       />
     </>

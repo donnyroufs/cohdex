@@ -22,13 +22,13 @@ const customStyles = {
     background: '#14181D',
     color: '#515762',
   }),
-  control: (provided: any) => ({
+  control: (provided: any, state: any) => ({
     ...provided,
     background: '#14181D',
     borderColor: '#1F2938',
     padding: '0.6rem .2rem',
-    outline: 'none',
-    boxShadow: 'none',
+    // outline: 'none',
+    boxShadow: state.isFocused ? '0 0 0 1px #B33245' : 'none',
     color: '#515762',
     '&:hover': {
       borderColor: '#1F2938',
