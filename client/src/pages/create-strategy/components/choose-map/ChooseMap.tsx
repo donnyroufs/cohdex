@@ -1,9 +1,8 @@
 import React, { useMemo } from 'react'
 import Select from 'react-select'
 import { Label } from '../../../../components'
-import { selectMap } from '../../../../store/slices/strategiesSlice'
-import { useAppDispatch } from '../../../../store/store'
-import { IStrategiesState } from '../../../../types'
+import { useAppSelector } from '../../../../store/store'
+import { IStrategiesLocalState } from '../../../../types'
 
 const customStyles = {
   input: (provided: any) => ({
@@ -48,19 +47,20 @@ const customStyles = {
 }
 
 export interface IChooseMapProps {
-  strategies: IStrategiesState
+  state: IStrategiesLocalState
+  setState: React.Dispatch<React.SetStateAction<IStrategiesLocalState>>
 }
 
-export const ChooseMap: React.FC<IChooseMapProps> = ({ strategies }) => {
-  const dispatch = useAppDispatch()
+export const ChooseMap: React.FC<IChooseMapProps> = ({ state, setState }) => {
+  const maps = useAppSelector((state) => state.strategies.maps)
 
   const chooseMapOptions = useMemo(
     () =>
-      strategies.maps.map((m) => ({
+      maps.map((m) => ({
         value: m.id,
         label: m.name,
       })),
-    [strategies.maps]
+    [maps]
   )
 
   return (
@@ -69,7 +69,7 @@ export const ChooseMap: React.FC<IChooseMapProps> = ({ strategies }) => {
       <Select
         options={chooseMapOptions}
         styles={customStyles}
-        onChange={(e) => dispatch(selectMap(e!.value))}
+        onChange={(e) => setState((curr) => ({ ...curr, mapId: e!.value }))}
         placeholder="Press Any Key To Find A Map"
         noOptionsMessage={({ inputValue }) => (inputValue = 'No Maps Found')}
       />

@@ -1,34 +1,35 @@
 import React, { useMemo } from 'react'
 import { ChooseFactionMenu } from '..'
 import { Label } from '../../../../components'
-import { selectAlliesFaction } from '../../../../store/slices/strategiesSlice'
-import { useAppDispatch } from '../../../../store/store'
+import { useAppSelector } from '../../../../store/store'
 import {
   FactionTeam,
   Identifier,
   IFactionOptions,
-  IStrategiesState,
+  IStrategiesLocalState,
 } from '../../../../types'
 
 export interface IChooseAlliesFactionProps {
-  strategies: IStrategiesState
+  state: IStrategiesLocalState
+  setState: React.Dispatch<React.SetStateAction<IStrategiesLocalState>>
 }
 
 export const ChooseAlliesFaction: React.FC<IChooseAlliesFactionProps> = ({
-  strategies,
+  state,
+  setState,
 }) => {
-  const dispatch = useAppDispatch()
+  const factions = useAppSelector((state) => state.strategies.factions)
 
   const alliesOptions: IFactionOptions[] = useMemo(
     () =>
-      strategies.factions
+      factions
         .filter((faction) => faction.team === 'ALLIES')
         .map((faction) => ({
           id: faction.id,
           imgUrl: faction.imgUrl,
           alt: faction.team as FactionTeam,
         })),
-    [strategies.factions]
+    [factions]
   )
   return (
     <>
@@ -36,9 +37,9 @@ export const ChooseAlliesFaction: React.FC<IChooseAlliesFactionProps> = ({
       <ChooseFactionMenu
         options={alliesOptions}
         onSelect={(payload: Identifier) =>
-          dispatch(selectAlliesFaction(payload))
+          setState((curr) => ({ ...curr, alliesFactionId: payload }))
         }
-        selected={strategies.alliesFactionId}
+        selected={state.alliesFactionId}
       />
     </>
   )

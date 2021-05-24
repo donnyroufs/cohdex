@@ -1,34 +1,35 @@
 import React, { useMemo } from 'react'
 import { ChooseFactionMenu } from '..'
 import { Label } from '../../../../components'
-import { selectAxisFaction } from '../../../../store/slices/strategiesSlice'
-import { useAppDispatch } from '../../../../store/store'
+import { useAppSelector } from '../../../../store/store'
 import {
   FactionTeam,
   Identifier,
   IFactionOptions,
-  IStrategiesState,
+  IStrategiesLocalState,
 } from '../../../../types'
 
 export interface IChooseAxisFactionProps {
-  strategies: IStrategiesState
+  state: IStrategiesLocalState
+  setState: React.Dispatch<React.SetStateAction<IStrategiesLocalState>>
 }
 
 export const ChooseAxisFaction: React.FC<IChooseAxisFactionProps> = ({
-  strategies,
+  state,
+  setState,
 }) => {
-  const dispatch = useAppDispatch()
+  const factions = useAppSelector((state) => state.strategies.factions)
 
   const axisOptions: IFactionOptions[] = useMemo(
     () =>
-      strategies.factions
+      factions
         .filter((faction) => faction.team === 'AXIS')
         .map((faction) => ({
           id: faction.id,
           imgUrl: faction.imgUrl,
           alt: faction.team as FactionTeam,
         })),
-    [strategies.factions]
+    [factions]
   )
 
   return (
@@ -36,8 +37,10 @@ export const ChooseAxisFaction: React.FC<IChooseAxisFactionProps> = ({
       <Label value="Axis" mb={6} />
       <ChooseFactionMenu
         options={axisOptions}
-        onSelect={(payload: Identifier) => dispatch(selectAxisFaction(payload))}
-        selected={strategies.axisFactionId}
+        onSelect={(payload: Identifier) =>
+          setState((curr) => ({ ...curr, axisFactionId: payload }))
+        }
+        selected={state.axisFactionId}
       />
     </>
   )

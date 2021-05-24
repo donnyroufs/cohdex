@@ -1,7 +1,6 @@
 import React, { useMemo } from 'react'
 import { ChooseFactionMenu } from '..'
-import { fetchCreateStrategy } from '../../../../store/slices/strategiesSlice'
-import { useAppDispatch } from '../../../../store/store'
+import { useAppSelector } from '../../../../store/store'
 import {
   Heading,
   Modal,
@@ -14,36 +13,36 @@ import {
   FactionTeam,
   Identifier,
   IFactionOptions,
-  IStrategiesState,
+  IStrategiesLocalState,
 } from '../../../../types'
 
 export interface ICreateModalProps {
   isOpen: boolean
   onClose: () => void
-  strategies: IStrategiesState
+  state: IStrategiesLocalState
+  setState: React.Dispatch<React.SetStateAction<IStrategiesLocalState>>
 }
 
 export const CreateModal: React.FC<ICreateModalProps> = ({
   isOpen,
   onClose,
-  strategies,
+  state,
+  setState,
 }) => {
-  const dispatch = useAppDispatch()
+  const factions = useAppSelector((state) => state.strategies.factions)
 
   const factionOptions: IFactionOptions[] = useMemo(
     () =>
-      strategies.factions
+      factions
         .filter((faction) =>
-          [strategies.alliesFactionId, strategies.axisFactionId].includes(
-            faction.id
-          )
+          [state.alliesFactionId, state.axisFactionId].includes(faction.id)
         )
         .map((faction) => ({
           id: faction.id,
           imgUrl: faction.imgUrl,
           alt: faction.team as FactionTeam,
         })),
-    [strategies.alliesFactionId, strategies.axisFactionId, strategies.factions]
+    [state.alliesFactionId, state.axisFactionId, factions]
   )
 
   return (
@@ -63,9 +62,9 @@ export const CreateModal: React.FC<ICreateModalProps> = ({
           <ChooseFactionMenu
             options={factionOptions}
             onSelect={(payload: Identifier) => {
-              dispatch(fetchCreateStrategy(payload))
+              setState((curr) => ({ ...curr, factionId: payload }))
             }}
-            selected={strategies.factionId}
+            selected={state.factionId}
           />
         </ModalBody>
       </ModalContent>

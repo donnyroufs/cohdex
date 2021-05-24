@@ -1,19 +1,17 @@
 import React from 'react'
 import { Input } from '@chakra-ui/react'
 import { Label } from '../../../../components'
-import { setTitle } from '../../../../store/slices/strategiesSlice'
-import { useAppDispatch } from '../../../../store/store'
-import { IStrategiesState } from '../../../../types'
+import { IStrategiesLocalState } from '../../../../types'
 
 export interface IStrategyTitleProps {
-  strategies: IStrategiesState
+  state: IStrategiesLocalState
+  setState: React.Dispatch<React.SetStateAction<IStrategiesLocalState>>
 }
 
 export const StrategyTitle: React.FC<IStrategyTitleProps> = ({
-  strategies,
+  state,
+  setState,
 }) => {
-  const dispatch = useAppDispatch()
-
   return (
     <>
       <Label value="Title" mb={6} />
@@ -22,8 +20,10 @@ export const StrategyTitle: React.FC<IStrategyTitleProps> = ({
         background="badge"
         borderColor="border"
         h={14}
-        onChange={(e) => dispatch(setTitle(e.target.value))}
-        value={strategies.title}
+        onChange={(e) =>
+          setState((curr) => ({ ...curr, title: e.target.value }))
+        }
+        value={state.title}
         color="text.400"
         fontSize={16}
         _placeholder={{

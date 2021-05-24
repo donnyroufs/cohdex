@@ -11,11 +11,6 @@ export interface IStrategiesState {
   isLoading: boolean
   maps: IMap[]
   factions: IFaction[]
-  title: string
-  alliesFactionId?: Identifier
-  axisFactionId?: Identifier
-  factionId?: Identifier
-  mapId?: Identifier
 }
 
 export interface IRoute {
@@ -49,5 +44,10 @@ export type OnFactionSelectFn = (id: Identifier, team: FactionTeam) => void
 
 export type FactionTeam = 'ALLIES' | 'AXIS'
 
-// export type SelectedFaction = Partial<Record<FactionTeam, Identifier>>
-// export type SelectedFaction = Partial<Record<FactionTeam, Identifier>>
+export interface IStrategiesLocalState {
+  title?: string
+  alliesFactionId?: Identifier
+  axisFactionId?: Identifier
+  factionId?: Identifier
+  mapId?: Identifier
+}

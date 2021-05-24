@@ -1,8 +1,7 @@
 import { ICreateStrategyRequestDto } from '@cohdex/shared'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { strategiesApi } from '../../api'
-import { Identifier, IStrategiesState } from '../../types'
-import { RootState } from '../store'
+import { IStrategiesState } from '../../types'
 
 export const fetchFactions = createAsyncThunk(
   'strategies/fetchFactions',
@@ -25,17 +24,8 @@ export const fetchMaps = createAsyncThunk('strategies/fetchMaps', async () => {
 
 export const fetchCreateStrategy = createAsyncThunk(
   'strategies/fetchCreateStrategy',
-  async (factionId: Identifier, { getState }) => {
-    const { strategies } = getState() as RootState
-
-    const { data, error } = await strategiesApi.createStrategy({
-      alliesFactionId: +strategies.alliesFactionId!,
-      axisFactionId: +strategies.axisFactionId!,
-      factionId: +factionId!,
-      mapId: +strategies.mapId!,
-      title: strategies.title!,
-    })
-
+  async (payload: ICreateStrategyRequestDto) => {
+    const { data, error } = await strategiesApi.createStrategy(payload)
     return { data, error }
   }
 )
@@ -45,29 +35,12 @@ export const initialState: IStrategiesState = {
   isLoading: true,
   factions: [],
   maps: [],
-  title: '',
 }
 
 export const slice = createSlice({
   name: 'strategies',
   initialState,
-  reducers: {
-    selectAxisFaction(state, action) {
-      state.axisFactionId = action.payload
-    },
-    selectAlliesFaction(state, action) {
-      state.alliesFactionId = action.payload
-    },
-    selectFaction(state, action) {
-      state.factionId = action.payload
-    },
-    selectMap(state, action) {
-      state.mapId = action.payload
-    },
-    setTitle(state, action) {
-      state.title = action.payload
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchFactions.pending, (state) => {
@@ -107,10 +80,4 @@ export const slice = createSlice({
 })
 
 export const strategiesReducer = slice.reducer
-export const {
-  selectAlliesFaction,
-  selectAxisFaction,
-  selectFaction,
-  selectMap,
-  setTitle,
-} = slice.actions
+export const actions = slice.actions
