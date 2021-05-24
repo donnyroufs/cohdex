@@ -13,8 +13,11 @@ export const strategiesApi = new (class StrategiesApi extends BaseApi {
   // TODO: Fix error type
   async createStrategy(
     payload: ICreateStrategyRequestDto
-  ): Promise<BaseHttpResponse<ICreateStrategyResponseDto, unknown>> {
-    return this.axios.post(this.endpoint('/'), payload).then(({ data }) => data)
+  ): Promise<BaseHttpResponse<ICreateStrategyResponseDto, string>> {
+    return this.axios
+      .post(this.endpoint('/'), payload)
+      .then(({ data }) => data)
+      .catch((err) => err.response.data)
   }
 
   async getFactions(): Promise<BaseHttpResponse<IGetFactionsResponseDto>> {

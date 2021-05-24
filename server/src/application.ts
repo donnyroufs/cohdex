@@ -17,7 +17,11 @@ import {
   SteamProfile,
 } from './types'
 import { PrismaService } from './services/prisma.service'
-import { BadRequestException, NotAuthenticatedException } from './exceptions'
+import {
+  BadRequestException,
+  DuplicateException,
+  NotAuthenticatedException,
+} from './exceptions'
 import { StrategyRepository } from './repositories/strategy.repository'
 import { StrategyService } from './services/strategy.service'
 import { UserService } from './services/user.service'

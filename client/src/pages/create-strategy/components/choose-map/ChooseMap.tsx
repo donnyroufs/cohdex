@@ -63,14 +63,23 @@ export const ChooseMap: React.FC<IChooseMapProps> = ({ state, setState }) => {
     [maps]
   )
 
+  const chosenMap = useMemo(
+    () => maps.find((map) => map.id === state.mapId),
+    [maps, state]
+  )
+
   return (
     <>
       <Label value="Choose map" mb={6} />
       <Select
         options={chooseMapOptions}
         styles={customStyles}
-        onChange={(e) => setState((curr) => ({ ...curr, mapId: e!.value }))}
-        placeholder="Press Any Key To Find A Map"
+        onChange={(e) => {
+          if (e?.value) {
+            setState((curr) => ({ ...curr, mapId: e.value }))
+          }
+        }}
+        placeholder={chosenMap ? chosenMap.name : 'Press Any Key To Find A Map'}
         noOptionsMessage={({ inputValue }) => (inputValue = 'No Maps Found')}
       />
     </>

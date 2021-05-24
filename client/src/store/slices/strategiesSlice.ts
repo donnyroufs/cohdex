@@ -5,29 +5,17 @@ import { IStrategiesState } from '../../types'
 
 export const fetchFactions = createAsyncThunk(
   'strategies/fetchFactions',
-  async () => {
-    const { data } = await strategiesApi.getFactions()
-
-    return {
-      data,
-    }
-  }
+  async () => strategiesApi.getFactions()
 )
 
-export const fetchMaps = createAsyncThunk('strategies/fetchMaps', async () => {
-  const { data } = await strategiesApi.getMaps()
-
-  return {
-    data,
-  }
-})
+export const fetchMaps = createAsyncThunk('strategies/fetchMaps', async () =>
+  strategiesApi.getMaps()
+)
 
 export const fetchCreateStrategy = createAsyncThunk(
   'strategies/fetchCreateStrategy',
-  async (payload: ICreateStrategyRequestDto) => {
-    const { data, error } = await strategiesApi.createStrategy(payload)
-    return { data, error }
-  }
+  async (payload: ICreateStrategyRequestDto) =>
+    strategiesApi.createStrategy(payload).then((res) => res)
 )
 
 // TODO: Move to a more generic loading state
@@ -36,14 +24,20 @@ export const initialState: IStrategiesState = {
   slug: null,
   factions: [],
   maps: [],
+  error: null,
 }
 
 export const slice = createSlice({
   name: 'strategies',
   initialState,
   reducers: {
-    nullifySlug(state) {
+    restore(state) {
       state.slug = null
+      state.error = null
+      state.isLoading = true
+    },
+    nullifyError(state) {
+      state.error = null
     },
   },
   extraReducers: (builder) => {
@@ -77,13 +71,20 @@ export const slice = createSlice({
       })
       .addCase(fetchCreateStrategy.fulfilled, (state, { payload }) => {
         state.isLoading = false
+
+        if (payload.error) {
+          state.isLoading = false
+          state.error = payload.error
+          return
+        }
+
         state.slug = payload.data.strategy.slug
       })
-      .addCase(fetchCreateStrategy.rejected, (state, { payload }) => {
-        state.isLoading = false
+      .addCase(fetchCreateStrategy.rejected, (state, payload) => {
+        state.error = payload.error?.message || 'something went wrong'
       })
   },
 })
 
 export const strategiesReducer = slice.reducer
-export const { nullifySlug } = slice.actions
+export const { restore, nullifyError } = slice.actions

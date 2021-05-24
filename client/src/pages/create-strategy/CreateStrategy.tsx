@@ -3,10 +3,11 @@ import { difference, uniq } from 'lodash'
 import { Spinner, Title } from '../../components'
 import { BaseLayout } from '../../components/layouts'
 import {
-  nullifySlug,
+  restore,
   fetchCreateStrategy,
   fetchFactions,
   fetchMaps,
+  nullifyError,
 } from '../../store/slices/strategiesSlice'
 import { useAppDispatch, useAppSelector } from '../../store/store'
 import {
@@ -19,12 +20,8 @@ import {
 import { Box, Container } from '@chakra-ui/layout'
 import { useDisclosure } from '@chakra-ui/react'
 import { ChooseAxisFaction } from './components'
-import { IStrategiesLocalState } from '../../types'
+import { IStrategiesLocalState, MissingFieldsState } from '../../types'
 import { useHistory } from 'react-router-dom'
-
-export type MissingFieldsState = Partial<
-  keyof Omit<IStrategiesLocalState, 'factionId'>
->
 
 function createErrorMessage(field: MissingFieldsState) {
   // Remove id suffix
@@ -53,6 +50,7 @@ export const CreateStrategy = () => {
   const [state, setState] = useState<IStrategiesLocalState>({})
   const [missingFields, setMissingFields] = useState<MissingFieldsState[]>([])
   const isLoading = useAppSelector((state) => state.strategies.isLoading)
+  const error = useAppSelector((state) => state.strategies.error)
   const slug = useAppSelector((state) => state.strategies.slug)
   const history = useHistory()
   const dispatch = useAppDispatch()
@@ -79,16 +77,22 @@ export const CreateStrategy = () => {
     }
   }, [state, dispatch])
 
-  // Redirect on success create
   useEffect(() => {
     if (slug) {
       history.push('/strategy/' + slug)
-      dispatch(nullifySlug())
+      dispatch(restore())
     }
-  }, [slug, history, dispatch])
+
+    if (error) {
+      setState(({ factionId, ...curr }) => ({
+        ...curr,
+      }))
+      onClose()
+    }
+  }, [slug, history, dispatch, error, onClose])
 
   function handleFinalStep() {
-    const fields = ['alliesFactionId', 'axisFactionId', 'title', 'mapId']
+    const fields = ['axisFactionId', 'alliesFactionId', 'title', 'mapId']
 
     const _missingFields = difference(
       fields,
@@ -97,6 +101,7 @@ export const CreateStrategy = () => {
 
     if (_missingFields.length <= 0 && Object.values(state).every((v) => v)) {
       setMissingFields([])
+      dispatch(nullifyError())
       return onOpen()
     }
 
@@ -125,16 +130,17 @@ export const CreateStrategy = () => {
       >
         <Title value="Create Strategy" />
         <Box
-          display={`${missingFields.length > 0 ? 'flex' : 'none'}`}
+          display={`${missingFields.length > 0 || error ? 'flex' : 'none'}`}
           background="header"
           p={6}
           textAlign="center"
           color="vintage.300"
           border="1px solid"
           borderColor="primary.600"
-          mt={4}
+          mt={8}
         >
           {missingFields.length > 0 && createErrorMessage(missingFields[0])}
+          {error && error}
         </Box>
         <ChooseAxisFaction {...stateProps} />
         <ChooseAlliesFaction {...stateProps} />

@@ -11,6 +11,7 @@ export interface IStrategiesState {
   isLoading: boolean
   slug: string | null
   maps: IMap[]
+  error: string | null
   factions: IFaction[]
 }
 
@@ -52,3 +53,7 @@ export interface IStrategiesLocalState {
   factionId?: Identifier
   mapId?: Identifier
 }
+
+export type MissingFieldsState = Partial<
+  keyof Omit<IStrategiesLocalState, 'factionId'>
+>
