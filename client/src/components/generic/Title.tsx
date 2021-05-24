@@ -7,7 +7,7 @@ interface ITitleProps {
 
 export const Title: React.FC<ITitleProps> = ({ value }) => {
   return (
-    <Box display="flex" alignItems="center">
+    <Box display="flex" alignItems="center" mt={12}>
       <Box
         backgroundColor="primary.600"
         h={6}

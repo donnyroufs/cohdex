@@ -45,8 +45,11 @@ export const CreateStrategy = () => {
   }
 
   return (
-    <BaseLayout.Container>
-      <Container maxW="container.md">
+    <BaseLayout.FullContainer>
+      <Container
+        maxW="container.md"
+        h={{ base: '100%', md: 'calc(100% - 128px)' }}
+      >
         <Title value="Create Strategy" />
         <ChooseAxisFaction strategies={strategies} />
         <ChooseAlliesFaction strategies={strategies} />
@@ -55,6 +58,6 @@ export const CreateStrategy = () => {
         <Footer handleFinalStep={handleFinalStep} />
       </Container>
       <CreateModal isOpen={isOpen} onClose={onClose} strategies={strategies} />
-    </BaseLayout.Container>
+    </BaseLayout.FullContainer>
   )
 }

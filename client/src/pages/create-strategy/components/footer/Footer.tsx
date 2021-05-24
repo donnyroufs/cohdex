@@ -7,13 +7,17 @@ export interface IFooterProps {
 
 export const Footer: React.FC<IFooterProps> = ({ handleFinalStep }) => {
   return (
-    <Box as="footer" textAlign="center" mb={12}>
+    <Box as="footer" textAlign="center" pb={12}>
       <Button
         colorScheme="primary"
+        background="primary.600"
         w="full"
         mt={12}
         onClick={handleFinalStep}
         fontFamily="play"
+        _hover={{
+          background: 'primary.500',
+        }}
       >
         Create
       </Button>
@@ -22,6 +26,7 @@ export const Footer: React.FC<IFooterProps> = ({ handleFinalStep }) => {
         color="text.600"
         display="block"
         my={4}
+        target="_blank"
       >
         Map not here? Suggest it on
         <Box as="span" fontWeight="bold" color="primary.600" ml={1}>

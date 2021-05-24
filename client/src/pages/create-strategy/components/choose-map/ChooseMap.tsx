@@ -1,31 +1,48 @@
 import React, { useMemo } from 'react'
-import Select from 'react-select'
+import Select, { NonceProvider } from 'react-select'
 import { Label } from '../../../../components'
 import { selectMap } from '../../../../store/slices/strategiesSlice'
 import { useAppDispatch } from '../../../../store/store'
 import { IStrategiesState } from '../../../../types'
 
 const customStyles = {
+  input: (provided: any) => ({
+    ...provided,
+    color: '#515762',
+  }),
   option: (provided: any, state: any) => ({
     ...provided,
-    // borderBottom: '1px dotted pink',
-    // color: state.isSelected ? 'red' : 'blue',
-    // padding: 20,
+    background: '#14181D',
+    color: '#838996',
+    '&:hover': {
+      background: '#222830',
+    },
   }),
-  menu: (provided: any, state: any) => ({}),
+  menu: (provided: any) => ({
+    ...provided,
+    background: '#14181D',
+    color: '#515762',
+  }),
   control: (provided: any) => ({
-    // none of react-select's styles are passed to <Control />
     ...provided,
     background: '#14181D',
     borderColor: '#1F2938',
     padding: '0.6rem .2rem',
+    outline: 'none',
+    boxShadow: 'none',
+    color: '#515762',
+    '&:hover': {
+      borderColor: '#1F2938',
+    },
   }),
-  // singleValue: (provided: any, state: any) => {
-  //   const opacity = state.isDisabled ? 0.5 : 1
-  //   const transition = 'opacity 300ms'
-
-  //   return { ...provided, opacity, transition }
-  // },
+  placeholder: (provided: any) => ({
+    ...provided,
+    color: '#515762',
+  }),
+  singleValue: (provided: any) => ({
+    ...provided,
+    color: '#838996',
+  }),
 }
 
 export interface IChooseMapProps {
@@ -51,6 +68,8 @@ export const ChooseMap: React.FC<IChooseMapProps> = ({ strategies }) => {
         options={chooseMapOptions}
         styles={customStyles}
         onChange={(e) => dispatch(selectMap(e!.value))}
+        placeholder="Press Any Key To Find A Map"
+        noOptionsMessage={({ inputValue }) => (inputValue = 'No Maps Found')}
       />
     </>
   )

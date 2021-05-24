@@ -6,6 +6,7 @@ import { routePaths, routePathsWithLayout } from '../../../router'
 
 interface IBaseLayoutProps {
   Container: React.FC
+  FullContainer: React.FC
 }
 
 export const BaseLayout: CompoundComponent<IBaseLayoutProps> = ({
@@ -29,6 +30,20 @@ export const BaseLayout: CompoundComponent<IBaseLayoutProps> = ({
 BaseLayout.Container = ({ children }) => {
   return (
     <ChakraContainer maxW="1700px" mt={12}>
+      {children}
+    </ChakraContainer>
+  )
+}
+
+BaseLayout.FullContainer = ({ children }) => {
+  return (
+    <ChakraContainer
+      maxW="1700px"
+      h="calc(100vh - 128px)"
+      display="flex"
+      alignItems="center"
+      justifyContent="center"
+    >
       {children}
     </ChakraContainer>
   )

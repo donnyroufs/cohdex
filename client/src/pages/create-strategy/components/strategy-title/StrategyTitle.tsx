@@ -30,6 +30,15 @@ export const StrategyTitle: React.FC<IStrategyTitleProps> = ({
           color: 'text.600',
           textTransform: 'capitalize',
         }}
+        outline="none"
+        _hover={{
+          outline: 'none',
+          borderColor: 'border',
+        }}
+        _focus={{
+          outline: 'none',
+          borderColor: 'border',
+        }}
       />
     </>
   )
