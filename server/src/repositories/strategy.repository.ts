@@ -20,16 +20,19 @@ export class StrategyRepository {
   constructor(private readonly _prismaService: PrismaService) {}
 
   async create(data: CreateStrategyDto) {
-    await this.strategy.create({
+    const createdStrategy = await this.strategy.create({
       data: {
         ...data,
         slug: slugify(data.title, {
           lower: true,
         }),
       },
+      select: {
+        slug: true,
+      },
     })
 
-    return true
+    return createdStrategy
   }
 
   async getAllFactions() {

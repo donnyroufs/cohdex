@@ -5,6 +5,12 @@ export interface IMap extends Pick<Map, 'id' | 'name'> {}
 export interface IFaction
   extends Pick<Faction, 'id' | 'name' | 'abbreviation' | 'team' | 'imgUrl'> {}
 
+export interface ICreateStrategyResponseDto {
+  strategy: {
+    slug: string
+  }
+}
+
 export interface IGetMeResponseDto {
   user: IUser
 }

@@ -6,7 +6,11 @@ import { isAuthGuard } from '../guards/is-auth.guard'
 import { validateBody } from '../lib'
 import { BadRequestException } from '../exceptions'
 import { BaseHttpResponse } from '../lib/base-http-response'
-import { IGetFactionsResponseDto, IGetMapsResponseDto } from '@cohdex/shared'
+import {
+  ICreateStrategyResponseDto,
+  IGetFactionsResponseDto,
+  IGetMapsResponseDto,
+} from '@cohdex/shared'
 
 @Controller('/strategies')
 export class StrategyController {
@@ -37,10 +41,14 @@ export class StrategyController {
   @Post('/')
   @Middleware(isAuthGuard, validateBody(CreateStrategyDto))
   async store(ctx: HttpContext<CreateStrategyDto>) {
-    await this._strategyService.create(ctx.data).catch((e) => {
+    const strategy = await this._strategyService.create(ctx.data).catch((e) => {
       throw new BadRequestException(e.message)
     })
 
-    ctx.res.sendStatus(201)
+    ctx.res.status(201).json(
+      new BaseHttpResponse<ICreateStrategyResponseDto>({
+        strategy,
+      })
+    )
   }
 }
