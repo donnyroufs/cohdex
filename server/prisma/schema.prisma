@@ -63,7 +63,7 @@ model Strategy {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@unique([title, userId, factionId, alliesFactionId, axisFactionId])
+  @@unique([title, userId, factionId, alliesFactionId, axisFactionId, mapId])
 }
 
 // Add faction image
