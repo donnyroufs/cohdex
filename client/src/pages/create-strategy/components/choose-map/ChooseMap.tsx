@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react'
-import Select, { NonceProvider } from 'react-select'
+import Select from 'react-select'
 import { Label } from '../../../../components'
 import { selectMap } from '../../../../store/slices/strategiesSlice'
 import { useAppDispatch } from '../../../../store/store'
@@ -33,6 +33,7 @@ const customStyles = {
     color: '#515762',
     '&:hover': {
       borderColor: '#1F2938',
+      cursor: 'pointer',
     },
   }),
   placeholder: (provided: any) => ({
@@ -43,6 +44,7 @@ const customStyles = {
     ...provided,
     color: '#838996',
   }),
+  indicatorSeparator: () => ({}),
 }
 
 export interface IChooseMapProps {

@@ -32,6 +32,7 @@ export const ChooseFactionMenuItem: React.FC<IChooseFactionMenuItemProps> = ({
       border="1px solid"
       borderColor={isSelected ? 'primary.600' : 'border'}
       opacity={isSelected ? '1' : '0.5'}
+      transition="all .2s ease"
       _hover={{
         cursor: 'pointer',
         opacity: 1,
