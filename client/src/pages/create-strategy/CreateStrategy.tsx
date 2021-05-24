@@ -57,9 +57,13 @@ export const CreateStrategy = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   useEffect(() => {
+    // As of now the needed data won't change therefore we can skip
+    // fetching again when we have them in our store.
+    if (!isLoading) return
+
     dispatch(fetchFactions())
     dispatch(fetchMaps())
-  }, [dispatch])
+  }, [dispatch, isLoading])
 
   useEffect(() => {
     if (Object.keys(state).length < 5) return
