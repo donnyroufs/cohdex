@@ -38,7 +38,7 @@ export const ChooseAlliesFaction: React.FC<IChooseAlliesFactionProps> = ({
         onSelect={(payload: Identifier) =>
           dispatch(selectAlliesFaction(payload))
         }
-        selected={strategies.axisFactionId}
+        selected={strategies.alliesFactionId}
       />
     </>
   )
