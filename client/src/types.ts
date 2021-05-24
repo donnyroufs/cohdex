@@ -9,6 +9,7 @@ export interface IAuthState {
 
 export interface IStrategiesState {
   isLoading: boolean
+  slug: string | null
   maps: IMap[]
   factions: IFaction[]
 }

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Spinner, Title } from '../../components'
 import { BaseLayout } from '../../components/layouts'
 import {
+  nullifySlug,
   fetchCreateStrategy,
   fetchFactions,
   fetchMaps,
@@ -18,10 +19,13 @@ import { Container } from '@chakra-ui/layout'
 import { useDisclosure } from '@chakra-ui/react'
 import { ChooseAxisFaction } from './components'
 import { IStrategiesLocalState } from '../../types'
+import { useHistory } from 'react-router-dom'
 
 export const CreateStrategy = () => {
   const [state, setState] = useState<IStrategiesLocalState>({})
   const isLoading = useAppSelector((state) => state.strategies.isLoading)
+  const slug = useAppSelector((state) => state.strategies.slug)
+  const history = useHistory()
   const dispatch = useAppDispatch()
   const { isOpen, onOpen, onClose } = useDisclosure()
 
@@ -45,6 +49,14 @@ export const CreateStrategy = () => {
       )
     }
   }, [state, dispatch])
+
+  // Redirect on success create
+  useEffect(() => {
+    if (slug) {
+      history.push('/strategy/' + slug)
+      dispatch(nullifySlug())
+    }
+  }, [slug, history, dispatch])
 
   function handleFinalStep() {
     if (

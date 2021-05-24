@@ -33,6 +33,7 @@ export const fetchCreateStrategy = createAsyncThunk(
 // TODO: Move to a more generic loading state
 export const initialState: IStrategiesState = {
   isLoading: true,
+  slug: null,
   factions: [],
   maps: [],
 }
@@ -40,7 +41,11 @@ export const initialState: IStrategiesState = {
 export const slice = createSlice({
   name: 'strategies',
   initialState,
-  reducers: {},
+  reducers: {
+    nullifySlug(state) {
+      state.slug = null
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchFactions.pending, (state) => {
@@ -72,6 +77,7 @@ export const slice = createSlice({
       })
       .addCase(fetchCreateStrategy.fulfilled, (state, { payload }) => {
         state.isLoading = false
+        state.slug = payload.data.strategy.slug
       })
       .addCase(fetchCreateStrategy.rejected, (state, { payload }) => {
         state.isLoading = false
@@ -80,4 +86,4 @@ export const slice = createSlice({
 })
 
 export const strategiesReducer = slice.reducer
-export const actions = slice.actions
+export const { nullifySlug } = slice.actions
