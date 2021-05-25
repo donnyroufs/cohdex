@@ -1,7 +1,7 @@
 import {
   BaseHttpResponse,
-  ICreateStrategyRequestDto,
   ICreateStrategyResponseDto,
+  ICreateStrategyDto,
   IGetFactionsResponseDto,
   IGetMapsResponseDto,
 } from '@cohdex/shared'
@@ -12,7 +12,7 @@ export const strategiesApi = new (class StrategiesApi extends BaseApi {
 
   // TODO: Fix error type
   async createStrategy(
-    payload: ICreateStrategyRequestDto
+    payload: ICreateStrategyDto
   ): Promise<BaseHttpResponse<ICreateStrategyResponseDto, string>> {
     return this.axios
       .post(this.endpoint('/'), payload)

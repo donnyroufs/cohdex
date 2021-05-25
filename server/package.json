@@ -45,6 +45,7 @@
     "@kondah/http-context": "0.0.7",
     "@kondah/http-controller": "0.0.10",
     "@prisma/client": "^2.23.0",
+    "class-transformer": "^0.4.0",
     "class-validator": "^0.13.1",
     "connect-redis": "^5.2.0",
     "cookie-parser": "^1.4.5",

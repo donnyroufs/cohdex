@@ -11,17 +11,9 @@ import { milliseconds } from 'date-fns'
 import { Strategy as SteamStrategy } from 'passport-steam'
 import passport from 'passport'
 
-import {
-  IValidationError,
-  IValidationErrorResponse,
-  SteamProfile,
-} from './types'
+import { SteamProfile } from './types'
 import { PrismaService } from './services/prisma.service'
-import {
-  BadRequestException,
-  DuplicateException,
-  NotAuthenticatedException,
-} from './exceptions'
+import { BadRequestException, NotAuthenticatedException } from './exceptions'
 import { StrategyRepository } from './repositories/strategy.repository'
 import { StrategyService } from './services/strategy.service'
 import { UserService } from './services/user.service'
@@ -115,12 +107,11 @@ export class Application extends Kondah {
       }
 
       if (err instanceof InputValidationException) {
-        const response = new BaseHttpResponse<IValidationErrorResponse[]>(
+        const error = err.errors[0]
+
+        const response = new BaseHttpResponse<string>(
           undefined,
-          err.errors.map((e: IValidationError) => ({
-            property: e.property,
-            messages: e.constraints,
-          }))
+          error.constraints != null ? Object.values(error.constraints)[0] : ''
         )
 
         return res.status(err.code).json(response)

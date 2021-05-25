@@ -77,7 +77,8 @@ export const CreateStrategy = () => {
           axisFactionId: +state.axisFactionId!,
           factionId: +state.factionId!,
           mapId: +state.mapId!,
-          title: state.title!,
+          title: state.title!.trim(),
+          userId: undefined!,
         })
       )
     }

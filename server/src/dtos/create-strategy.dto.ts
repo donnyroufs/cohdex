@@ -1,36 +1,34 @@
-import { IsDefined, IsNumber, IsString } from 'class-validator'
+import { ICreateStrategyDto } from '@cohdex/shared'
+import { Expose } from 'class-transformer'
+import { IsNumber, IsString, Length, Matches } from 'class-validator'
+import { DTO } from '../lib'
 
-export class CreateStrategyDto {
-  @IsDefined()
+export class CreateStrategyDto extends DTO<ICreateStrategyDto> {
+  @Expose()
   @IsString()
+  @Length(6, 24)
+  @Matches(RegExp(/^(?:[A-Za-z]+)(?:[A-Za-z0-9 _]*)$/), {
+    message: 'A title cannot contain special characters.',
+  })
   title: string
 
-  @IsDefined()
-  @IsNumber()
-  alliesFactionId: number
-
-  @IsDefined()
-  @IsNumber()
-  axisFactionId: number
-
-  @IsDefined()
-  @IsNumber()
-  factionId: number
-
-  @IsDefined()
-  @IsNumber()
-  mapId: number
-
-  @IsDefined()
+  @Expose()
   @IsNumber()
   userId: number
 
-  constructor(props: CreateStrategyDto) {
-    this.title = props.title
-    this.alliesFactionId = props.alliesFactionId
-    this.axisFactionId = props.axisFactionId
-    this.factionId = props.factionId
-    this.mapId = props.mapId
-    this.userId = props.userId
-  }
+  @Expose()
+  @IsNumber()
+  mapId: number
+
+  @Expose()
+  @IsNumber()
+  factionId: number
+
+  @Expose()
+  @IsNumber()
+  alliesFactionId: number
+
+  @Expose()
+  @IsNumber()
+  axisFactionId: number
 }

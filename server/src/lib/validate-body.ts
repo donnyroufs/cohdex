@@ -1,20 +1,20 @@
 import { Request, Response, NextFunction } from 'express'
-import { validateOrReject } from 'class-validator'
-import { IValidationError } from '../types'
+import { validateSync } from 'class-validator'
 import { InputValidationException } from '../exceptions/input-validation.exception'
+import { classToPlain } from 'class-transformer'
 
 // TODO: Move to kondah plugin
 export function validateBody(dto: new (args: any) => any) {
   return async (req: Request, res: Response, next: NextFunction) => {
-    // Define DTO for input validation errors
-    const data = new dto({ ...req.body, userId: req.user!.id })
+    const instance = new dto({ ...req.body, userId: req.user!.id })
+    const errors = validateSync(instance)
 
-    await validateOrReject(data, {
-      validationError: {
-        target: false,
-      },
-    }).catch((err) => {
-      throw new InputValidationException(err)
+    if (errors.length > 0) {
+      throw new InputValidationException(errors)
+    }
+
+    const data = classToPlain(instance, {
+      excludeExtraneousValues: true,
     })
 
     // TODO: Kondah expose types!

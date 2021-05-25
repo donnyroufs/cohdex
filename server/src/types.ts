@@ -28,17 +28,3 @@ export interface JSON {
 export interface Photo {
   value: string
 }
-
-export interface IValidationError {
-  value: string
-  property: string
-  children: unknown[]
-  constraints: {
-    [key: string]: string
-  }
-}
-
-export interface IValidationErrorResponse {
-  property: string
-  messages: Record<string, string>
-}

@@ -1,4 +1,4 @@
-import { ICreateStrategyRequestDto } from '@cohdex/shared'
+import { ICreateStrategyDto } from '@cohdex/shared'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { strategiesApi } from '../../api'
 import { IStrategiesState } from '../../types'
@@ -14,7 +14,7 @@ export const fetchMaps = createAsyncThunk('strategies/fetchMaps', async () =>
 
 export const fetchCreateStrategy = createAsyncThunk(
   'strategies/fetchCreateStrategy',
-  async (payload: ICreateStrategyRequestDto) =>
+  async (payload: ICreateStrategyDto) =>
     strategiesApi.createStrategy(payload).then((res) => res)
 )
 
