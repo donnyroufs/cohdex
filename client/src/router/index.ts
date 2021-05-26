@@ -1,2 +1,2 @@
-export * from './Router'
 export * from './AuthRoute'
+export * from './routerConfig'

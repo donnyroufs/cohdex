@@ -1,23 +1,40 @@
 import { AppContext, Energizor, Kondah } from '@kondah/core'
 import express from 'express'
 import cors from 'cors'
-import csurf from 'csurf'
 import morgan from 'morgan'
 import cookieParser from 'cookie-parser'
 import session from 'express-session'
+import path from 'path'
 import redis from 'redis'
 import connectRedis from 'connect-redis'
 import { milliseconds } from 'date-fns'
 import { Strategy as SteamStrategy } from 'passport-steam'
 import passport from 'passport'
 
-import { SteamProfile } from './types'
+import { SteamProfile, DoneFn } from './types'
 import { PrismaService } from './services/prisma.service'
-import { NotAuthenticatedException } from './exceptions'
+import { StrategyRepository } from './repositories/strategy.repository'
+import { StrategyService } from './services/strategy.service'
+import { UserService } from './services/user.service'
+import { UserRepository } from './repositories/user.repository'
+import { CreateUserDto } from './dtos/create-user.dto'
+import { InputValidationException } from './exceptions/http/input-validation.exception'
+import { BaseHttpResponse } from './lib/base-http-response'
+import { DomainInputValidationException } from './exceptions/domain/domain-input-validation.exception'
+
+export const API_VERSION = 1
 
 export class Application extends Kondah {
   protected async configureServices(services: Energizor) {
+    services.setDefaultScope('singleton')
+
     services.register(PrismaService)
+
+    services.register(UserRepository)
+    services.register(UserService)
+
+    services.register(StrategyRepository)
+    services.register(StrategyService)
   }
 
   protected async setup({ server, addControllers, energizor }: AppContext) {
@@ -26,15 +43,16 @@ export class Application extends Kondah {
     const RedisStore = connectRedis(session)
     const store = new RedisStore({ client: redis.createClient() })
 
-    const csrf = csurf({
-      cookie: {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'prod',
-      },
-    })
+    server.addMiddleware(
+      '/public',
+      express.static(path.join(__dirname, '../public'))
+    )
+
+    if (process.env.NODE_ENV !== 'test') {
+      server.addGlobalMiddleware(morgan('common'))
+    }
 
     server.addGlobalMiddleware(
-      morgan('short'),
       cookieParser(),
       express.json(),
       session({
@@ -47,7 +65,7 @@ export class Application extends Kondah {
           maxAge: milliseconds({ days: 7 }),
           secure: process.env.NODE_ENV === 'prod',
           httpOnly: true,
-          sameSite: true,
+          sameSite: 'strict',
         },
       }),
       cors({
@@ -55,13 +73,7 @@ export class Application extends Kondah {
         credentials: true,
       }),
       passport.initialize(),
-      passport.session(),
-      csrf,
-      (req, res, next) => {
-        const csrfToken = req.csrfToken()
-        res.cookie('xsrf-token', csrfToken)
-        next()
-      }
+      passport.session()
     )
 
     passport.serializeUser(function (user, done) {
@@ -72,6 +84,8 @@ export class Application extends Kondah {
       done(null, obj)
     })
 
+    const userService = energizor.get(UserService)
+
     passport.use(
       new SteamStrategy(
         {
@@ -79,40 +93,44 @@ export class Application extends Kondah {
           realm: process.env.BASE_URI,
           apiKey: process.env.API_KEY_STEAM,
         },
-        async (_: string, profile: SteamProfile, done: any) => {
-          const user = await prisma.client.user.upsert({
-            where: {
-              steamId: profile._json.steamid,
-            },
-            create: {
+        async (_: string, profile: SteamProfile, done: DoneFn) => {
+          const user = await userService.createOrUpdate(
+            new CreateUserDto({
               avatar: profile._json.avatarfull,
               profileUrl: profile._json.profileurl,
               steamId: profile._json.steamid,
-            },
-            update: {
-              profileUrl: profile._json.profileurl,
-            },
-            select: {
-              avatar: true,
-              profileUrl: true,
-              steamId: true,
-            },
-          })
+            }).validateAndThrow()
+          )
 
           done(null, user)
         }
       )
     )
 
-    await addControllers('/api/v1')
+    await addControllers('/api/v' + API_VERSION)
 
-    server.handleGlobalExceptions((err, req, res, next) => {
-      if (err instanceof NotAuthenticatedException) {
-        return res.status(err.code).json(err.message)
+    server.handleGlobalExceptions(
+      (err: Error & { code?: number }, req, res, next) => {
+        const code = err?.code || 500
+        let response = new BaseHttpResponse(
+          undefined,
+          err.message || 'Something unknown happend'
+        )
+
+        if (
+          err instanceof InputValidationException ||
+          err instanceof DomainInputValidationException
+        ) {
+          const error = err.detail[0]
+          response = new BaseHttpResponse<string>(
+            undefined,
+            error.constraints != null ? Object.values(error.constraints)[0] : ''
+          )
+        }
+
+        return res.status(code).json(response)
       }
-
-      return res.status(500).json(err.message)
-    })
+    )
 
     await prisma.connect()
     server.run(5000)

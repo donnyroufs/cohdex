@@ -3,19 +3,13 @@ import 'dotenv/config'
 import { Logger } from '@kondah/core'
 import { HttpControllerPlugin } from '@kondah/http-controller'
 
-import path from 'path'
-
 import { Application } from './application'
+import { AppConfig } from './app.config'
 
 console.clear()
 
 new Application({
   logger: new Logger('border'),
   plugins: [HttpControllerPlugin],
-  config: {
-    'http-controller': {
-      controllersPath: [path.join(__dirname, '../src/controllers')],
-      catchExceptions: true,
-    },
-  },
+  config: AppConfig,
 })

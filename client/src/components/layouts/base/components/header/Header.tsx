@@ -24,7 +24,7 @@ export const Header = () => {
       >
         <Heading
           as={ReactLink}
-          to="/strategies"
+          to="/"
           textTransform="uppercase"
           color="primary.600"
           letterSpacing="wider"
@@ -35,11 +35,33 @@ export const Header = () => {
           dex
         </Heading>
         <Box>
-          {user && <Dropdown />}
+          {user && (
+            <Box display="flex" justifyContent="center" alignItems="center">
+              <Link
+                display={{ base: 'none', sm: 'flex' }}
+                as={ReactLink}
+                to="/strategies/create"
+                px={6}
+                py={4}
+                mr={6}
+                background="primary.600"
+                color="text.100"
+                fontFamily="play"
+                fontWeight="bold"
+                _hover={{
+                  textDecor: 'none',
+                  background: 'primary.500',
+                }}
+              >
+                Create Strategy
+              </Link>
+              <Dropdown />
+            </Box>
+          )}
           {!user && (
             <Link
               display="flex"
-              href="http://localhost:5000/api/v1/auth/login"
+              href={process.env.REACT_APP_BASE_URL + '/api/v1/auth/login'}
               background="background.800"
               py={6}
               px={10}

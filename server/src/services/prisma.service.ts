@@ -1,10 +1,8 @@
-import { PrismaClient } from '.prisma/client'
+import { PrismaClient } from '@prisma/client'
 import { AppContext, Injectable } from '@kondah/core'
 
 @Injectable()
 export class PrismaService extends PrismaClient {
-  public readonly client = new PrismaClient()
-
   constructor(private readonly _appContext: AppContext) {
     super()
   }

@@ -1,10 +1,10 @@
+import { IGetMeResponseDto, BaseHttpResponse } from '@cohdex/shared'
 import { BaseApi } from '../lib/BaseApi'
-import { IGetMeResponseDto } from '@cohdex/shared'
 
 export const authApi = new (class AuthApi extends BaseApi {
-  prefix = 'auth'
+  prefix = '/auth'
 
-  public async me(): Promise<IGetMeResponseDto> {
+  public async me(): Promise<BaseHttpResponse<IGetMeResponseDto, string>> {
     const { data } = await this.axios.get(this.endpoint('/me'))
     return data
   }
