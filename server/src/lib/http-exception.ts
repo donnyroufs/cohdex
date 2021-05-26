@@ -1,11 +1,5 @@
-export function HttpException(message = '', code = 500) {
-  return class HttpException extends Error {
-    public readonly code: number
-
-    constructor() {
-      super()
-      this.code = code
-      this.message = message
-    }
+export class HttpException extends Error {
+  constructor(message: string, public readonly code: number) {
+    super(message || 'Something went wrong in the http layer')
   }
 }

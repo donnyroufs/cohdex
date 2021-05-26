@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
 import { validateSync } from 'class-validator'
-import { InputValidationException } from '../exceptions/input-validation.exception'
+import { InputValidationException } from '../exceptions/http/input-validation.exception'
 import { classToPlain } from 'class-transformer'
 
 // TODO: Move to kondah plugin

@@ -19,7 +19,7 @@ import { StrategyService } from './services/strategy.service'
 import { UserService } from './services/user.service'
 import { UserRepository } from './repositories/user.repository'
 import { CreateUserDto } from './dtos/create-user.dto'
-import { InputValidationException } from './exceptions/input-validation.exception'
+import { InputValidationException } from './exceptions/http/input-validation.exception'
 import { BaseHttpResponse } from './lib/base-http-response'
 
 export class Application extends Kondah {
@@ -100,31 +100,27 @@ export class Application extends Kondah {
 
     await addControllers('/api/v1')
 
-    server.handleGlobalExceptions((err, req, res, next) => {
-      if (err instanceof NotAuthenticatedException) {
-        const response = new BaseHttpResponse<string>(undefined, err.message)
-        return res.status(err.code).json(response)
-      }
-
-      if (err instanceof InputValidationException) {
-        const error = err.errors[0]
-
-        const response = new BaseHttpResponse<string>(
+    server.handleGlobalExceptions(
+      (err: Error & { code?: number }, req, res, next) => {
+        const code = err?.code || 500
+        let response = new BaseHttpResponse(
           undefined,
-          error.constraints != null ? Object.values(error.constraints)[0] : ''
+          err.message || 'Something unknown happend'
         )
 
-        return res.status(err.code).json(response)
-      } else if (err instanceof BadRequestException) {
-        const response = new BaseHttpResponse<string>(undefined, err.message)
-        return res.status(err.code).json(response)
-      }
+        if (err instanceof InputValidationException) {
+          const error = err.detail[0]
+          response = new BaseHttpResponse<string>(
+            undefined,
+            error.constraints != null ? Object.values(error.constraints)[0] : ''
+          )
+        }
 
-      return res.status(500).json(new BaseHttpResponse(undefined, err.message))
-    })
+        return res.status(code).json(response)
+      }
+    )
 
     await prisma.connect()
-
     server.run(5000)
   }
 }

@@ -28,3 +28,5 @@ export interface JSON {
 export interface Photo {
   value: string
 }
+
+export type ErrorDetail<T> = string | T
