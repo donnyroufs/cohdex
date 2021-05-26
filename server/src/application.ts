@@ -22,6 +22,8 @@ import { InputValidationException } from './exceptions/http/input-validation.exc
 import { BaseHttpResponse } from './lib/base-http-response'
 import { DomainInputValidationException } from './exceptions/domain/domain-input-validation.exception'
 
+export const API_VERSION = 1
+
 export class Application extends Kondah {
   protected async configureServices(services: Energizor) {
     services.setDefaultScope('singleton')
@@ -46,8 +48,11 @@ export class Application extends Kondah {
       express.static(path.join(__dirname, '../public'))
     )
 
+    if (process.env.NODE_ENV !== 'test') {
+      server.addGlobalMiddleware(morgan('common'))
+    }
+
     server.addGlobalMiddleware(
-      morgan('short'),
       cookieParser(),
       express.json(),
       session({
@@ -102,7 +107,7 @@ export class Application extends Kondah {
       )
     )
 
-    await addControllers('/api/v1')
+    await addControllers('/api/v' + API_VERSION)
 
     server.handleGlobalExceptions(
       (err: Error & { code?: number }, req, res, next) => {
