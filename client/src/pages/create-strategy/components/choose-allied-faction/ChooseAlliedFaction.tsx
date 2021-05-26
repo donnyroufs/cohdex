@@ -9,12 +9,12 @@ import {
   IStrategiesLocalState,
 } from '../../../../types'
 
-export interface IChooseAlliesFactionProps {
+export interface IChooseAlliedFaction {
   state: IStrategiesLocalState
   setState: React.Dispatch<React.SetStateAction<IStrategiesLocalState>>
 }
 
-export const ChooseAlliesFaction: React.FC<IChooseAlliesFactionProps> = ({
+export const ChooseAlliedFaction: React.FC<IChooseAlliedFaction> = ({
   state,
   setState,
 }) => {
@@ -37,9 +37,9 @@ export const ChooseAlliesFaction: React.FC<IChooseAlliesFactionProps> = ({
       <ChooseFactionMenu
         options={alliesOptions}
         onSelect={(payload: Identifier) =>
-          setState((curr) => ({ ...curr, alliesFactionId: payload }))
+          setState((curr) => ({ ...curr, alliedFactionId: payload }))
         }
-        selected={state.alliesFactionId}
+        selected={state.alliedFactionId}
       />
     </>
   )

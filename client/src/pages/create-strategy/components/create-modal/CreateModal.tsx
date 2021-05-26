@@ -37,14 +37,14 @@ export const CreateModal: React.FC<ICreateModalProps> = ({
     () =>
       factions
         .filter((faction) =>
-          [state.alliesFactionId, state.axisFactionId].includes(faction.id)
+          [state.alliedFactionId, state.axisFactionId].includes(faction.id)
         )
         .map((faction) => ({
           id: faction.id,
           imgUrl: faction.imgUrl,
           alt: faction.team as FactionTeam,
         })),
-    [state.alliesFactionId, state.axisFactionId, factions]
+    [state.alliedFactionId, state.axisFactionId, factions]
   )
 
   return (

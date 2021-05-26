@@ -54,8 +54,8 @@ model Strategy {
   Faction   Faction @relation(fields: [factionId], references: [id], name: "userFaction")
   factionId Int
 
-  AlliesFaction   Faction @relation(fields: [alliesFactionId], references: [id], name: "alliesFaction")
-  alliesFactionId Int
+  alliedFaction   Faction @relation(fields: [alliedFactionId], references: [id], name: "alliedFaction")
+  alliedFactionId Int
 
   AxisFaction   Faction @relation(fields: [axisFactionId], references: [id], name: "axisFaction")
   axisFactionId Int
@@ -63,7 +63,7 @@ model Strategy {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@unique([title, userId, factionId, alliesFactionId, axisFactionId, mapId])
+  @@unique([title, userId, factionId, alliedFactionId, axisFactionId, mapId])
 }
 
 // Add faction image
@@ -79,7 +79,7 @@ model Faction {
   team Team
 
   strategies       Strategy[] @relation("userFaction")
-  alliesStrategies Strategy[] @relation("alliesFaction")
+  alliesStrategies Strategy[] @relation("alliedFaction")
   axisStrategies   Strategy[] @relation("axisFaction")
 
   createdAt DateTime @default(now())

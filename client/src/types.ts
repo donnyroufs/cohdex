@@ -48,7 +48,7 @@ export type FactionTeam = 'ALLIES' | 'AXIS'
 
 export interface IStrategiesLocalState {
   title?: string
-  alliesFactionId?: Identifier
+  alliedFactionId?: Identifier
   axisFactionId?: Identifier
   factionId?: Identifier
   mapId?: Identifier

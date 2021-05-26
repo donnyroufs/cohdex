@@ -34,7 +34,7 @@ CREATE TABLE "Strategy" (
     "userId" INTEGER NOT NULL,
     "mapId" INTEGER NOT NULL,
     "factionId" INTEGER NOT NULL,
-    "alliesFactionId" INTEGER NOT NULL,
+    "alliedFactionId" INTEGER NOT NULL,
     "axisFactionId" INTEGER NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -73,7 +73,7 @@ CREATE UNIQUE INDEX "User.steamId_unique" ON "User"("steamId");
 CREATE UNIQUE INDEX "Map.name_unique" ON "Map"("name");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Strategy.title_userId_factionId_alliesFactionId_axisFactionId_unique" ON "Strategy"("title", "userId", "factionId", "alliesFactionId", "axisFactionId");
+CREATE UNIQUE INDEX "Strategy.title_userId_factionId_alliedFactionId_axisFactionId_unique" ON "Strategy"("title", "userId", "factionId", "alliedFactionId", "axisFactionId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Faction.name_unique" ON "Faction"("name");
@@ -94,7 +94,7 @@ ALTER TABLE "Strategy" ADD FOREIGN KEY ("mapId") REFERENCES "Map"("id") ON DELET
 ALTER TABLE "Strategy" ADD FOREIGN KEY ("factionId") REFERENCES "Faction"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Strategy" ADD FOREIGN KEY ("alliesFactionId") REFERENCES "Faction"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "Strategy" ADD FOREIGN KEY ("alliedFactionId") REFERENCES "Faction"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Strategy" ADD FOREIGN KEY ("axisFactionId") REFERENCES "Faction"("id") ON DELETE CASCADE ON UPDATE CASCADE;

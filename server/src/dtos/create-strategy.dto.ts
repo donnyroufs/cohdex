@@ -26,7 +26,7 @@ export class CreateStrategyDto extends DTO<ICreateStrategyDto> {
 
   @Expose()
   @IsNumber()
-  alliesFactionId: number
+  alliedFactionId: number
 
   @Expose()
   @IsNumber()

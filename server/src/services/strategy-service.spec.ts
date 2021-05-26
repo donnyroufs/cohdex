@@ -9,7 +9,7 @@ import {
 import { StrategyService } from './strategy.service'
 
 const createProps = {
-  alliesFactionId: 3,
+  alliedFactionId: 3,
   axisFactionId: 1,
   factionId: 3,
   mapId: 1,
@@ -52,7 +52,7 @@ describe('strategy service', () => {
           service.create(
             new CreateStrategyDto({
               ...createProps,
-              alliesFactionId: 1,
+              alliedFactionId: 1,
               axisFactionId: 1,
             })
           )
@@ -73,7 +73,7 @@ describe('strategy service', () => {
           service.create(
             new CreateStrategyDto({
               ...createProps,
-              alliesFactionId: 8,
+              alliedFactionId: 8,
               axisFactionId: 1,
             })
           )
@@ -83,7 +83,7 @@ describe('strategy service', () => {
           service.create(
             new CreateStrategyDto({
               ...createProps,
-              alliesFactionId: 1,
+              alliedFactionId: 1,
               axisFactionId: 8,
             })
           )
@@ -95,7 +95,7 @@ describe('strategy service', () => {
           service.create(
             new CreateStrategyDto({
               ...createProps,
-              alliesFactionId: 2,
+              alliedFactionId: 2,
               axisFactionId: 1,
               factionId: 2,
             })

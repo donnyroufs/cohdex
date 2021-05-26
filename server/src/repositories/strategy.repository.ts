@@ -1,7 +1,7 @@
+import { ICreateStrategyDto } from '@cohdex/shared'
 import { Injectable } from '@kondah/core'
 import slugify from 'slugify'
 import { PrismaService } from '../services/prisma.service'
-import { CreateStrategyDto } from '../dtos/create-strategy.dto'
 
 @Injectable()
 export class StrategyRepository {
@@ -19,7 +19,7 @@ export class StrategyRepository {
 
   constructor(private readonly _prismaService: PrismaService) {}
 
-  async create(data: CreateStrategyDto) {
+  async create(data: ICreateStrategyDto) {
     const createdStrategy = await this.strategy.create({
       data: {
         ...data,
@@ -47,7 +47,7 @@ export class StrategyRepository {
     })
   }
 
-  async notUnique(data: CreateStrategyDto) {
+  async notUnique(data: ICreateStrategyDto) {
     const result = await this.strategy.findFirst({
       where: {
         ...data,

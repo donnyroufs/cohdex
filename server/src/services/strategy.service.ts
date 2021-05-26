@@ -1,5 +1,5 @@
+import { ICreateStrategyDto } from '@cohdex/shared'
 import { Injectable } from '@kondah/core'
-import { CreateStrategyDto } from '../dtos/create-strategy.dto'
 import {
   InvalidFactionsException,
   InvalidTeamsException,
@@ -12,21 +12,21 @@ import { StrategyRepository } from '../repositories/strategy.repository'
 export class StrategyService {
   constructor(private readonly _strategyRepo: StrategyRepository) {}
 
-  async create(data: CreateStrategyDto) {
-    if (data.alliesFactionId === data.axisFactionId) {
+  async create(data: ICreateStrategyDto) {
+    if (data.alliedFactionId === data.axisFactionId) {
       throw new InvalidFactionsException()
     }
 
-    if (![data.alliesFactionId, data.axisFactionId].includes(data.factionId)) {
+    if (![data.alliedFactionId, data.axisFactionId].includes(data.factionId)) {
       throw new ChosenFactionDoesNotExistException()
     }
 
     const factions = await this._strategyRepo.getAllFactions()
 
-    const alliesFaction = factions.find((f) => f.id === data.alliesFactionId)!
+    const alliedFaction = factions.find((f) => f.id === data.alliedFactionId)!
     const axisFaction = factions.find((f) => f.id === data.axisFactionId)!
 
-    if (alliesFaction.team !== 'ALLIES' || axisFaction.team !== 'AXIS') {
+    if (alliedFaction.team !== 'ALLIES' || axisFaction.team !== 'AXIS') {
       throw new InvalidTeamsException()
     }
 

@@ -11,7 +11,7 @@ import {
 } from '../../store/slices/strategiesSlice'
 import { useAppDispatch, useAppSelector } from '../../store/store'
 import {
-  ChooseAlliesFaction,
+  ChooseAlliedFaction,
   ChooseMap,
   CreateModal,
   Footer,
@@ -35,8 +35,8 @@ function createErrorMessage(field: MissingFieldsState) {
     return 'You forgot to select an Axis faction'
   }
 
-  if (_field.includes('allies')) {
-    return 'You forgot to select an Allies faction'
+  if (_field.includes('allied')) {
+    return 'You forgot to select an Allied faction'
   }
 
   if (_field.includes('title')) {
@@ -73,7 +73,7 @@ export const CreateStrategy = () => {
     if (Object.values(state).every((v) => v)) {
       dispatch(
         fetchCreateStrategy({
-          alliesFactionId: +state.alliesFactionId!,
+          alliedFactionId: +state.alliedFactionId!,
           axisFactionId: +state.axisFactionId!,
           factionId: +state.factionId!,
           mapId: +state.mapId!,
@@ -99,7 +99,7 @@ export const CreateStrategy = () => {
   }, [slug, history, dispatch, error, onClose])
 
   function handleFinalStep() {
-    const fields = ['axisFactionId', 'alliesFactionId', 'title', 'mapId']
+    const fields = ['axisFactionId', 'alliedFactionId', 'title', 'mapId']
 
     const _missingFields = difference(
       fields,
@@ -150,7 +150,7 @@ export const CreateStrategy = () => {
           {error && error}
         </Box>
         <ChooseAxisFaction {...stateProps} />
-        <ChooseAlliesFaction {...stateProps} />
+        <ChooseAlliedFaction {...stateProps} />
         <StrategyTitle {...stateProps} />
         <ChooseMap {...stateProps} />
         <Footer handleFinalStep={handleFinalStep} />
