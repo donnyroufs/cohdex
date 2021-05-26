@@ -1,6 +1,6 @@
 import { Injectable } from '@kondah/core'
 import { PrismaService } from '../services/prisma.service'
-import { CreateUserDto } from '../dtos/create-user.dto'
+import { ICreateUserDto } from '@cohdex/shared'
 
 @Injectable()
 export class UserRepository {
@@ -10,7 +10,7 @@ export class UserRepository {
 
   constructor(private readonly _prismaService: PrismaService) {}
 
-  async createOrUpdate(data: CreateUserDto) {
+  async createOrUpdate(data: ICreateUserDto) {
     return this.user.upsert({
       where: {
         steamId: data.steamId,

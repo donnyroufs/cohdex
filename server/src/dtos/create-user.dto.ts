@@ -1,21 +1,22 @@
-import { SteamProfile } from '../types'
+import { ICreateUserDto } from '@cohdex/shared'
+import { Expose } from 'class-transformer'
+import { IsString } from 'class-validator'
+import { DTO } from '../lib'
 
-export class CreateUserDto {
+// TODO: Take in StreamProfile type and map accordingly.
+export class CreateUserDto
+  extends DTO<ICreateUserDto>
+  implements ICreateUserDto
+{
+  @Expose()
+  @IsString()
   steamId: string
+
+  @Expose()
+  @IsString()
   avatar: string
+
+  @Expose()
+  @IsString()
   profileUrl: string
-
-  constructor(props: CreateUserDto) {
-    this.steamId = props.steamId
-    this.avatar = props.avatar
-    this.profileUrl = props.profileUrl
-  }
-
-  static from(props: SteamProfile) {
-    return new CreateUserDto({
-      avatar: props._json.avatarfull,
-      profileUrl: props._json.profileurl,
-      steamId: props._json.steamid,
-    })
-  }
 }

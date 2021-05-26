@@ -30,3 +30,8 @@ export interface Photo {
 }
 
 export type ErrorDetail<T> = string | T
+
+export type DoneFn = (
+  err: any,
+  user?: false | Express.User | null | undefined
+) => void

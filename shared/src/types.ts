@@ -7,7 +7,6 @@ export interface BaseHttpResponse<T, U = string> {
 
 export interface IUser extends Pick<User, 'id' | 'avatar' | 'profileUrl'> {}
 export interface IMap extends Pick<Map, 'id' | 'name'> {}
-
 export interface IFaction
   extends Pick<Faction, 'id' | 'name' | 'abbreviation' | 'team' | 'imgUrl'> {}
 
@@ -23,10 +22,15 @@ export interface IGetFactionsResponseDto {
   factions: IFaction[]
 }
 
-// [POST] - /strategies
 export interface ICreateStrategyDto
   extends Omit<Strategy, 'id' | 'slug' | 'createdAt' | 'updatedAt'> {}
 
 export interface ICreateStrategyResponseDto {
   strategy: Pick<Strategy, 'slug'>
+}
+
+export interface ICreateUserDto {
+  steamId: string
+  avatar: string
+  profileUrl: string
 }

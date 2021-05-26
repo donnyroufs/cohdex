@@ -11,9 +11,8 @@ import { milliseconds } from 'date-fns'
 import { Strategy as SteamStrategy } from 'passport-steam'
 import passport from 'passport'
 
-import { SteamProfile } from './types'
+import { SteamProfile, DoneFn } from './types'
 import { PrismaService } from './services/prisma.service'
-import { BadRequestException, NotAuthenticatedException } from './exceptions'
 import { StrategyRepository } from './repositories/strategy.repository'
 import { StrategyService } from './services/strategy.service'
 import { UserService } from './services/user.service'
@@ -21,6 +20,7 @@ import { UserRepository } from './repositories/user.repository'
 import { CreateUserDto } from './dtos/create-user.dto'
 import { InputValidationException } from './exceptions/http/input-validation.exception'
 import { BaseHttpResponse } from './lib/base-http-response'
+import { DomainInputValidationException } from './exceptions/domain/domain-input-validation.exception'
 
 export class Application extends Kondah {
   protected async configureServices(services: Energizor) {
@@ -88,9 +88,13 @@ export class Application extends Kondah {
           realm: process.env.BASE_URI,
           apiKey: process.env.API_KEY_STEAM,
         },
-        async (_: string, profile: SteamProfile, done: any) => {
+        async (_: string, profile: SteamProfile, done: DoneFn) => {
           const user = await userService.createOrUpdate(
-            CreateUserDto.from(profile)
+            new CreateUserDto({
+              avatar: profile._json.avatarfull,
+              profileUrl: profile._json.profileurl,
+              steamId: profile._json.steamid,
+            }).validateAndThrow()
           )
 
           done(null, user)
@@ -108,7 +112,10 @@ export class Application extends Kondah {
           err.message || 'Something unknown happend'
         )
 
-        if (err instanceof InputValidationException) {
+        if (
+          err instanceof InputValidationException ||
+          err instanceof DomainInputValidationException
+        ) {
           const error = err.detail[0]
           response = new BaseHttpResponse<string>(
             undefined,
