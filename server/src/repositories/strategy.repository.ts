@@ -19,6 +19,42 @@ export class StrategyRepository {
 
   constructor(private readonly _prismaService: PrismaService) {}
 
+  async all(id: number) {
+    return this.strategy.findMany({
+      where: {
+        userId: id,
+      },
+      select: {
+        id: true,
+        slug: true,
+        title: true,
+        Map: {
+          select: {
+            name: true,
+          },
+        },
+        AxisFaction: {
+          select: {
+            name: true,
+            abbreviation: true,
+          },
+        },
+        AlliedFaction: {
+          select: {
+            name: true,
+            abbreviation: true,
+          },
+        },
+        Faction: {
+          select: {
+            name: true,
+            abbreviation: true,
+          },
+        },
+      },
+    })
+  }
+
   async create(data: ICreateStrategyDto) {
     const createdStrategy = await this.strategy.create({
       data: {

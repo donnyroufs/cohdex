@@ -8,6 +8,7 @@ import { BadRequestException } from '../exceptions'
 import { BaseHttpResponse } from '../lib/base-http-response'
 import {
   ICreateStrategyResponseDto,
+  IGetAllUserStrategiesResponseDto,
   IGetFactionsResponseDto,
   IGetMapsResponseDto,
 } from '@cohdex/shared'
@@ -15,6 +16,18 @@ import {
 @Controller('/strategies')
 export class StrategyController {
   constructor(private readonly _strategyService: StrategyService) {}
+
+  @Get('/')
+  @Middleware(isAuthGuard)
+  async index({ req, res }: HttpContext) {
+    // @ts-expect-error because kondah does not handle types properly yet.
+    const strategies = await this._strategyService.all(req.user.id)
+    return res.json(
+      new BaseHttpResponse<IGetAllUserStrategiesResponseDto>({
+        strategies,
+      })
+    )
+  }
 
   @Get('/maps')
   async allMaps(ctx: HttpContext) {
