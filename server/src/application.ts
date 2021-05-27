@@ -49,7 +49,7 @@ export class Application extends Kondah {
     )
 
     if (process.env.NODE_ENV !== 'test') {
-      server.addGlobalMiddleware(morgan('common'))
+      server.addGlobalMiddleware(morgan('dev'))
     }
 
     server.addGlobalMiddleware(

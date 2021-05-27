@@ -3,6 +3,11 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { strategiesApi } from '../../api'
 import { IStrategiesState } from '../../types'
 
+export const fetchUserSrategies = createAsyncThunk(
+  'strategies/fetchUserStrategies',
+  async () => strategiesApi.getAllUserStrategies()
+)
+
 export const fetchFactions = createAsyncThunk(
   'strategies/fetchFactions',
   async () => strategiesApi.getFactions()
@@ -19,6 +24,7 @@ export const fetchCreateStrategy = createAsyncThunk(
 )
 
 export const initialState: IStrategiesState = {
+  strategies: [],
   status: 'init',
   slug: null,
   factions: [],
@@ -77,6 +83,18 @@ export const slice = createSlice({
       .addCase(fetchCreateStrategy.rejected, (state, payload) => {
         state.status = 'idle'
         state.error = payload.error?.message || 'something went wrong'
+      })
+
+    builder
+      .addCase(fetchUserSrategies.pending, (state) => {
+        state.status = 'loading-strategies'
+      })
+      .addCase(fetchUserSrategies.fulfilled, (state, { payload }) => {
+        state.status = 'idle'
+        state.strategies = payload.data.strategies
+      })
+      .addCase(fetchUserSrategies.rejected, (state) => {
+        state.status = 'idle'
       })
   },
 })

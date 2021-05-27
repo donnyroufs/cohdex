@@ -34,3 +34,28 @@ export interface ICreateUserDto {
   avatar: string
   profileUrl: string
 }
+
+export interface IGetAllUserStrategiesResponseDto {
+  strategies: IGetAllUserStrategies[]
+}
+
+export interface IGetAllUserStrategies {
+  id: number
+  slug: string
+  title: string
+  Map: {
+    name: string
+  }
+  AxisFaction: {
+    name: string
+    abbreviation: string
+  }
+  AlliedFaction: {
+    name: string
+    abbreviation: string
+  }
+  Faction: {
+    name: string
+    abbreviation: string
+  }
+}

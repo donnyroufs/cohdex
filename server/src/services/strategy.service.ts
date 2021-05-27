@@ -12,6 +12,10 @@ import { StrategyRepository } from '../repositories/strategy.repository'
 export class StrategyService {
   constructor(private readonly _strategyRepo: StrategyRepository) {}
 
+  async all(id: number) {
+    return this._strategyRepo.all(id)
+  }
+
   async create(data: ICreateStrategyDto) {
     if (data.alliedFactionId === data.axisFactionId) {
       throw new InvalidFactionsException()

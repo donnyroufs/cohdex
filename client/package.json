@@ -4,6 +4,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@chakra-ui/icons": "^1.0.13",
     "@chakra-ui/react": "^1.6.1",
     "@cohdex/shared": "1.0.0",
     "@emotion/react": "^11",
@@ -29,6 +30,7 @@
     "react-router-redux": "^4.0.8",
     "react-scripts": "4.0.3",
     "react-select": "^4.3.1",
+    "react-table": "^7.7.0",
     "typescript": "^4.1.2",
     "web-vitals": "^1.0.1"
   },
@@ -59,7 +61,8 @@
   "devDependencies": {
     "@types/react-router-dom": "^5.1.7",
     "@types/react-router-redux": "^5.0.18",
-    "@types/react-select": "^4.0.15"
+    "@types/react-select": "^4.0.15",
+    "@types/react-table": "^7.7.1"
   },
   "proxy": "http://localhost:5000/api/v1"
 }

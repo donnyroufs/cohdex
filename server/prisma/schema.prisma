@@ -45,16 +45,16 @@ model Strategy {
   // commanderId Int?
   // tierId Int?
 
-  User   User? @relation(fields: [userId], references: [id])
+  User   User @relation(fields: [userId], references: [id])
   userId Int
 
-  Map   Map? @relation(fields: [mapId], references: [id])
+  Map   Map @relation(fields: [mapId], references: [id])
   mapId Int
 
   Faction   Faction @relation(fields: [factionId], references: [id], name: "userFaction")
   factionId Int
 
-  alliedFaction   Faction @relation(fields: [alliedFactionId], references: [id], name: "alliedFaction")
+  AlliedFaction   Faction @relation(fields: [alliedFactionId], references: [id], name: "alliedFaction")
   alliedFactionId Int
 
   AxisFaction   Faction @relation(fields: [axisFactionId], references: [id], name: "axisFaction")

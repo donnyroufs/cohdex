@@ -1,5 +1,5 @@
 import React, { FunctionComponent, ReactNode } from 'react'
-import { IFaction, IMap, IUser } from '@cohdex/shared'
+import { IFaction, IGetAllUserStrategies, IMap, IUser } from '@cohdex/shared'
 import { RouteComponentProps } from 'react-router-dom'
 
 export interface IAuthState {
@@ -13,6 +13,7 @@ export interface IStrategiesState {
   maps: IMap[]
   error: string | null
   factions: IFaction[]
+  strategies: IGetAllUserStrategies[]
 }
 
 export interface IRoute {
@@ -58,4 +59,8 @@ export type MissingFieldsState = Partial<
   keyof Omit<IStrategiesLocalState, 'factionId'>
 >
 
-export type StrategiesLoadingType = 'init' | 'idle' | 'create-strategy'
+export type StrategiesLoadingType =
+  | 'init'
+  | 'idle'
+  | 'create-strategy'
+  | 'loading-strategies'

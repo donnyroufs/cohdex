@@ -4,13 +4,19 @@ import {
   ICreateStrategyDto,
   IGetFactionsResponseDto,
   IGetMapsResponseDto,
+  IGetAllUserStrategiesResponseDto,
 } from '@cohdex/shared'
 import { BaseApi } from '../lib/BaseApi'
 
 export const strategiesApi = new (class StrategiesApi extends BaseApi {
   prefix = '/strategies'
 
-  // TODO: Fix error type
+  async getAllUserStrategies(): Promise<
+    BaseHttpResponse<IGetAllUserStrategiesResponseDto>
+  > {
+    return this.axios.get(this.endpoint('/')).then(({ data }) => data)
+  }
+
   async createStrategy(
     payload: ICreateStrategyDto
   ): Promise<BaseHttpResponse<ICreateStrategyResponseDto, string>> {
