@@ -22,15 +22,29 @@ model User {
   updatedAt DateTime @updatedAt
 }
 
-// Should keep track of map version
 model Map {
-  id   Int    @id @default(autoincrement())
-  name String @unique
+  id         Int    @id @default(autoincrement())
+  name       String @unique
+  height     Float
+  width      Float
+  maxPlayers Int    @default(2)
+  version    Int
 
-  strategy Strategy[]
+  pointPositions PointPosition[]
+  strategy       Strategy[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model PointPosition {
+  id       Int    @id @default(autoincrement())
+  x        Float
+  y        Float
+  ownerId  Int
+  fileName String
+  Map      Map    @relation(fields: [mapId], references: [id])
+  mapId    Int
 }
 
 model Strategy {

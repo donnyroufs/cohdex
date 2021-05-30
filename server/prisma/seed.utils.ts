@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient, Map } from '@prisma/client'
 
 export async function seedFactions(prisma: PrismaClient | any) {
   if ((await prisma.faction.count()) <= 0) {
