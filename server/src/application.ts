@@ -21,7 +21,7 @@ import { CreateUserDto } from './dtos/create-user.dto'
 import { InputValidationException } from './exceptions/http/input-validation.exception'
 import { BaseHttpResponse } from './lib/base-http-response'
 import { DomainInputValidationException } from './exceptions/domain/domain-input-validation.exception'
-import { CloudinaryService } from './services/cloudinary.service'
+import { GameDataService } from './services/game-data.service'
 
 export const API_VERSION = 1
 
@@ -37,7 +37,7 @@ export class Application extends Kondah {
     services.register(StrategyRepository)
     services.register(StrategyService)
 
-    services.register(CloudinaryService)
+    services.register(GameDataService)
   }
 
   protected async setup({ server, addControllers, energizor }: AppContext) {
@@ -135,6 +135,7 @@ export class Application extends Kondah {
       }
     )
 
+    await energizor.get(GameDataService).syncMaps()
     await prisma.connect()
     server.run(5000)
   }

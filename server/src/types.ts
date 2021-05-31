@@ -67,3 +67,26 @@ export interface ICloudinaryResponseUrls {
   tgaUrl: string
   infoUrl: string
 }
+
+export interface IResult {
+  name: string
+  scenarioName: string
+  maxPlayers: number
+  version: number
+  height: number
+  width: number
+  pointPositions: any[]
+}
+
+export interface IParsedContent {
+  type: string
+  key: {
+    type: string
+    name: string
+  }
+  value: {
+    type: string
+    value: any
+    raw: string
+  }
+}
