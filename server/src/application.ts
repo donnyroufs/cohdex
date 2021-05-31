@@ -21,11 +21,12 @@ import { CreateUserDto } from './dtos/create-user.dto'
 import { InputValidationException } from './exceptions/http/input-validation.exception'
 import { BaseHttpResponse } from './lib/base-http-response'
 import { DomainInputValidationException } from './exceptions/domain/domain-input-validation.exception'
+import { CloudinaryService } from './services/cloudinary.service'
 
 export const API_VERSION = 1
 
 export class Application extends Kondah {
-  protected async configureServices(services: Energizor) {
+  protected async configureServices(services: Energizor): Promise<void> {
     services.setDefaultScope('singleton')
 
     services.register(PrismaService)
@@ -35,6 +36,8 @@ export class Application extends Kondah {
 
     services.register(StrategyRepository)
     services.register(StrategyService)
+
+    services.register(CloudinaryService)
   }
 
   protected async setup({ server, addControllers, energizor }: AppContext) {
