@@ -23,12 +23,13 @@ model User {
 }
 
 model Map {
-  id         Int    @id @default(autoincrement())
-  name       String @unique
-  height     Float
-  width      Float
-  maxPlayers Int    @default(2)
-  version    Int
+  id           Int    @id @default(autoincrement())
+  name         String @unique
+  scenarioName String @unique
+  height       Float
+  width        Float
+  maxPlayers   Int    @default(2)
+  version      Int
 
   pointPositions PointPosition[]
   strategy       Strategy[]

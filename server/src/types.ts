@@ -90,3 +90,7 @@ export interface IParsedContent {
     raw: string
   }
 }
+
+export interface IGameDataService {
+  syncMaps(): Promise<void>
+}

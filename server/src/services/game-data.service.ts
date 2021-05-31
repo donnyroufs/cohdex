@@ -3,16 +3,22 @@ import { v2 as cloudinary } from 'cloudinary'
 import {
   ICloudinaryResponse,
   ICloudinaryResponseUrls,
+  IGameDataService,
   IModifiedCloudinaryResource,
   IParsedContent,
   IResult,
 } from '../types'
 import parser from 'luaparse'
 import axios, { AxiosResponse } from 'axios'
+import { PrismaService } from './prisma.service'
 
 @Injectable()
-export class GameDataService {
-  constructor() {
+export class GameDataService implements IGameDataService {
+  get map() {
+    return this._prismaService.map
+  }
+
+  constructor(private readonly _prismaService: PrismaService) {
     cloudinary.config({
       cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
       api_key: process.env.CLOUDINARY_API_KEY,
@@ -29,6 +35,28 @@ export class GameDataService {
    */
   public async syncMaps() {
     const maps = await this.getMaps()
+    const results = await this.getResults(maps)
+
+    for (const { pointPositions, ...mapData } of results) {
+      await this.map.upsert({
+        where: {
+          scenarioName: mapData.scenarioName,
+        },
+        create: {
+          ...mapData,
+          pointPositions: {
+            createMany: {
+              data: pointPositions,
+            },
+          },
+        },
+        update: {},
+      })
+    }
+  }
+
+  private async getResults(maps: ICloudinaryResponseUrls[]) {
+    const results: IResult[] = []
 
     for (const map of maps) {
       const file = await axios.get(map.infoUrl)
@@ -60,6 +88,11 @@ export class GameDataService {
 
         if (curr.key.name === 'scenarioname') {
           acc.scenarioName = this.removeSurroundingQuotesFromRaw(curr.value.raw)
+          return acc
+        }
+
+        if (curr.key.name === 'maxplayers') {
+          acc.maxPlayers = curr.value.value
           return acc
         }
 
@@ -110,8 +143,9 @@ export class GameDataService {
 
         return acc
       }, {})
-      console.log(result)
+      results.push(result)
     }
+    return results
   }
 
   private removeSurroundingQuotesFromRaw(raw: string) {
