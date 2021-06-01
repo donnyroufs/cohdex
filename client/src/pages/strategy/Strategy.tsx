@@ -3,7 +3,6 @@ import { useEffect, useRef } from 'react'
 import { BaseLayout } from '../../components/layouts'
 import { useAppDispatch, useAppSelector } from '../../store/store'
 import { fetchStrategy } from '../../store/slices/strategiesSlice'
-import { IStrategyMap } from '@cohdex/shared'
 
 export interface IStrategyParams {
   slug: string
@@ -29,34 +28,37 @@ export const Strategy = () => {
       const img = new Image()
       img.src = url
 
-      const scaleX = width / canvas.width
-      const scaleY = height / canvas.height
+      const scaleX = canvas.width / width
+      const scaleY = canvas.height / height
+
+      const CANVAS_HEIGHT = height * scaleY
+      const CANVAS_WIDTH = width * scaleX
 
       img.onload = () => {
-        ctx.drawImage(img, 0, 0, width * 2, height * 2)
+        ctx.drawImage(img, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT)
         let spawn = 0
         let spawnIconName: string
 
         const points = strategy.Map.pointPositions
-        console.clear()
         points.forEach((point) => {
           const isSpawnPoint = point.fileName.includes('starting')
 
           if (isSpawnPoint) {
             spawn++
           }
+
           spawnIconName = point.fileName
 
           if (spawn > 1) {
             spawnIconName = point.fileName + '-2'
           }
 
-          const x = point.x
-          const y = point.y
+          const x = point.x * scaleX
+          const y = point.y * scaleY
 
-          const SIZE = 25
+          const SIZE = 25 * scaleX
 
-          const CENTER = 640 / 2 - SIZE / 2
+          const CENTER = CANVAS_HEIGHT / 2 - SIZE / 2
 
           const flip = (pos: number) => (pos < 0 ? Math.abs(pos) : 0 - pos)
 
@@ -65,18 +67,12 @@ export const Strategy = () => {
             isSpawnPoint ? spawnIconName : point.fileName
           }.png`
           _img.onload = () => {
-            ctx.drawImage(
-              _img,
-              x * 2 + CENTER,
-              flip(y * 2) + CENTER,
-              SIZE * 2,
-              SIZE * 2
-            )
+            ctx.drawImage(_img, x + CENTER, flip(y) + CENTER, SIZE, SIZE)
           }
         })
       }
     }
-  }, [status])
+  }, [status, strategy])
 
   return (
     <BaseLayout.Container>
