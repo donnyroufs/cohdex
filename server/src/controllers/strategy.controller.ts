@@ -11,6 +11,7 @@ import {
   IGetAllUserStrategiesResponseDto,
   IGetFactionsResponseDto,
   IGetMapsResponseDto,
+  IGetStrategyResponseDto,
 } from '@cohdex/shared'
 
 @Controller('/strategies')
@@ -61,6 +62,23 @@ export class StrategyController {
     ctx.res.status(201).json(
       new BaseHttpResponse<ICreateStrategyResponseDto>({
         strategy,
+      })
+    )
+  }
+
+  @Get('/:slug')
+  @Middleware(isAuthGuard)
+  async show({ req, res }: HttpContext) {
+    const strategy = await this._strategyService.findOne(
+      // @ts-expect-error because kondah does not handle types properly yet.
+      req.user!.id,
+      req.params.slug
+    )
+
+    return res.json(
+      new BaseHttpResponse<IGetStrategyResponseDto>({
+        // @ts-ignore
+        strategy: strategy,
       })
     )
   }

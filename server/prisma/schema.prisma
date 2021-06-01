@@ -25,6 +25,7 @@ model User {
 model Map {
   id           Int    @id @default(autoincrement())
   name         String @unique
+  url          String
   scenarioName String @unique
   height       Float
   width        Float

@@ -50,7 +50,9 @@ export class GameDataService implements IGameDataService {
             },
           },
         },
-        update: {},
+        update: {
+          url: mapData.url,
+        },
       })
     }
   }
@@ -77,6 +79,7 @@ export class GameDataService implements IGameDataService {
 
       const result = fields.reduce((acc: IResult, curr: IParsedContent) => {
         acc.name = map.id
+        acc.url = map.tgaUrl
         if (curr.key.name === 'mapsize') {
           // @ts-ignore
           const [h, w] = curr.value.fields

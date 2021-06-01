@@ -1,10 +1,23 @@
 import React, { FunctionComponent, ReactNode } from 'react'
-import { IFaction, IGetAllUserStrategies, IMap, IUser } from '@cohdex/shared'
+import {
+  IFaction,
+  IGetAllUserStrategies,
+  IMap,
+  IStrategy,
+  IUser,
+} from '@cohdex/shared'
 import { RouteComponentProps } from 'react-router-dom'
 
 export interface IAuthState {
   isLoading: boolean
   user: IUser | null
+}
+
+export type StrategyLoadingType = 'init' | 'idle'
+
+export interface IStrategySliceState {
+  status: StrategyLoadingType
+  data: IStrategy
 }
 
 export interface IStrategiesState {

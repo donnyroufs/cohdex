@@ -19,6 +19,42 @@ export class StrategyRepository {
 
   constructor(private readonly _prismaService: PrismaService) {}
 
+  async findOne(userId: number, slug: string) {
+    return this.strategy.findFirst({
+      where: {
+        userId,
+        slug,
+      },
+      select: {
+        id: true,
+        factionId: true,
+        AxisFaction: {
+          select: {
+            id: true,
+            name: true,
+            abbreviation: true,
+          },
+        },
+        AlliedFaction: {
+          select: {
+            id: true,
+            name: true,
+            abbreviation: true,
+          },
+        },
+        Map: {
+          select: {
+            name: true,
+            url: true,
+            height: true,
+            width: true,
+            pointPositions: true,
+          },
+        },
+      },
+    })
+  }
+
   async all(id: number) {
     return this.strategy.findMany({
       where: {

@@ -5,11 +5,18 @@ import {
   IGetFactionsResponseDto,
   IGetMapsResponseDto,
   IGetAllUserStrategiesResponseDto,
+  IGetStrategyResponseDto,
 } from '@cohdex/shared'
 import { BaseApi } from '../lib/BaseApi'
 
 export const strategiesApi = new (class StrategiesApi extends BaseApi {
   prefix = '/strategies'
+
+  async getStrategy(
+    slug: string
+  ): Promise<BaseHttpResponse<IGetStrategyResponseDto>> {
+    return this.axios.get(this.endpoint('/') + slug).then(({ data }) => data)
+  }
 
   async getAllUserStrategies(): Promise<
     BaseHttpResponse<IGetAllUserStrategiesResponseDto>

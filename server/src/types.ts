@@ -70,6 +70,7 @@ export interface ICloudinaryResponseUrls {
 
 export interface IResult {
   name: string
+  url: string
   scenarioName: string
   maxPlayers: number
   version: number
