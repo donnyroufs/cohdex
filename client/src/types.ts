@@ -77,3 +77,14 @@ export type StrategiesLoadingType =
   | 'idle'
   | 'create-strategy'
   | 'loading-strategies'
+
+export interface IRendererOptions {
+  canvas: HTMLCanvasElement
+  height: number
+  width: number
+}
+
+export interface ITacticalMapOptions {
+  strategy: IStrategy
+  rendererOptions: IRendererOptions
+}
