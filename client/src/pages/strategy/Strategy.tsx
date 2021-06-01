@@ -21,18 +21,18 @@ export const Strategy = () => {
   }, [dispatch, slug])
 
   useEffect(() => {
-    if ((!ref.current && status !== 'idle') || !ref.current) return
+    if (ref.current && status === 'idle') {
+      const tmap = new TacticalMap({
+        strategy,
+        rendererOptions: {
+          canvas: ref.current!,
+          height: 840,
+          width: 840,
+        },
+      })
 
-    const tmap = new TacticalMap({
-      strategy,
-      rendererOptions: {
-        canvas: ref.current!,
-        height: 840,
-        width: 840,
-      },
-    })
-
-    tmap.start()
+      tmap.start()
+    }
   }, [status, strategy])
 
   return (

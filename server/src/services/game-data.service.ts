@@ -11,6 +11,7 @@ import {
 import parser from 'luaparse'
 import axios, { AxiosResponse } from 'axios'
 import { PrismaService } from './prisma.service'
+import { PointPosition } from '.prisma/client'
 
 @Injectable()
 export class GameDataService implements IGameDataService {
@@ -148,7 +149,24 @@ export class GameDataService implements IGameDataService {
       }, {})
       results.push(result)
     }
-    return results
+
+    return results.map((result) => ({
+      ...result,
+      pointPositions: result.pointPositions.map((point: PointPosition) => ({
+        ...point,
+        fileName: point.fileName.includes('starting')
+          ? this.setFileNameForSpawnPosition(point)
+          : point.fileName,
+      })),
+    }))
+  }
+
+  /**
+   * The last character of ownerId tells us what spawn location it is.
+   */
+  private setFileNameForSpawnPosition(point: PointPosition) {
+    const index = Number(String(point.ownerId).substr(-1)) + 1
+    return point.fileName + '-' + index
   }
 
   private removeSurroundingQuotesFromRaw(raw: string) {

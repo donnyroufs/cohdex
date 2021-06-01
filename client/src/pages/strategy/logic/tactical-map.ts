@@ -4,6 +4,12 @@ import { Vec2 } from './math/vec2.math'
 import { Renderer } from './renderer'
 import { ImageUtil } from './utils/image.util'
 
+/*
+ * [ ] Fix spawnpoints on backend
+ * [ ] Abstract everything into renderer thats supposed to be there
+ * [ ] Fix scaling for anything other than 1:1
+ */
+
 export class TacticalMap {
   private readonly _renderer: Renderer
   private readonly _strategy: IStrategy
@@ -29,11 +35,6 @@ export class TacticalMap {
     const points = this._strategy.Map.pointPositions
 
     for (const point of points) {
-      const isSpawnPoint = point.fileName.includes('starting')
-      const spawnLocation = isSpawnPoint
-        ? Number(String(point.ownerId).substr(-1)) + 1
-        : 2
-
       const x = point.x * scaleX
       const y = point.y * scaleY
 
@@ -43,13 +44,10 @@ export class TacticalMap {
 
       const flip = (pos: number) => (pos < 0 ? Math.abs(pos) : 0 - pos)
 
-      const fileName = isSpawnPoint
-        ? point.fileName + '-' + spawnLocation
-        : point.fileName
-
       const img = await ImageUtil.loadAsyncImage(
-        `${process.env.REACT_APP_BASE_URL}/public/${fileName}.png`
+        `${process.env.REACT_APP_BASE_URL}/public/${point.fileName}.png`
       )
+
       this._renderer.drawImage(
         img,
         SIZE,
