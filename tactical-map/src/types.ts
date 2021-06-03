@@ -1,4 +1,6 @@
-import { IStrategy} from '@cohdex/shared'
+import { IMap, IStrategy, IStrategyMap } from '@cohdex/shared'
+import { Vec2 } from './math/vec2.math'
+import { Renderer } from './renderer'
 
 export interface IRendererOptions {
   canvas: HTMLCanvasElement
@@ -9,4 +11,16 @@ export interface IRendererOptions {
 export interface ITacticalMapOptions {
   strategy: IStrategy
   rendererOptions: IRendererOptions
+}
+
+export interface IBaseEntityProps {
+  height: number
+  width: number
+  pos: Vec2
+  // Should maybe be a string? e.g. path
+  image: HTMLImageElement
+}
+
+export interface IGameData {
+  renderer: Renderer
 }
