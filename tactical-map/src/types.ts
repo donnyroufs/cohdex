@@ -11,6 +11,7 @@ export interface IRendererOptions {
 export interface ITacticalMapOptions {
   strategy: IStrategy
   rendererOptions: IRendererOptions
+  basePath: string
 }
 
 export interface IBaseEntityProps {

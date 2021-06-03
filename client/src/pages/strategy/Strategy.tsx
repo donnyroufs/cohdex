@@ -29,6 +29,7 @@ export const Strategy = () => {
           height: 840,
           width: 840,
         },
+        basePath: process.env.REACT_APP_BASE_URL,
       })
 
       tmap.start()

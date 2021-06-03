@@ -2,25 +2,39 @@ import { IStrategy } from '@cohdex/shared'
 import { IGameData, ITacticalMapOptions } from './types'
 import { Vec2 } from './math/vec2.math'
 import { Renderer } from './renderer'
-import { ImageUtil } from './utils/image.util'
 import { GameData } from './game-data'
+import { AssetLoader } from './loaders/asset.loader'
 
 export class TacticalMap {
   private readonly _renderer: Renderer
   private readonly _strategy: IStrategy
   private readonly _gameData: IGameData
+  private readonly _assetLoader: AssetLoader
 
   constructor(options: ITacticalMapOptions) {
     this._strategy = options.strategy
     this._renderer = new Renderer(options.rendererOptions)
     this._gameData = new GameData(this._renderer)
+
+    this._assetLoader = new AssetLoader(
+      this._strategy.Map.url,
+      AssetLoader.toAssetsToLoad(
+        this._strategy.Map.pointPositions,
+        options.basePath
+      )
+    )
   }
 
   async start() {
     const { height: mapHeight, width: mapWidth, url } = this._strategy.Map
 
-    const img = await ImageUtil.loadAsyncImage(url.replace('tga', 'png'))
+    // Load all required assets for strategy
+    await this._assetLoader.setup()
 
+    // TODO: Move to World.ts
+    const img = this._assetLoader.getImage(AssetLoader.urlToFileName(url))
+
+    // TODO: Move to renderer
     const { scaleX, scaleY } = this.calculateScale(mapHeight, mapWidth)
 
     // TODO: Rename and move renderer
@@ -38,6 +52,7 @@ export class TacticalMap {
       ? 0
       : mapHeight / this._renderer.height + 0.05
 
+    // TODO: Becomes entities and should be rendered in the render loop
     for (const point of points) {
       // TODO: Abstract to it's own method inside renderer
       const x = point.x * (scaleX - RATIO_SCALE)
@@ -54,9 +69,12 @@ export class TacticalMap {
       const flip = (pos: number) => (pos < 0 ? Math.abs(pos) : 0 - pos)
 
       // TODO: Create an assets loader
-      const img = await ImageUtil.loadAsyncImage(
-        `${process.env.REACT_APP_BASE_URL}/public/${point.fileName}.png`
-      )
+      // const img = await ImageUtil.loadAsyncImage(
+      //   `${process.env.REACT_APP_BASE_URL}/public/${point.fileName}.png`
+      // )
+
+      // TODO: We are storing the assets by url and not by key therefore we need to prefix it with the base url
+      const img = this._assetLoader.getImage(point.fileName)
 
       // TODO: Create an assets loader
       this._renderer.drawImage(

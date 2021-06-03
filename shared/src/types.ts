@@ -82,15 +82,17 @@ export interface IStrategyMap {
   height: number
   width: number
   url: string
-  pointPositions: Array<{
-    id: number
-    x: number
-    y: number
-    ownerId: number
-    fileName: string
-    mapId: number
-    url: string
-  }>
+  pointPositions: IPointPosition[]
+}
+
+export interface IPointPosition {
+  id: number
+  x: number
+  y: number
+  ownerId: number
+  fileName: string
+  mapId: number
+  url: string
 }
 
 export interface IGetStrategyResponseDto {
