@@ -25,7 +25,7 @@ export class BaseEntity<T extends IBaseEntityProps = IBaseEntityProps> {
   }
 
   draw(gameData: IGameData) {
-    gameData.renderer.drawImage(
+    gameData.renderer.drawImageToScreen(
       this.image,
       this.height,
       this.width,
