@@ -22,7 +22,7 @@ export class TacticalMap {
   async start() {
     const { height: mapHeight, width: mapWidth, url } = this._strategy.Map
 
-    const img = await ImageUtil.loadAsyncImage(url)
+    const img = await ImageUtil.loadAsyncImage(url.replace('tga', 'png'))
 
     const { scaleX, scaleY } = this.calculateScale(mapHeight, mapWidth)
 
@@ -34,11 +34,15 @@ export class TacticalMap {
 
     const points = this._strategy.Map.pointPositions
 
+    const SCALE = this.isSquare(mapHeight, mapWidth)
+      ? 0
+      : mapHeight / this._renderer.height + 0.05
+
     for (const point of points) {
-      const x = point.x * scaleX
+      const x = point.x * (scaleX - SCALE)
       const y = point.y * scaleY
 
-      const SIZE = 25 * scaleX
+      const SIZE = 15 * scaleX
 
       const CENTER = CANVAS_HEIGHT / 2 - SIZE / 2
 
@@ -62,5 +66,9 @@ export class TacticalMap {
       scaleX: this._renderer.width / mapWidth,
       scaleY: this._renderer.height / mapHeight,
     }
+  }
+
+  private isSquare(mapHeight: number, mapWidth: number) {
+    return mapHeight === mapWidth
   }
 }
