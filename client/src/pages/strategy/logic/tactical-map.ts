@@ -4,12 +4,6 @@ import { Vec2 } from './math/vec2.math'
 import { Renderer } from './renderer'
 import { ImageUtil } from './utils/image.util'
 
-/*
- * [ ] Fix spawnpoints on backend
- * [ ] Abstract everything into renderer thats supposed to be there
- * [ ] Fix scaling for anything other than 1:1
- */
-
 export class TacticalMap {
   private readonly _renderer: Renderer
   private readonly _strategy: IStrategy

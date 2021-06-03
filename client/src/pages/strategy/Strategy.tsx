@@ -33,7 +33,7 @@ export const Strategy = () => {
 
       tmap.start()
     }
-  }, [status, strategy])
+  }, [status, strategy, slug])
 
   return (
     <BaseLayout.Container>
