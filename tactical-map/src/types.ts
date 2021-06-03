@@ -1,4 +1,5 @@
 import { IMap, IStrategy, IStrategyMap } from '@cohdex/shared'
+import { AssetLoader } from './loaders/asset.loader'
 import { Vec2 } from './math/vec2.math'
 import { Renderer } from './renderer'
 
@@ -24,4 +25,5 @@ export interface IBaseEntityProps {
 
 export interface IGameData {
   renderer: Renderer
+  assetLoader: AssetLoader
 }
