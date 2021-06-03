@@ -83,7 +83,7 @@ export class GameDataService implements IGameDataService {
         acc.url = map.tgaUrl
         if (curr.key.name === 'mapsize') {
           // @ts-ignore
-          const [h, w] = curr.value.fields
+          const [w, h] = curr.value.fields
           acc.height = h.value.value
           acc.width = w.value.value
 
