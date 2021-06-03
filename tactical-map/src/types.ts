@@ -5,6 +5,9 @@ import { Renderer } from './renderer'
 
 export interface IRendererOptions {
   canvas: HTMLCanvasElement
+  /**
+   * As of now TacticalMap only works with a 1:1 ratio
+   */
   height: number
   width: number
 }

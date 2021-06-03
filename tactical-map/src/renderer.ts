@@ -44,7 +44,7 @@ export class Renderer {
     const magicNumberThatFixesAlignment = 0.05
     this.scale = this.isSquare()
       ? 0
-      : this._map.height / this.height + magicNumberThatFixesAlignment
+      : this.mapHeight / this.height + magicNumberThatFixesAlignment
   }
 
   /**
@@ -57,19 +57,19 @@ export class Renderer {
     width: number,
     pos: Vec2
   ) {
-    const size = this.getScaleX()
-    // const scaleY = this.getScaleY()
-    const center = this.getCenterPositionForEntity(size)
+    const scaleX = this.getScaleX()
+    const size = width * scaleX
+    const center = this.getCenterPositionForEntity(height)
     const { x, y } = this.getWorldToScreenPos(pos)
 
+    // Note we are assuming everything is a square at the moment.
     this.drawImage(
       image,
-      height * size,
-      width * size,
+      size,
+      size,
       new Vec2(x + center, this.flip(y) + center)
     )
   }
-  // new Vec2(x + CENTER, flip(y) + CENTER)
 
   drawImage(
     image: HTMLImageElement,
@@ -87,7 +87,9 @@ export class Renderer {
 
   // TODO: take in entity
   getCenterPositionForEntity(size: number) {
-    return this.getScreenHeight() / 2 - size / 2
+    const scaleX = this.getScaleX()
+
+    return this.getScreenHeight() / 2 - (size * scaleX) / 2
   }
 
   getWorldToScreenPos({ x, y }: Vec2) {
