@@ -1,5 +1,5 @@
 import { IStrategy } from '@cohdex/shared'
-import { ITacticalMapOptions } from '../../../types'
+import { ITacticalMapOptions } from './types'
 import { Vec2 } from './math/vec2.math'
 import { Renderer } from './renderer'
 import { ImageUtil } from './utils/image.util'
@@ -28,12 +28,12 @@ export class TacticalMap {
 
     const points = this._strategy.Map.pointPositions
 
-    const SCALE = this.isSquare(mapHeight, mapWidth)
+    const RATIO_SCALE = this.isSquare(mapHeight, mapWidth)
       ? 0
       : mapHeight / this._renderer.height + 0.05
 
     for (const point of points) {
-      const x = point.x * (scaleX - SCALE)
+      const x = point.x * (scaleX - RATIO_SCALE)
       const y = point.y * scaleY
 
       const SIZE = 15 * scaleX

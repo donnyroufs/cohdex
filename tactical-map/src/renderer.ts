@@ -1,4 +1,4 @@
-import { IRendererOptions } from '../../../types'
+import { IRendererOptions } from './types'
 import { Vec2 } from './math/vec2.math'
 
 export class Renderer {

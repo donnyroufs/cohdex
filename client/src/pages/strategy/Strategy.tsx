@@ -3,7 +3,7 @@ import { useEffect, useRef } from 'react'
 import { BaseLayout } from '../../components/layouts'
 import { useAppDispatch, useAppSelector } from '../../store/store'
 import { fetchStrategy } from '../../store/slices/strategiesSlice'
-import { TacticalMap } from './logic/tactical-map'
+import { TacticalMap } from '@cohdex/tactical-map'
 
 export interface IStrategyParams {
   slug: string

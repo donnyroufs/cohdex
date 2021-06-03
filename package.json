@@ -4,12 +4,14 @@
     "client": "yarn workspace @cohdex/client start",
     "server": "yarn workspace @cohdex/server dev",
     "shared": "yarn workspace @cohdex/shared watch",
+    "tmap": "yarn workspace @cohdex/tactical-map watch",
     "prepare": "husky install"
   },
   "workspaces": [
     "client",
     "server",
-    "shared"
+    "shared",
+    "tactical-map"
   ],
   "devDependencies": {
     "husky": "^6.0.0",
