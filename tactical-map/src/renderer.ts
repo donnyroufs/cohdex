@@ -1,151 +1,94 @@
 import { IStrategyMap } from '@cohdex/shared'
 import { BaseEntity } from './entities/base-entity'
-import { AssetLoader } from './loaders/asset.loader'
 import { Vec2 } from './math/vec2.math'
+import { IRendererOptions } from './types'
 
 export class Renderer {
-  public scale: number
+  public scale: number = 1
+  public scaleX: number = 1
+  public scaleY: number = 1
   private readonly _context: CanvasRenderingContext2D
-  /**
-   * Map name ot grab from the assetLoader
-   */
-  private _fileName: string
-
-  get height() {
-    return this._canvas.height
-  }
 
   get width() {
-    return this._canvas.width
+    return this._context.canvas.width
   }
 
-  get mapHeight() {
-    return this._map.height
+  get height() {
+    return this._context.canvas.height
   }
 
-  get mapWidth() {
-    return this._map.width
-  }
-
-  constructor(
-    private readonly _map: IStrategyMap,
-    private readonly _assetLoader: AssetLoader,
-    private readonly _canvas: HTMLCanvasElement,
-    height: number,
-    width: number
-  ) {
-    this.setRendererSize(height, width)
-
-    this._context = this._canvas.getContext('2d')!
-    this._fileName = AssetLoader.urlToFileName(_map.url)
-  }
-
-  setup() {
-    const magicNumberThatFixesAlignment = 0.05
-    this.scale = this.isSquare()
-      ? 0
-      : this.mapHeight / this.height + magicNumberThatFixesAlignment
+  constructor(options: IRendererOptions) {
+    this._context = options.canvas.getContext('2d')!
+    this.setCanvasSize(options.size)
+    this.translateCanvasToCenter()
   }
 
   /**
-   * An entity needs to be be scaled and corrected their position
-   * based on the scaled screen size
+   * Vec2(0, 0) will be the center of the canvas instead of
+   * the top left.
    */
-  drawImageToScreen(
+  public translateCanvasToCenter() {
+    this._context.translate(this.width / 2, this.height / 2)
+  }
+
+  /**
+   * Used for rendering the world, that way we don't need to do
+   * calculations somewhere else.
+   */
+  public getTopLeftPos() {
+    return new Vec2(-this.width / 2, -this.height / 2)
+  }
+
+  public drawUnscaledImage(
     image: HTMLImageElement,
-    height: number,
-    width: number,
-    pos: Vec2
+    pos: Vec2,
+    w = this.width,
+    h = this.height
   ) {
-    const scaleX = this.getScaleX()
-    const size = width * scaleX
-    const center = this.getCenterPositionForEntity(height)
-    const { x, y } = this.getWorldToScreenPos(pos)
-
-    // Note we are assuming everything is a square at the moment.
-    this.drawImage(
-      image,
-      size,
-      size,
-      new Vec2(x + center, this.flip(y) + center)
-    )
+    this._context.drawImage(image, pos.x, pos.y, w, h)
   }
 
-  drawImage(
+  public drawImage(
     image: HTMLImageElement,
-    height: number,
-    width: number,
-    pos = new Vec2(0, 0)
+    pos: Vec2,
+    w = this.width,
+    h = this.height
   ) {
-    this._context.drawImage(image, pos.x, pos.y, width, height)
+    this._context.drawImage(image, pos.x, pos.y, w * this.scale, h * this.scale)
   }
 
-  drawMap() {
-    const img = this._assetLoader.getImage(this._fileName)
-    this.drawImage(img, this.getScreenHeight(), this.getScreenWidth())
+  // public drawEntity(entity: BaseEntity) {
+  //   entity.
+  // }
+
+  public setCanvasSize(size: number) {
+    this._context.canvas.width = size
+    this._context.canvas.height = size
   }
 
-  // TODO: take in entity
-  getCenterPositionForEntity(size: number) {
-    const scaleX = this.getScaleX()
+  public getPosToScreen(entity: BaseEntity) {
+    const x = entity.x * this.scale - entity.size
+    const y = entity.y * this.scale - entity.size
 
-    return this.getScreenHeight() / 2 - (size * scaleX) / 2
-  }
-
-  getWorldToScreenPos({ x, y }: Vec2) {
-    const scaleX = this.getScaleX()
-    const scaleY = this.getScaleY()
-
-    return new Vec2(x * (scaleX - this.scale), y * scaleY)
+    return new Vec2(x, y)
   }
 
   /**
-   * Rendered size based on scaleX
+   * Make sure we know the difference between the world and canvas size
    */
-  getScreenWidth() {
-    return this.mapWidth * this.getScaleX()
+  public calculateAndSetScale(world: IStrategyMap) {
+    this.scaleX = this.width / world.width
+    this.scaleY = this.height / world.height
+    this.scale = this.calculateScale(world)
   }
 
-  /**
-   * Rendered size based on scaleY
-   */
-  getScreenHeight() {
-    return this.mapHeight * this.getScaleY()
-  }
+  private calculateScale(world: IStrategyMap) {
+    const size = Math.max(world.height, world.width)
 
-  /**
-   * How much should it scale the width of the original image
-   * to fit the canvas
-   */
-  getScaleX() {
-    return this.width / this.mapWidth
-  }
+    if (size === world.height) {
+      return this.height / size
+    }
 
-  /**
-   * How much should it scale height of the original image
-   * to fit the canvas
-   */
-  getScaleY() {
-    return this.height / this.mapHeight
-  }
-
-  /**
-   * Check if it's a 1:1 ratio, in that case we don't need to worry
-   * about scaling issues.
-   */
-  private isSquare() {
-    return this.mapHeight === this.mapWidth
-  }
-
-  private setRendererSize(height: number, width: number) {
-    this._canvas.height = height
-    this._canvas.width = width
-  }
-
-  /**
-   * Map icons their pos need to be flipped
-   */
-  private flip(pos: number) {
-    return pos < 0 ? Math.abs(pos) : 0 - pos
+    return this.width / size
   }
 }

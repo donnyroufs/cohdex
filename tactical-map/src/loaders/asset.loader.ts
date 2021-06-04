@@ -13,12 +13,9 @@ export class AssetLoader {
   private readonly _assetsToLoad: IAssetToLoad[] = []
   private readonly _assets: Map<string, HTMLImageElement> = new Map()
 
-  constructor(mapUrl: string, _assetsToLoad: IAssetToLoad[]) {
+  constructor(map: IAssetToLoad, _assetsToLoad: IAssetToLoad[]) {
     this._assetsToLoad = _assetsToLoad
-    this._assetsToLoad.push({
-      fileName: AssetLoader.urlToFileName(mapUrl),
-      url: mapUrl,
-    })
+    this._assetsToLoad.push(map)
   }
 
   public async setup() {

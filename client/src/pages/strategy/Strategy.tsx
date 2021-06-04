@@ -26,8 +26,7 @@ export const Strategy = () => {
         strategy,
         rendererOptions: {
           canvas: ref.current!,
-          height: 840,
-          width: 840,
+          size: 840,
         },
         basePath: process.env.REACT_APP_BASE_URL,
       })

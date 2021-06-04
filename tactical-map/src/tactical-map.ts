@@ -6,55 +6,48 @@ import { GameData } from './game-data'
 import { AssetLoader } from './loaders/asset.loader'
 import { BaseEntity } from './entities/base-entity'
 import { BASE_ENTITY_SIZE } from './constants'
+import { World } from './world'
 
 export class TacticalMap {
   private readonly _strategy: IStrategy
   private readonly _gameData: IGameData
   private readonly _assetLoader: AssetLoader
   private readonly _renderer: Renderer
-  private readonly entities: BaseEntity[] = []
+  private readonly _entities: BaseEntity[] = []
+  private readonly _world: World
 
   constructor(options: ITacticalMapOptions) {
     this._strategy = options.strategy
     this._assetLoader = new AssetLoader(
-      this._strategy.Map.url,
+      {
+        fileName: this._strategy.Map.name,
+        url: this._strategy.Map.url,
+      },
       AssetLoader.toAssetsToLoad(
         this._strategy.Map.pointPositions,
         options.basePath
       )
     )
-    this._renderer = new Renderer(
-      this._strategy.Map,
-      this._assetLoader,
-      options.rendererOptions.canvas,
-      options.rendererOptions.height,
-      options.rendererOptions.width
-    )
+    this._renderer = new Renderer(options.rendererOptions)
+    this._world = new World(this._strategy.Map)
     this._gameData = new GameData(this._renderer, this._assetLoader)
   }
 
   async start() {
-    await this.loadAsyncData()
-
+    await this._assetLoader.setup()
+    this._renderer.calculateAndSetScale(this._strategy.Map)
     this.setupEntities()
-
-    this._renderer.setup()
-
-    this._renderer.drawMap()
     this.draw()
   }
 
-  private async loadAsyncData() {
-    await this._assetLoader.setup()
-  }
-
   private draw() {
-    this.entities.forEach((entity) => entity.draw(this._gameData))
+    this._world.draw(this._gameData)
+    this._entities.forEach((entity) => entity.draw(this._gameData))
   }
 
   private setupEntities() {
     this._strategy.Map.pointPositions.forEach((point) =>
-      this.entities.push(
+      this._entities.push(
         new BaseEntity({
           height: BASE_ENTITY_SIZE,
           width: BASE_ENTITY_SIZE,
