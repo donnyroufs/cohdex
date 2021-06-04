@@ -5,8 +5,6 @@ import { IRendererOptions } from './types'
 
 export class Renderer {
   public scale: number = 1
-  public scaleX: number = 1
-  public scaleY: number = 1
   private readonly _context: CanvasRenderingContext2D
 
   get width() {
@@ -57,9 +55,17 @@ export class Renderer {
     this._context.drawImage(image, pos.x, pos.y, w * this.scale, h * this.scale)
   }
 
-  // public drawEntity(entity: BaseEntity) {
-  //   entity.
-  // }
+  public drawEntity(entity: BaseEntity) {
+    const { x, y } = this.getPosToScreen(entity)
+
+    this._context.drawImage(
+      entity.image,
+      x,
+      y,
+      entity.width * this.scale,
+      entity.height * this.scale
+    )
+  }
 
   public setCanvasSize(size: number) {
     this._context.canvas.width = size
@@ -77,8 +83,6 @@ export class Renderer {
    * Make sure we know the difference between the world and canvas size
    */
   public calculateAndSetScale(world: IStrategyMap) {
-    this.scaleX = this.width / world.width
-    this.scaleY = this.height / world.height
     this.scale = this.calculateScale(world)
   }
 

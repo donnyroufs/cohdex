@@ -1,4 +1,3 @@
-import { Vec2 } from '../math/vec2.math'
 import { IBaseEntityProps, IGameData } from '../types'
 
 export class BaseEntity<T extends IBaseEntityProps = IBaseEntityProps> {
@@ -30,8 +29,7 @@ export class BaseEntity<T extends IBaseEntityProps = IBaseEntityProps> {
   }
 
   draw(gameData: IGameData) {
-    const pos = gameData.renderer.getPosToScreen(this)
-    gameData.renderer.drawImage(this.image, pos, this.width, this.height)
+    gameData.renderer.drawEntity(this)
   }
 
   /**
