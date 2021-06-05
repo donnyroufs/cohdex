@@ -79,11 +79,9 @@ export class Renderer {
     return new Vec2(x, y)
   }
 
-  // TODO: Probably move it all to PointPositionEntity
   public getEntityPosToScreen(entity: BaseEntity) {
-    // TODO: Remove offset from here, they should go in the entity (pointPosition entity)
-    const x = entity.x * this.scale - entity.size - 2
-    const y = entity.y * this.scale - entity.size - 1
+    const x = entity.x * this.scale - entity.size
+    const y = entity.y * this.scale - entity.size
 
     return new Vec2(x, y)
   }
@@ -102,6 +100,16 @@ export class Renderer {
     })
   }
 
+  public drawCollisionBox(entity: BaseEntity) {
+    const { x, y } = this.getEntityPosToScreen(entity)
+    this.context.strokeRect(
+      x,
+      y,
+      entity.size * this.scale,
+      entity.size * this.scale
+    )
+  }
+
   private calculateScale(world: IStrategyMap) {
     const size = Math.max(world.height, world.width)
 
@@ -115,7 +123,6 @@ export class Renderer {
   private getMousePos(canvas: HTMLCanvasElement, e: MouseEvent) {
     const rect = canvas.getBoundingClientRect()
 
-    // TODO: Refactor (dividing this.scale) this is only used for PointPositionEntities(I think?)
     return new Vec2(
       (e.clientX - rect.left - this.width / 2) / this.scale,
       (e.clientY - rect.top - this.height / 2) / this.scale

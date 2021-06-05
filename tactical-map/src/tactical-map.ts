@@ -7,9 +7,10 @@ import { AssetLoader } from './loaders/asset.loader'
 import { BaseEntity } from './entities/base-entity'
 import { BASE_ENTITY_SIZE } from './constants'
 import { World } from './world'
-import { DebugUtil } from './utils/debug.util'
+// import { DebugUtil } from './utils/debug.util'
+import { PointPosition } from './entities/point-position.entity'
 
-const dbug = new DebugUtil()
+// const dbug = new DebugUtil()
 
 export class TacticalMap {
   private readonly _strategy: IStrategy
@@ -40,13 +41,16 @@ export class TacticalMap {
     await this._assetLoader.setup()
     this._renderer.calculateAndSetScale(this._strategy.Map)
     this._renderer.bindMouseEvent((pos) => {
-      this._entities.forEach((entity) => {
-        const distance = entity.pos.getDistance(pos)
+      const collidedEntity = this._entities.some(
+        (entity) => entity.pos.getDistance(pos) <= entity.size / 2
+      )
 
-        if (distance <= entity.size / 2) {
-          dbug.setText(entity.name)
-        }
-      })
+      if (collidedEntity) {
+        document.body.style.cursor = 'pointer'
+        return
+      }
+
+      document.body.style.cursor = 'default'
     })
     this.setupEntities()
     this.draw()
@@ -60,15 +64,12 @@ export class TacticalMap {
   private setupEntities() {
     this._strategy.Map.pointPositions.forEach((point, index) => {
       this._entities.push(
-        new BaseEntity({
+        new PointPosition({
           name: point.fileName,
           height: BASE_ENTITY_SIZE,
           width: BASE_ENTITY_SIZE,
           image: this._assetLoader.getImage(point.fileName),
           pos: new Vec2(point.x, point.y),
-          // TODO: Should be used for different entities
-          offsetX: 0,
-          offsetY: 0,
         })
       )
     })

@@ -15,7 +15,7 @@ export class DebugUtil {
     el.style.top = '32px'
     el.style.right = '32px'
     el.style.zIndex = '9000'
-    el.style.textAlign = 'center'
+    // el.style.textAlign = 'center'
     el.style.display = 'flex'
     el.style.justifyContent = 'center'
     el.style.alignItems = 'center'
@@ -30,12 +30,6 @@ export class DebugUtil {
   }
 
   setText(content: string) {
-    // const nodes = Object.entries(content)
-    //   .map(([k, v]) => {
-    //     return `<p>${k}: ${v}</p>`
-    //   })
-    //   .join('')
-
     this._el.innerHTML = content
   }
 }

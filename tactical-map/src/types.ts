@@ -19,8 +19,6 @@ export interface IBaseEntityProps {
   height: number
   width: number
   pos: Vec2
-  offsetX: number
-  offsetY: number
   // Should maybe be a string? e.g. path
   image: HTMLImageElement
 }
