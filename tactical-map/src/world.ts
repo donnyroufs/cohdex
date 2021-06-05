@@ -6,7 +6,6 @@ export class World {
   constructor(private readonly _map: IStrategyMap) {}
 
   draw(gameData: IGameData) {
-    console.log(gameData.assetLoader)
     const img = gameData.assetLoader.getImage(this._map.name)
     const pos = gameData.renderer.getTopLeftPos()
     gameData.renderer.drawUnscaledImage(img, pos)

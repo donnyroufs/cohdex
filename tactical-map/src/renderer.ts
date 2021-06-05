@@ -5,18 +5,18 @@ import { IRendererOptions } from './types'
 
 export class Renderer {
   public scale: number = 1
-  private readonly _context: CanvasRenderingContext2D
+  public readonly context: CanvasRenderingContext2D
 
   get width() {
-    return this._context.canvas.width
+    return this.context.canvas.width
   }
 
   get height() {
-    return this._context.canvas.height
+    return this.context.canvas.height
   }
 
   constructor(options: IRendererOptions) {
-    this._context = options.canvas.getContext('2d')!
+    this.context = options.canvas.getContext('2d')!
     this.setCanvasSize(options.size)
     this.translateCanvasToCenter()
   }
@@ -26,7 +26,7 @@ export class Renderer {
    * the top left.
    */
   public translateCanvasToCenter() {
-    this._context.translate(this.width / 2, this.height / 2)
+    this.context.translate(this.width / 2, this.height / 2)
   }
 
   /**
@@ -43,7 +43,7 @@ export class Renderer {
     w = this.width,
     h = this.height
   ) {
-    this._context.drawImage(image, pos.x, pos.y, w, h)
+    this.context.drawImage(image, pos.x, pos.y, w, h)
   }
 
   public drawImage(
@@ -52,29 +52,38 @@ export class Renderer {
     w = this.width,
     h = this.height
   ) {
-    this._context.drawImage(image, pos.x, pos.y, w * this.scale, h * this.scale)
+    this.context.drawImage(image, pos.x, pos.y, w * this.scale, h * this.scale)
   }
 
   public drawEntity(entity: BaseEntity) {
-    const { x, y } = this.getPosToScreen(entity)
+    const { x, y } = this.getEntityPosToScreen(entity)
 
-    this._context.drawImage(
+    this.context.drawImage(
       entity.image,
       x,
       y,
-      entity.width * this.scale,
-      entity.height * this.scale
+      entity.size * this.scale,
+      entity.size * this.scale
     )
   }
 
   public setCanvasSize(size: number) {
-    this._context.canvas.width = size
-    this._context.canvas.height = size
+    this.context.canvas.width = size
+    this.context.canvas.height = size
   }
 
-  public getPosToScreen(entity: BaseEntity) {
-    const x = entity.x * this.scale - entity.size
-    const y = entity.y * this.scale - entity.size
+  public getPosToScreen(pos: Vec2) {
+    const x = pos.x * this.scale
+    const y = pos.y * this.scale
+
+    return new Vec2(x, y)
+  }
+
+  // TODO: Probably move it all to PointPositionEntity
+  public getEntityPosToScreen(entity: BaseEntity) {
+    // TODO: Remove offset from here, they should go in the entity (pointPosition entity)
+    const x = entity.x * this.scale - entity.size - 2
+    const y = entity.y * this.scale - entity.size - 1
 
     return new Vec2(x, y)
   }
@@ -86,6 +95,13 @@ export class Renderer {
     this.scale = this.calculateScale(world)
   }
 
+  public bindMouseEvent(callback: (pos: Vec2) => void) {
+    this.context.canvas.addEventListener('mousemove', (e) => {
+      const pos = this.getMousePos(this.context.canvas, e)
+      callback(pos)
+    })
+  }
+
   private calculateScale(world: IStrategyMap) {
     const size = Math.max(world.height, world.width)
 
@@ -94,5 +110,15 @@ export class Renderer {
     }
 
     return this.width / size
+  }
+
+  private getMousePos(canvas: HTMLCanvasElement, e: MouseEvent) {
+    const rect = canvas.getBoundingClientRect()
+
+    // TODO: Refactor (dividing this.scale) this is only used for PointPositionEntities(I think?)
+    return new Vec2(
+      (e.clientX - rect.left - this.width / 2) / this.scale,
+      (e.clientY - rect.top - this.height / 2) / this.scale
+    )
   }
 }
