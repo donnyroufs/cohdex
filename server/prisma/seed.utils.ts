@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient, Map } from '@prisma/client'
 
 export async function seedFactions(prisma: PrismaClient | any) {
   if ((await prisma.faction.count()) <= 0) {
@@ -48,9 +48,36 @@ export async function seedMaps(prisma: PrismaClient | any) {
   if ((await prisma.map.count()) <= 0) {
     await prisma.map.createMany({
       data: [
-        { id: 1, name: 'langres' },
-        { id: 2, name: 'semoisky' },
-        { id: 3, name: 'crossroads' },
+        {
+          id: 1,
+          name: 'langres',
+          scenarioName: 'langres',
+          height: 20,
+          width: 20,
+          maxPlayers: 2,
+          version: 1,
+          url: 'https://',
+        },
+        {
+          id: 2,
+          name: 'semoisky',
+          scenarioName: 'semoisky',
+          height: 20,
+          width: 20,
+          maxPlayers: 2,
+          version: 1,
+          url: 'https://',
+        },
+        {
+          id: 3,
+          name: 'crossroads',
+          scenarioName: 'crossroads',
+          height: 20,
+          width: 20,
+          maxPlayers: 2,
+          version: 1,
+          url: 'https://',
+        },
       ],
     })
   }

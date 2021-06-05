@@ -1,7 +1,8 @@
-prepare:
-	docker-compose up -d;
+prepare: 
+	docker-compose up -d && sleep 1
 
-bootstrap:
+bootstrap: prepare
 	yarn workspace @cohdex/server migrate; \
-	yarn workspace @cohdex/server seed;  \
-	yarn server
+	yarn workspace @cohdex/server seed; \
+	yarn workspace @cohdex/server test:migrate; \
+	yarn server;

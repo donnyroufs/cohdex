@@ -7,6 +7,7 @@ export interface BaseHttpResponse<T, U = string> {
 
 export interface IUser extends Pick<User, 'id' | 'avatar' | 'profileUrl'> {}
 export interface IMap extends Pick<Map, 'id' | 'name'> {}
+
 export interface IFaction
   extends Pick<Faction, 'id' | 'name' | 'abbreviation' | 'team' | 'imgUrl'> {}
 
@@ -58,4 +59,42 @@ export interface IGetAllUserStrategies {
     name: string
     abbreviation: string
   }
+}
+
+export interface IStrategy {
+  id: number
+  factionId: number
+  AxisFaction: {
+    id: number
+    name: string
+    abbreviation: string
+  }
+  AlliedFaction: {
+    id: number
+    name: string
+    abbreviation: string
+  }
+  Map: IStrategyMap
+}
+
+export interface IStrategyMap {
+  name: string
+  height: number
+  width: number
+  url: string
+  pointPositions: IPointPosition[]
+}
+
+export interface IPointPosition {
+  id: number
+  x: number
+  y: number
+  ownerId: number
+  fileName: string
+  mapId: number
+  url: string
+}
+
+export interface IGetStrategyResponseDto {
+  strategy: IStrategy
 }

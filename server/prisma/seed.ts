@@ -5,7 +5,7 @@ const prisma = new PrismaClient()
 
 async function seed(prisma: PrismaClient) {
   await Utils.seedFactions(prisma)
-  await Utils.seedMaps(prisma)
+  // await Utils.seedMaps(prisma)
 }
 
 seed(prisma)

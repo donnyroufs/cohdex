@@ -17,6 +17,11 @@ export const fetchMaps = createAsyncThunk('strategies/fetchMaps', async () =>
   strategiesApi.getMaps()
 )
 
+export const fetchStrategy = createAsyncThunk(
+  'strategies/fetchStrategy',
+  async (slug: string) => strategiesApi.getStrategy(slug)
+)
+
 export const fetchCreateStrategy = createAsyncThunk(
   'strategies/fetchCreateStrategy',
   async (payload: ICreateStrategyDto) =>

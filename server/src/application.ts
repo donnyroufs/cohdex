@@ -11,7 +11,7 @@ import { milliseconds } from 'date-fns'
 import { Strategy as SteamStrategy } from 'passport-steam'
 import passport from 'passport'
 
-import { SteamProfile, DoneFn } from './types'
+import { SteamProfile, DoneFn, IGameDataService } from './types'
 import { PrismaService } from './services/prisma.service'
 import { StrategyRepository } from './repositories/strategy.repository'
 import { StrategyService } from './services/strategy.service'
@@ -21,11 +21,13 @@ import { CreateUserDto } from './dtos/create-user.dto'
 import { InputValidationException } from './exceptions/http/input-validation.exception'
 import { BaseHttpResponse } from './lib/base-http-response'
 import { DomainInputValidationException } from './exceptions/domain/domain-input-validation.exception'
+import { GameDataService } from './services/game-data.service'
+import { DITypes } from './di-types'
 
 export const API_VERSION = 1
 
 export class Application extends Kondah {
-  protected async configureServices(services: Energizor) {
+  protected async configureServices(services: Energizor): Promise<void> {
     services.setDefaultScope('singleton')
 
     services.register(PrismaService)
@@ -35,6 +37,10 @@ export class Application extends Kondah {
 
     services.register(StrategyRepository)
     services.register(StrategyService)
+
+    services.register<IGameDataService>(DITypes.GameDataService, {
+      asClass: GameDataService,
+    })
   }
 
   protected async setup({ server, addControllers, energizor }: AppContext) {
@@ -132,6 +138,7 @@ export class Application extends Kondah {
       }
     )
 
+    await energizor.get<IGameDataService>(DITypes.GameDataService).syncMaps()
     await prisma.connect()
     server.run(5000)
   }

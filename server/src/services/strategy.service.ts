@@ -16,6 +16,10 @@ export class StrategyService {
     return this._strategyRepo.all(id)
   }
 
+  async findOne(userId: number, slug: string) {
+    return this._strategyRepo.findOne(userId, slug)
+  }
+
   async create(data: ICreateStrategyDto) {
     if (data.alliedFactionId === data.axisFactionId) {
       throw new InvalidFactionsException()
