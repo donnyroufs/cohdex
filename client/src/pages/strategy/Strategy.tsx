@@ -1,9 +1,12 @@
 import { useParams } from 'react-router-dom'
-import { useEffect, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { BaseLayout } from '../../components/layouts'
 import { useAppDispatch, useAppSelector } from '../../store/store'
 import { fetchStrategy } from '../../store/slices/strategiesSlice'
-import { TacticalMap } from '@cohdex/tactical-map'
+import { TacticalMap as TMap } from '@cohdex/tactical-map'
+import { Commands, TacticalMapWithRef, Units } from './components'
+import { Box, Flex } from '@chakra-ui/react'
+import { Spinner, Title } from '../../components'
 
 export interface IStrategyParams {
   slug: string
@@ -22,11 +25,11 @@ export const Strategy = () => {
 
   useEffect(() => {
     if (ref.current && status === 'idle') {
-      const tmap = new TacticalMap({
+      const tmap = new TMap({
         strategy,
         rendererOptions: {
           canvas: ref.current!,
-          size: 840,
+          size: 640,
         },
         basePath: process.env.REACT_APP_BASE_URL,
       })
@@ -35,9 +38,23 @@ export const Strategy = () => {
     }
   }, [status, strategy, slug])
 
+  if (status === 'init') {
+    return <Spinner withMessage />
+  }
+
   return (
     <BaseLayout.Container>
-      <canvas ref={ref}></canvas>
+      <Box as="header" display="flex" justifyContent="space-between" mb={8}>
+        <Title value={strategy.title} />
+        <Title value="Commands" />
+      </Box>
+      <Flex flexDir="row">
+        <Units />
+        <Flex flexDir="row" flexWrap="wrap" flex={1}>
+          <TacticalMapWithRef ref={ref} />
+          <Commands />
+        </Flex>
+      </Flex>
     </BaseLayout.Container>
   )
 }
