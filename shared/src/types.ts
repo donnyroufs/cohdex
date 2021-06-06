@@ -64,6 +64,7 @@ export interface IGetAllUserStrategies {
 export interface IStrategy {
   id: number
   factionId: number
+  title: string
   AxisFaction: {
     id: number
     name: string

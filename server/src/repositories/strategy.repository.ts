@@ -28,6 +28,7 @@ export class StrategyRepository {
       select: {
         id: true,
         factionId: true,
+        title: true,
         AxisFaction: {
           select: {
             id: true,

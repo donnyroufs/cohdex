@@ -88,3 +88,5 @@ export interface ITacticalMapOptions {
   strategy: IStrategy
   rendererOptions: IRendererOptions
 }
+
+export type Display = 'circle' | 'rectangle'
