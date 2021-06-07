@@ -1,7 +1,11 @@
 import { Flex, IconButton } from '@chakra-ui/react'
 import { FaPlusCircle } from 'react-icons/fa'
 
-export const Units = () => {
+export interface IUnitsProps {
+  handleOnAdd: () => void
+}
+
+export const Units: React.FC<IUnitsProps> = ({ handleOnAdd }) => {
   return (
     <Flex flexDir="column" mr={4}>
       <IconButton
@@ -18,6 +22,7 @@ export const Units = () => {
         _focus={{
           outline: 'none',
         }}
+        onClick={handleOnAdd}
       />
     </Flex>
   )

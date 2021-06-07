@@ -1,5 +1,5 @@
 import { IStrategy } from '@cohdex/shared'
-import { IGameData, ITacticalMapOptions } from './types'
+import { GameState, IGameData, ITacticalMapOptions } from './types'
 import { Vec2 } from './math/vec2.math'
 import { Renderer } from './renderer'
 import { GameData } from './game-data'
@@ -9,10 +9,12 @@ import { BASE_ENTITY_SIZE } from './constants'
 import { World } from './world'
 // import { DebugUtil } from './utils/debug.util'
 import { PointPosition } from './entities/point-position.entity'
+import onChange from 'on-change'
 
 // const dbug = new DebugUtil()
 
 export class TacticalMap {
+  private _state: GameState
   private readonly _strategy: IStrategy
   private readonly _gameData: IGameData
   private readonly _assetLoader: AssetLoader
@@ -21,6 +23,9 @@ export class TacticalMap {
   private readonly _world: World
 
   constructor(options: ITacticalMapOptions) {
+    this._state = onChange({ units: [] }, (prop, value) =>
+      options.syncStateHandler(prop, value, this._state)
+    )
     this._strategy = options.strategy
     this._assetLoader = new AssetLoader(
       {
@@ -54,6 +59,25 @@ export class TacticalMap {
     })
     this.setupEntities()
     this.draw()
+  }
+
+  // TODO: Add type
+  addUnit(unit: any) {
+    this._state.units.push(unit)
+  }
+
+  /**
+   * Used to do logic outside of TMap
+   */
+  getGameState() {
+    return this._state
+  }
+
+  syncState(newState: Partial<GameState>) {
+    this._state = {
+      ...newState,
+      ...this._state,
+    }
   }
 
   private draw() {
