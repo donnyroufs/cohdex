@@ -15,14 +15,14 @@ import onChange from 'on-change'
 
 export class TacticalMap {
   private _state: GameState
-  private readonly _strategy: IStrategy
-  private readonly _gameData: IGameData
-  private readonly _assetLoader: AssetLoader
-  private readonly _renderer: Renderer
-  private readonly _entities: BaseEntity[] = []
-  private readonly _world: World
+  private _strategy: IStrategy
+  private _gameData: IGameData
+  private _assetLoader: AssetLoader
+  private _renderer: Renderer
+  private _entities: BaseEntity[] = []
+  private _world: World
 
-  constructor(options: ITacticalMapOptions) {
+  init(options: ITacticalMapOptions) {
     this._state = onChange({ units: [] }, (prop, value) =>
       options.syncStateHandler(prop, value, this._state)
     )

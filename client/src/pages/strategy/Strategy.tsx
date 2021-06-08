@@ -3,14 +3,11 @@ import React, { useEffect, useRef } from 'react'
 import { BaseLayout } from '../../components/layouts'
 import { useAppDispatch, useAppSelector } from '../../store/store'
 import { fetchStrategy } from '../../store/slices/strategiesSlice'
-import {
-  TacticalMap,
-  TacticalMap as TMap,
-  GameState,
-} from '@cohdex/tactical-map'
+import { GameState } from '@cohdex/tactical-map'
 import { Commands, TacticalMapWithRef, Units } from './components'
 import { Box, Flex } from '@chakra-ui/react'
 import { Spinner, Title } from '../../components'
+import { TMap } from '../../logic/tactical-map'
 
 export interface IStrategyParams {
   slug: string
@@ -20,12 +17,9 @@ export const Strategy = () => {
   const [gameState, setGameState] = React.useState<GameState>()
   const { slug } = useParams<IStrategyParams>()
   const ref = useRef<HTMLCanvasElement | null>(null)
-  const tmap = useRef<TacticalMap>()
   const dispatch = useAppDispatch()
   const status = useAppSelector((state) => state.strategy.status)
   const strategy = useAppSelector((state) => state.strategy.data)
-
-  console.count('rendered')
 
   useEffect(() => {
     dispatch(fetchStrategy(slug))
@@ -33,7 +27,7 @@ export const Strategy = () => {
 
   useEffect(() => {
     if (ref.current && status === 'idle') {
-      tmap.current = new TMap({
+      TMap.init({
         strategy,
         rendererOptions: {
           canvas: ref.current!,
@@ -48,7 +42,7 @@ export const Strategy = () => {
         },
       })
 
-      tmap.current.start()
+      TMap.start()
     }
   }, [status, strategy, slug])
 
@@ -57,11 +51,7 @@ export const Strategy = () => {
   }
 
   function handleOnAdd() {
-    // console.log({
-    //   reactState: gameState,
-    //   tmapState: tmap.current?.getGameState(),
-    // })
-    tmap.current?.addUnit({})
+    TMap.addUnit({})
   }
 
   return (
@@ -69,7 +59,6 @@ export const Strategy = () => {
       <Box as="header" display="flex" justifyContent="space-between" mb={8}>
         <Title value={strategy.title} />
         <Title value="Commands" />
-        {JSON.stringify(gameState)}
       </Box>
       <Flex flexDir="row">
         <Units handleOnAdd={handleOnAdd} />
