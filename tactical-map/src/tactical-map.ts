@@ -43,22 +43,8 @@ export class TacticalMap {
   }
 
   async start() {
-    await this._assetLoader.setup()
-    this._renderer.calculateAndSetScale(this._strategy.Map)
-    this._renderer.bindMouseEvent((pos) => {
-      const collidedEntity = this._entities.some(
-        (entity) => entity.pos.getDistance(pos) <= entity.size / 2
-      )
-
-      if (collidedEntity) {
-        document.body.style.cursor = 'pointer'
-        return
-      }
-
-      document.body.style.cursor = 'default'
-    })
-    this.setupEntities()
-    this.draw()
+    await this.preStart()
+    this.update()
   }
 
   // TODO: Add type
@@ -73,16 +59,29 @@ export class TacticalMap {
     return this._state
   }
 
-  syncState(newState: Partial<GameState>) {
-    this._state = {
-      ...newState,
-      ...this._state,
-    }
-  }
-
-  private draw() {
+  private update() {
     this._world.draw(this._gameData)
     this._entities.forEach((entity) => entity.draw(this._gameData))
+
+    window.requestAnimationFrame(this.update.bind(this))
+  }
+
+  private async preStart() {
+    await this._assetLoader.setup()
+    this._renderer.calculateAndSetScale(this._strategy.Map)
+    this._renderer.bindMouseEvent('mousemove', (pos) => {
+      const collidedEntity = this._entities.some(
+        (entity) => entity.pos.getDistance(pos) <= entity.size / 2
+      )
+
+      if (collidedEntity) {
+        document.body.style.cursor = 'pointer'
+        return
+      }
+
+      document.body.style.cursor = 'default'
+    })
+    this.setupEntities()
   }
 
   private setupEntities() {
