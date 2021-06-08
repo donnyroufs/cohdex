@@ -21,6 +21,15 @@ export class Renderer {
     this.translateCanvasToCenter()
   }
 
+  clearCanvas() {
+    this.context.clearRect(
+      this.getTopLeftPos().getDistance(new Vec2(0, 0)),
+      this.width,
+      this.width,
+      this.height
+    )
+  }
+
   /**
    * Vec2(0, 0) will be the center of the canvas instead of
    * the top left.
@@ -62,8 +71,8 @@ export class Renderer {
       entity.image,
       x,
       y,
-      entity.size * this.scale,
-      entity.size * this.scale
+      entity.width * this.scale,
+      entity.height * this.scale
     )
   }
 
@@ -93,8 +102,8 @@ export class Renderer {
     this.scale = this.calculateScale(world)
   }
 
-  public bindMouseEvent(callback: (pos: Vec2) => void) {
-    this.context.canvas.addEventListener('mousemove', (e) => {
+  public bindMouseEvent(event: string, callback: (pos: Vec2) => void) {
+    this.context.canvas.addEventListener(event, (e: any) => {
       const pos = this.getMousePos(this.context.canvas, e)
       callback(pos)
     })
