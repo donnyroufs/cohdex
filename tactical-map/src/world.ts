@@ -1,5 +1,4 @@
 import { IStrategyMap } from '@cohdex/shared'
-import { Vec2 } from './math/vec2.math'
 import { IGameData } from './types'
 
 export class World {

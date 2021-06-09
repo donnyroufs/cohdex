@@ -1,7 +1,10 @@
-import { IStrategy } from '@cohdex/shared'
+import { IStrategy, IStrategyMap } from '@cohdex/shared'
 import { AssetLoader } from './loaders/asset.loader'
 import { Vec2 } from './math/vec2.math'
 import { Renderer } from './renderer'
+import { SceneContext } from './scene.context'
+import { SceneHandler } from './scene.handler'
+import { Scene } from './scenes/scene'
 
 export type GameState = {
   units: any[]
@@ -38,4 +41,17 @@ export interface IBaseEntityProps {
 export interface IGameData {
   renderer: Renderer
   assetLoader: AssetLoader
+}
+
+export type NewableScene = new (sceneHandler: SceneHandler) => Scene
+
+export interface IPreloadSetupProps {
+  renderer: Renderer
+  assetLoader: AssetLoader
+  map: IStrategyMap
+  basePath: string
+}
+
+export interface IGameSceneContext extends SceneContext {
+  map: IStrategyMap
 }
