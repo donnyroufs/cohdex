@@ -5,6 +5,7 @@
     "server": "yarn workspace @cohdex/server dev",
     "shared": "yarn workspace @cohdex/shared watch",
     "tmap": "yarn workspace @cohdex/tactical-map watch",
+    "test:watch": "yarn workspace @cohdex/server test:watch --silent",
     "prepare": "husky install"
   },
   "workspaces": [
