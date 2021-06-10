@@ -1,11 +1,13 @@
-import { ICreateStrategyDto } from '@cohdex/shared'
+import { ICreateStrategyDto, ICreateStrategyUnitDto } from '@cohdex/shared'
 import { Injectable } from '@kondah/core'
 import {
   InvalidFactionsException,
   InvalidTeamsException,
   ChosenFactionDoesNotExistException,
   StrategyAlreadyExistsException,
+  UnitDoesNotBelongToFactionException,
 } from '../exceptions'
+import { UnknownStrategyException } from '../exceptions/domain/unknown-strategy.exception'
 import { StrategyRepository } from '../repositories/strategy.repository'
 
 @Injectable()
@@ -18,6 +20,30 @@ export class StrategyService {
 
   async findOne(userId: number, slug: string) {
     return this._strategyRepo.findOne(userId, slug)
+  }
+
+  async addUnitToStrategy(data: ICreateStrategyUnitDto) {
+    const foundFaction = await this._strategyRepo.getFactionByStrategyId(
+      data.strategyId
+    )
+
+    if (!foundFaction) {
+      throw new UnknownStrategyException()
+    }
+
+    const factions = await this._strategyRepo.getUnitsByFaction()
+
+    const belongsToFaction = factions.find(
+      (f) =>
+        foundFaction.Faction.id === f.id &&
+        f.units.some((u) => u.id === data.unitId)
+    )
+
+    if (!belongsToFaction) {
+      throw new UnitDoesNotBelongToFactionException()
+    }
+
+    return this._strategyRepo.addUnit(data)
   }
 
   async create(data: ICreateStrategyDto) {

@@ -1,7 +1,7 @@
 import { HttpContext } from '@kondah/http-context'
 import { Controller, Get, Middleware, Post } from '@kondah/http-controller'
 import { StrategyService } from '../services/strategy.service'
-import { CreateStrategyDto } from '../dtos/create-strategy.dto'
+import { CreateStrategyDto, CreateStrategyUnitDto } from '../dtos'
 import { isAuthGuard } from '../guards/is-auth.guard'
 import { validateBody } from '../lib'
 import { BadRequestException } from '../exceptions'
@@ -12,6 +12,7 @@ import {
   IGetFactionsResponseDto,
   IGetMapsResponseDto,
   IGetStrategyResponseDto,
+  ICreateStrategyUnitResponseDto,
 } from '@cohdex/shared'
 
 @Controller('/strategies')
@@ -62,6 +63,24 @@ export class StrategyController {
     ctx.res.status(201).json(
       new BaseHttpResponse<ICreateStrategyResponseDto>({
         strategy,
+      })
+    )
+  }
+
+  @Post('/add-unit')
+  @Middleware(isAuthGuard, validateBody(CreateStrategyUnitDto))
+  async addUnit(ctx: HttpContext<CreateStrategyUnitDto>) {
+    const { id } = await this._strategyService
+      .addUnitToStrategy(ctx.data)
+      .catch((e) => {
+        throw new BadRequestException(e.message)
+      })
+
+    ctx.res.json(
+      new BaseHttpResponse<ICreateStrategyUnitResponseDto>({
+        strategyUnit: {
+          id,
+        },
       })
     )
   }

@@ -50,8 +50,17 @@ export const Strategy = () => {
     return <Spinner withMessage />
   }
 
+  // TODO: Create menu to choose
   function handleOnAdd() {
-    TMap.addUnit({})
+    if (!gameState) return
+
+    // TODO: Implement
+    const unit = strategy.StrategyUnits[0].unit
+
+    TMap.addUnit({
+      id: gameState.units.length + 1,
+      unit,
+    })
   }
 
   return (
@@ -61,7 +70,7 @@ export const Strategy = () => {
         <Title value="Commands" />
       </Box>
       <Flex flexDir="row">
-        <Units handleOnAdd={handleOnAdd} />
+        <Units handleOnAdd={handleOnAdd} gameState={gameState} />
         <Flex flexDir="row" flexWrap="wrap" flex={1}>
           <TacticalMapWithRef ref={ref} />
           <Commands />

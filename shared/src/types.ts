@@ -1,4 +1,11 @@
-import { User, Map, Faction, Strategy } from '@prisma/client'
+import {
+  User,
+  Map,
+  Faction,
+  Strategy,
+  StrategyUnits,
+  Unit,
+} from '@prisma/client'
 
 export interface BaseHttpResponse<T, U = string> {
   data: T
@@ -7,6 +14,7 @@ export interface BaseHttpResponse<T, U = string> {
 
 export interface IUser extends Pick<User, 'id' | 'avatar' | 'profileUrl'> {}
 export interface IMap extends Pick<Map, 'id' | 'name'> {}
+export interface IUnit extends Unit {}
 
 export interface IFaction
   extends Pick<Faction, 'id' | 'name' | 'abbreviation' | 'team' | 'imgUrl'> {}
@@ -25,6 +33,14 @@ export interface IGetFactionsResponseDto {
 
 export interface ICreateStrategyDto
   extends Omit<Strategy, 'id' | 'slug' | 'createdAt' | 'updatedAt'> {}
+
+export interface ICreateStrategyUnitDto extends Omit<StrategyUnits, 'id'> {}
+
+export interface ICreateStrategyUnitResponseDto {
+  strategyUnit: {
+    id: number
+  }
+}
 
 export interface ICreateStrategyResponseDto {
   strategy: Pick<Strategy, 'slug'>
@@ -76,6 +92,12 @@ export interface IStrategy {
     abbreviation: string
   }
   Map: IStrategyMap
+  StrategyUnits: IStrategyUnit[]
+}
+
+export interface IStrategyUnit {
+  id: number
+  unit: Unit
 }
 
 export interface IStrategyMap {

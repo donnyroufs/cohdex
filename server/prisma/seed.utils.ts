@@ -1,4 +1,4 @@
-import { PrismaClient, Map } from '@prisma/client'
+import { PrismaClient, Map, Prisma } from '@prisma/client'
 
 export async function seedFactions(prisma: PrismaClient | any) {
   if ((await prisma.faction.count()) <= 0) {
@@ -77,6 +77,46 @@ export async function seedMaps(prisma: PrismaClient | any) {
           maxPlayers: 2,
           version: 1,
           url: 'https://',
+        },
+      ],
+    })
+  }
+}
+
+// TODO: Shouldn't be seeded. Data should be coming from the original game files.
+export async function seedUnits(prisma: PrismaClient) {
+  if ((await prisma.unit.count()) <= 0) {
+    await prisma.unit.createMany({
+      data: [
+        {
+          id: 1,
+          name: 'pioneer',
+          image: '/public/pioneer.png',
+          factionId: 1,
+        },
+        {
+          id: 2,
+          name: 'sturm pioneers',
+          image: '/public/sturm_pioneers.png',
+          factionId: 2,
+        },
+        {
+          id: 3,
+          name: 'rear echelons',
+          image: '/public/rear_echelons.png',
+          factionId: 3,
+        },
+        {
+          id: 4,
+          name: 'infantry section',
+          image: '/public/infantry_section.png',
+          factionId: 4,
+        },
+        {
+          id: 5,
+          name: 'combat engineers',
+          image: '/public/combat_engineers.png',
+          factionId: 5,
         },
       ],
     })

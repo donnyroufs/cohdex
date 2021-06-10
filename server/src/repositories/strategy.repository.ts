@@ -1,10 +1,14 @@
-import { ICreateStrategyDto } from '@cohdex/shared'
+import { ICreateStrategyDto, ICreateStrategyUnitDto } from '@cohdex/shared'
 import { Injectable } from '@kondah/core'
 import slugify from 'slugify'
 import { PrismaService } from '../services/prisma.service'
 
 @Injectable()
 export class StrategyRepository {
+  get strategyUnits() {
+    return this._prismaService.strategyUnits
+  }
+
   get strategy() {
     return this._prismaService.strategy
   }
@@ -50,6 +54,12 @@ export class StrategyRepository {
             height: true,
             width: true,
             pointPositions: true,
+          },
+        },
+        StrategyUnits: {
+          select: {
+            id: true,
+            unit: true,
           },
         },
       },
@@ -135,6 +145,35 @@ export class StrategyRepository {
       select: {
         id: true,
         name: true,
+      },
+    })
+  }
+
+  async addUnit(data: ICreateStrategyUnitDto) {
+    return this.strategyUnits.create({
+      data,
+      select: {
+        id: true,
+      },
+    })
+  }
+
+  async getUnitsByFaction() {
+    return this.faction.findMany({
+      select: {
+        id: true,
+        units: true,
+      },
+    })
+  }
+
+  async getFactionByStrategyId(id: number) {
+    return this.strategy.findFirst({
+      where: {
+        id,
+      },
+      select: {
+        Faction: true,
       },
     })
   }
