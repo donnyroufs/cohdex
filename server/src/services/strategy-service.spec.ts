@@ -1,11 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { ICreateStrategyUnitDto } from '../../../shared/dist'
 import { CreateStrategyDto } from '../dtos/create-strategy.dto'
 import {
   ChosenFactionDoesNotExistException,
   InvalidFactionsException,
   InvalidTeamsException,
   StrategyAlreadyExistsException,
+  UnitDoesNotBelongToFactionException,
 } from '../exceptions'
+import { UnknownStrategyException } from '../exceptions/domain/unknown-strategy.exception'
 import { StrategyService } from './strategy.service'
 
 const createProps = {
@@ -26,6 +29,26 @@ const mockedRepo = {
     { id: 4, team: 'ALLIES' },
     { id: 5, team: 'ALLIES' },
   ],
+  getFactionByStrategyId: async (id: number) => {
+    if (id !== 1) return undefined
+
+    return {
+      Faction: {
+        id: 1,
+      },
+    }
+  },
+  getUnitsByFaction: async () => {
+    return [
+      {
+        id: 1,
+        units: [{ id: 1 }],
+      },
+    ]
+  },
+  addUnit: async (data: ICreateStrategyUnitDto) => {
+    return { id: 1 }
+  },
   notUnique: async () => false,
 } as any
 
@@ -34,6 +57,42 @@ describe('strategy service', () => {
     const service = new StrategyService(undefined!)
 
     expect(service).toBeDefined()
+  })
+
+  describe('add unit', () => {
+    it('should create a unit for the given strategy', async () => {
+      const service = new StrategyService(mockedRepo)
+
+      const result = await service.addUnitToStrategy({
+        strategyId: 1,
+        unitId: 1,
+      })
+
+      expect(result).toStrictEqual({ id: 1 })
+    })
+
+    describe('add unit should throw when', () => {
+      it('does not have an existing strategy', async () => {
+        const service = new StrategyService(mockedRepo)
+        await expect(
+          service.addUnitToStrategy({
+            strategyId: 2,
+            unitId: 1,
+          })
+        ).rejects.toThrowError(new UnknownStrategyException())
+      })
+
+      it('is trying to add a unit that does not belong to the faction', async () => {
+        const service = new StrategyService(mockedRepo)
+
+        await expect(
+          service.addUnitToStrategy({
+            strategyId: 1,
+            unitId: 2,
+          })
+        ).rejects.toThrowError(new UnitDoesNotBelongToFactionException())
+      })
+    })
   })
 
   describe('create strategy', () => {
