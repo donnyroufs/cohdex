@@ -70,7 +70,12 @@ export class StrategyService {
       throw new StrategyAlreadyExistsException()
     }
 
-    return this._strategyRepo.create(data)
+    const startingUnit = await this.getStartingUnitForFactionById(
+      data.factionId
+    )
+
+    // Starting unit should always be defined so we can assert it here
+    return this._strategyRepo.create(data, startingUnit!)
   }
 
   async getAllMaps() {
@@ -79,5 +84,9 @@ export class StrategyService {
 
   async getAllFactions() {
     return this._strategyRepo.getAllFactions()
+  }
+
+  async getStartingUnitForFactionById(factionId: number) {
+    return this._strategyRepo.getStartingUnitForFactionById(factionId)
   }
 }

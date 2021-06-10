@@ -38,6 +38,9 @@ const mockedRepo = {
       },
     }
   },
+  getStartingUnitForFactionById: (id: number) => {
+    return id
+  },
   getUnitsByFaction: async () => {
     return [
       {
@@ -97,6 +100,14 @@ describe('strategy service', () => {
 
   describe('create strategy', () => {
     it('should create a strategy', async () => {
+      const service = new StrategyService(mockedRepo)
+      const data = await service.create(createProps)
+
+      expect(data).toBeTruthy()
+    })
+
+    // Perhaps E2E, dont want to mock this really.
+    it.skip('should add a starting unit to the strategy upon creation', async () => {
       const service = new StrategyService(mockedRepo)
       const data = await service.create(createProps)
 
