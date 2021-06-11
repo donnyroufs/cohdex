@@ -6,11 +6,21 @@ import {
   IGetMapsResponseDto,
   IGetAllUserStrategiesResponseDto,
   IGetStrategyResponseDto,
+  ICreateStrategyUnitDto,
+  ICreateStrategyUnitResponseDto,
 } from '@cohdex/shared'
 import { BaseApi } from '../lib/BaseApi'
 
 export const strategiesApi = new (class StrategiesApi extends BaseApi {
   prefix = '/strategies'
+
+  async addUnitToStrategy(
+    data: ICreateStrategyUnitDto
+  ): Promise<BaseHttpResponse<ICreateStrategyUnitResponseDto>> {
+    return this.axios
+      .post(this.endpoint('/unit'), data)
+      .then(({ data }) => data)
+  }
 
   async getStrategy(
     slug: string

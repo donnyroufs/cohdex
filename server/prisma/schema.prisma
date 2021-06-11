@@ -17,6 +17,7 @@ model User {
   profileUrl String
 
   strategies Strategy[]
+  command    Command[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -101,7 +102,7 @@ model Faction {
 
 model Unit {
   id   Int    @id @default(autoincrement())
-  name String
+  name String @unique
 
   image String
 
@@ -123,10 +124,13 @@ model Command {
   id Int @id @default(autoincrement())
 
   type        UnitCommand
-  description String?
+  description String?     @default("")
 
-  StrategyUnits   StrategyUnits? @relation(fields: [strategyUnitsId], references: [id])
-  strategyUnitsId Int?
+  StrategyUnits   StrategyUnits @relation(fields: [strategyUnitsId], references: [id])
+  strategyUnitsId Int
+
+  User   User @relation(fields: [userId], references: [id])
+  userId Int
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

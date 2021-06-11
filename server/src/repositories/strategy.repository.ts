@@ -1,11 +1,23 @@
-import { ICreateStrategyDto, ICreateStrategyUnitDto } from '@cohdex/shared'
+import {
+  ICreateStrategyDto,
+  ICreateStrategyUnitDto,
+  IRemoveUnitFromStrategyDto,
+} from '@cohdex/shared'
 import { Injectable } from '@kondah/core'
 import { Unit } from '@prisma/client'
 import slugify from 'slugify'
+import {
+  AddCommandToStrategyUnitDto,
+  RemoveCommandFromStrategyUnitDto,
+} from '../dtos'
 import { PrismaService } from '../services/prisma.service'
 
 @Injectable()
 export class StrategyRepository {
+  get command() {
+    return this._prismaService.command
+  }
+
   get unit() {
     return this._prismaService.unit
   }
@@ -65,6 +77,13 @@ export class StrategyRepository {
           select: {
             id: true,
             unit: true,
+            commands: {
+              select: {
+                id: true,
+                description: true,
+                type: true,
+              },
+            },
           },
         },
       },
@@ -159,6 +178,7 @@ export class StrategyRepository {
     })
   }
 
+  // TODO: Add user validation
   async addUnit(data: ICreateStrategyUnitDto) {
     return this.strategyUnits.create({
       data,
@@ -195,5 +215,29 @@ export class StrategyRepository {
         startingUnit: true,
       },
     })
+  }
+
+  // TODO: Add user validation
+  // TODO: Implement in service / create DTO
+  async removeUnitFromStrategy(data: IRemoveUnitFromStrategyDto) {
+    await this.strategyUnits.delete({
+      where: {
+        id: data.id,
+      },
+    })
+  }
+
+  async addCommandToStrategyUnit(data: AddCommandToStrategyUnitDto) {
+    return this.command.create({
+      data,
+      select: {
+        id: true,
+      },
+    })
+  }
+
+  // TODO: Implement
+  async removeCommandFromStrategyUnit(data: RemoveCommandFromStrategyUnitDto) {
+    return !!this.command.delete({ where: { ...data } })
   }
 }

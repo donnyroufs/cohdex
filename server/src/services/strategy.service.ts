@@ -1,6 +1,10 @@
 import { ICreateStrategyDto, ICreateStrategyUnitDto } from '@cohdex/shared'
 import { Injectable } from '@kondah/core'
 import {
+  AddCommandToStrategyUnitDto,
+  RemoveCommandFromStrategyUnitDto,
+} from '../dtos'
+import {
   InvalidFactionsException,
   InvalidTeamsException,
   ChosenFactionDoesNotExistException,
@@ -21,6 +25,20 @@ export class StrategyService {
   async findOne(userId: number, slug: string) {
     return this._strategyRepo.findOne(userId, slug)
   }
+
+  // Should probably check if owner of strategy
+  // even though repo already does that.
+  async addCommandToStrategyUnit(data: AddCommandToStrategyUnitDto) {
+    return this._strategyRepo.addCommandToStrategyUnit(data)
+  }
+
+  // Should probably check if owner of strategy
+  // even though repo already does that.
+  async removeCommandFromStrategyUnit(data: RemoveCommandFromStrategyUnitDto) {
+    return this._strategyRepo.removeCommandFromStrategyUnit(data)
+  }
+
+  async removeCommandFromUnit() {}
 
   async addUnitToStrategy(data: ICreateStrategyUnitDto) {
     const foundFaction = await this._strategyRepo.getFactionByStrategyId(

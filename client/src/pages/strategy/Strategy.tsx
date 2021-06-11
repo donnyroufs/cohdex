@@ -8,6 +8,7 @@ import { Commands, TacticalMapWithRef, Units } from './components'
 import { Box, Flex } from '@chakra-ui/react'
 import { Spinner, Title } from '../../components'
 import { TMap } from '../../logic/tactical-map'
+import { addUnitToStrategy } from '../../store/slices/strategySlice'
 
 export interface IStrategyParams {
   slug: string
@@ -26,7 +27,7 @@ export const Strategy = () => {
   }, [dispatch, slug])
 
   useEffect(() => {
-    if (ref.current && status === 'idle') {
+    if (ref.current && status === 'idle' && !TMap.initialized) {
       TMap.init({
         strategy,
         rendererOptions: {
@@ -50,15 +51,22 @@ export const Strategy = () => {
     return <Spinner withMessage />
   }
 
-  // TODO: Create menu to choose
-  function handleOnAdd() {
+  async function handleOnAdd() {
     if (!gameState) return
 
-    // TODO: Implement
+    // TODO: Create list to choose unit
     const unit = strategy.StrategyUnits[0].unit
 
+    const res = await dispatch(
+      addUnitToStrategy({
+        strategyId: strategy.id,
+        unitId: unit.id,
+      })
+    )
+
     TMap.addUnit({
-      id: gameState.units.length + 1,
+      // @ts-expect-error not sure how to type dispatch
+      id: res.payload.data.strategyUnit.id,
       unit,
     })
   }

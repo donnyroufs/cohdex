@@ -4,9 +4,10 @@ import onChange from 'on-change'
 import { SceneHandler } from './scene.handler'
 import { PreloadScene } from './scenes/preload.scene'
 import { GameScene } from './scenes/game.scene'
-import { IUnit } from '@cohdex/shared'
+import { IStrategyUnit } from '@cohdex/shared'
 
 export class TacticalMap {
+  public initialized = false
   private _state: GameState
   private _renderer: Renderer
   private _sceneHandler: SceneHandler
@@ -24,6 +25,8 @@ export class TacticalMap {
     this._sceneHandler = new SceneHandler([PreloadScene, GameScene])
 
     options.syncStateHandler(undefined!, undefined!, this._state)
+
+    this.initialized = true
   }
 
   async start() {
@@ -34,8 +37,8 @@ export class TacticalMap {
     })
   }
 
-  // TODO: Add type
-  addUnit(unit: { id: number; unit: IUnit }) {
+  addUnit(unit: IStrategyUnit) {
+    console.log('adding unit', unit)
     this._state.units.push(unit)
   }
 

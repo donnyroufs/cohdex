@@ -1,7 +1,11 @@
 import { HttpContext } from '@kondah/http-context'
 import { Controller, Get, Middleware, Post } from '@kondah/http-controller'
 import { StrategyService } from '../services/strategy.service'
-import { CreateStrategyDto, CreateStrategyUnitDto } from '../dtos'
+import {
+  AddCommandToStrategyUnitDto,
+  CreateStrategyDto,
+  CreateStrategyUnitDto,
+} from '../dtos'
 import { isAuthGuard } from '../guards/is-auth.guard'
 import { validateBody } from '../lib'
 import { BadRequestException } from '../exceptions'
@@ -13,6 +17,7 @@ import {
   IGetMapsResponseDto,
   IGetStrategyResponseDto,
   ICreateStrategyUnitResponseDto,
+  IAddCommandToStrategyUnitResponseDto,
 } from '@cohdex/shared'
 
 @Controller('/strategies')
@@ -67,7 +72,7 @@ export class StrategyController {
     )
   }
 
-  @Post('/add-unit')
+  @Post('/unit')
   @Middleware(isAuthGuard, validateBody(CreateStrategyUnitDto))
   async addUnit(ctx: HttpContext<CreateStrategyUnitDto>) {
     const { id } = await this._strategyService
@@ -81,6 +86,20 @@ export class StrategyController {
         strategyUnit: {
           id,
         },
+      })
+    )
+  }
+
+  @Post('/command')
+  @Middleware(isAuthGuard, validateBody(AddCommandToStrategyUnitDto))
+  async addCommandToStrategy(ctx: HttpContext<AddCommandToStrategyUnitDto>) {
+    const strategyUnit = await this._strategyService.addCommandToStrategyUnit(
+      ctx.data
+    )
+
+    return ctx.res.json(
+      new BaseHttpResponse<IAddCommandToStrategyUnitResponseDto>({
+        strategyUnit,
       })
     )
   }

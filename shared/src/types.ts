@@ -5,6 +5,7 @@ import {
   Strategy,
   StrategyUnits,
   Unit,
+  Command,
 } from '@prisma/client'
 
 export interface BaseHttpResponse<T, U = string> {
@@ -97,7 +98,11 @@ export interface IStrategy {
 
 export interface IStrategyUnit {
   id: number
-  unit: Unit
+  unit: IUnitWithCommands
+}
+
+export interface IUnitWithCommands extends Unit {
+  commands: Pick<Command, 'id' | 'description' | 'type'>[]
 }
 
 export interface IStrategyMap {
@@ -120,4 +125,21 @@ export interface IPointPosition {
 
 export interface IGetStrategyResponseDto {
   strategy: IStrategy
+}
+
+export interface IRemoveUnitFromStrategyDto {
+  id: number
+}
+
+export interface IAddCommandToStrategyUnitDto
+  extends Omit<Command, 'createdAt' | 'updatedAt' | 'id'> {}
+
+export interface IRemoveCommandFromStrategyUnit {
+  id: number
+}
+
+export interface IAddCommandToStrategyUnitResponseDto {
+  strategyUnit: {
+    id: number
+  }
 }

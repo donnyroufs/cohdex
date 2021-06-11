@@ -1,3 +1,5 @@
 export * from './create-strategy.dto'
 export * from './create-user.dto'
 export * from './create-strategy-unit.dto'
+export * from './add-command-to-strategy-unit.dto'
+export * from './remove-command-from-strategy-unit.dto'

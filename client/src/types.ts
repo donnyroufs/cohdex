@@ -13,7 +13,7 @@ export interface IAuthState {
   user: IUser | null
 }
 
-export type StrategyLoadingType = 'init' | 'idle'
+export type StrategyLoadingType = 'init' | 'idle' | 'adding-unit'
 
 export interface IStrategySliceState {
   status: StrategyLoadingType
