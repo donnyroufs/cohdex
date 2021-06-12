@@ -22,7 +22,7 @@ interface ITableData {
   you: string
   opponent: string
   mapName: string
-  spawns: string
+  spawn: string
 }
 
 interface ITableProps {
@@ -53,8 +53,8 @@ export const Table: React.FC<ITableProps> = ({ tableData }) => {
         accessor: 'mapName',
       },
       {
-        Header: 'Spawn(s)',
-        accessor: 'spawns',
+        Header: 'Spawn',
+        accessor: 'spawn',
       },
     ],
     []

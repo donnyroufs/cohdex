@@ -6,7 +6,7 @@ import { DTO } from '../lib'
 export class CreateStrategyDto extends DTO<ICreateStrategyDto> {
   @Expose()
   @IsString()
-  @Length(6, 24)
+  @Length(6, 42)
   @Matches(RegExp(/^(?:[A-Za-z]+)(?:[A-Za-z0-9 _]*)$/), {
     message: 'A title cannot contain special characters.',
   })

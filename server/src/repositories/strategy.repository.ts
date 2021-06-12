@@ -8,6 +8,7 @@ import { Unit } from '@prisma/client'
 import slugify from 'slugify'
 import {
   AddCommandToStrategyUnitDto,
+  ChooseSpawnPointDto,
   RemoveCommandFromStrategyUnitDto,
 } from '../dtos'
 import { PrismaService } from '../services/prisma.service'
@@ -41,7 +42,7 @@ export class StrategyRepository {
   constructor(private readonly _prismaService: PrismaService) {}
 
   async findOne(userId: number, slug: string) {
-    return this.strategy.findFirst({
+    const strategy = await this.strategy.findFirst({
       where: {
         userId,
         slug,
@@ -50,6 +51,7 @@ export class StrategyRepository {
         id: true,
         factionId: true,
         title: true,
+        spawnPoint: true,
         AxisFaction: {
           select: {
             id: true,
@@ -88,6 +90,22 @@ export class StrategyRepository {
         },
       },
     })
+
+    if (!strategy) {
+      return null
+    }
+
+    // TODO: Implement with class-transformer
+    return {
+      ...strategy,
+      StrategyUnits: strategy.StrategyUnits.map((unit) => ({
+        ...unit,
+        unit: {
+          ...unit.unit,
+          commands: unit.commands,
+        },
+      })),
+    }
   }
 
   async all(id: number) {
@@ -99,6 +117,7 @@ export class StrategyRepository {
         id: true,
         slug: true,
         title: true,
+        spawnPoint: true,
         Map: {
           select: {
             name: true,
@@ -239,5 +258,18 @@ export class StrategyRepository {
   // TODO: Implement
   async removeCommandFromStrategyUnit(data: RemoveCommandFromStrategyUnitDto) {
     return !!this.command.delete({ where: { ...data } })
+  }
+
+  async chooseSpawnpoint(data: ChooseSpawnPointDto) {
+    await this.strategy.update({
+      where: {
+        id: data.strategyId,
+      },
+      data: {
+        spawnPoint: data.spawnpoint,
+      },
+    })
+
+    return true
   }
 }

@@ -1,13 +1,14 @@
 import { HttpContext } from '@kondah/http-context'
-import { Controller, Get, Middleware, Post } from '@kondah/http-controller'
+import { Controller, Get, Middleware, Post, Put } from '@kondah/http-controller'
 import { StrategyService } from '../services/strategy.service'
 import {
   AddCommandToStrategyUnitDto,
+  ChooseSpawnPointDto,
   CreateStrategyDto,
   CreateStrategyUnitDto,
 } from '../dtos'
 import { isAuthGuard } from '../guards/is-auth.guard'
-import { validateBody } from '../lib'
+import { validateBody, validateBodyWithParamsToInt } from '../lib'
 import { BadRequestException } from '../exceptions'
 import { BaseHttpResponse } from '../lib/base-http-response'
 import {
@@ -102,6 +103,22 @@ export class StrategyController {
         strategyUnit,
       })
     )
+  }
+
+  @Put('/:strategyId/spawnpoint')
+  @Middleware(isAuthGuard, validateBodyWithParamsToInt(ChooseSpawnPointDto))
+  async updateSpawnpoint(ctx: HttpContext<ChooseSpawnPointDto>) {
+    const result = await this._strategyService
+      .chooseSpawnpoint(ctx.data)
+      .catch((err) => {
+        throw new BadRequestException(err.message)
+      })
+
+    if (!result) {
+      throw new BadRequestException('Could not update spawnpoint')
+    }
+
+    return ctx.res.sendStatus(204)
   }
 
   @Get('/:slug')

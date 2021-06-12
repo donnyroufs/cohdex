@@ -2,6 +2,7 @@ import { ICreateStrategyDto, ICreateStrategyUnitDto } from '@cohdex/shared'
 import { Injectable } from '@kondah/core'
 import {
   AddCommandToStrategyUnitDto,
+  ChooseSpawnPointDto,
   RemoveCommandFromStrategyUnitDto,
 } from '../dtos'
 import {
@@ -106,5 +107,9 @@ export class StrategyService {
 
   async getStartingUnitForFactionById(factionId: number) {
     return this._strategyRepo.getStartingUnitForFactionById(factionId)
+  }
+
+  async chooseSpawnpoint(spawn: ChooseSpawnPointDto) {
+    return this._strategyRepo.chooseSpawnpoint(spawn)
   }
 }

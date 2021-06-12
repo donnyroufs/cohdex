@@ -1,4 +1,4 @@
-import { IStrategy, IStrategyMap } from '@cohdex/shared'
+import { IStrategy, IStrategyMap, IStrategyUnit } from '@cohdex/shared'
 import { AssetLoader } from './loaders/asset.loader'
 import { Vec2 } from './math/vec2.math'
 import { Renderer } from './renderer'
@@ -7,8 +7,9 @@ import { SceneHandler } from './scene.handler'
 import { Scene } from './scenes/scene'
 
 export type GameState = {
-  units: any[]
-  [key: string]: any
+  units: IStrategyUnit[]
+  spawnpoint: number | null
+  [key: string]: unknown
 }
 
 export interface IRendererOptions {
@@ -48,7 +49,7 @@ export type NewableScene = new (sceneHandler: SceneHandler) => Scene
 export interface IPreloadSetupProps {
   renderer: Renderer
   assetLoader: AssetLoader
-  map: IStrategyMap
+  strategy: IStrategy
   basePath: string
 }
 

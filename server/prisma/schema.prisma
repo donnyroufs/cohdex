@@ -55,6 +55,7 @@ model Strategy {
   title String
   slug  String
 
+  spawnPoint Int?
 
   // commanderId Int?
   // tierId Int?

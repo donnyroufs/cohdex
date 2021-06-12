@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom'
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useMemo, useState } from 'react'
 import { BaseLayout } from '../../components/layouts'
 import { useAppDispatch, useAppSelector } from '../../store/store'
 import { fetchStrategy } from '../../store/slices/strategiesSlice'
@@ -8,14 +8,16 @@ import { Commands, TacticalMapWithRef, Units } from './components'
 import { Box, Flex } from '@chakra-ui/react'
 import { Spinner, Title } from '../../components'
 import { TMap } from '../../logic/tactical-map'
-import { addUnitToStrategy } from '../../store/slices/strategySlice'
+import { addUnitToStrategy, restore } from '../../store/slices/strategySlice'
 
 export interface IStrategyParams {
   slug: string
 }
 
 export const Strategy = () => {
-  const [gameState, setGameState] = React.useState<GameState>()
+  const init = useRef(true)
+  const [gameState, setGameState] = useState<GameState>()
+  const [activeUnitId, setActiveUnitId] = useState<number | null>(null)
   const { slug } = useParams<IStrategyParams>()
   const ref = useRef<HTMLCanvasElement | null>(null)
   const dispatch = useAppDispatch()
@@ -27,7 +29,8 @@ export const Strategy = () => {
   }, [dispatch, slug])
 
   useEffect(() => {
-    if (ref.current && status === 'idle' && !TMap.initialized) {
+    if (ref.current && status === 'idle' && init.current) {
+      init.current = false
       TMap.init({
         strategy,
         rendererOptions: {
@@ -36,6 +39,7 @@ export const Strategy = () => {
         },
         basePath: process.env.REACT_APP_BASE_URL,
         syncStateHandler: (prop, value, state) => {
+          console.log('updating gameState')
           setGameState((curr) => ({
             ...curr,
             ...state,
@@ -46,6 +50,18 @@ export const Strategy = () => {
       TMap.start()
     }
   }, [status, strategy, slug])
+
+  useEffect(() => {
+    return () => {
+      console.log('restoring')
+      dispatch(restore())
+      TMap.clearState()
+    }
+  }, [dispatch])
+
+  const activeUnit = useMemo(() => {
+    return gameState?.units.find((unit) => unit.id === activeUnitId)
+  }, [gameState, activeUnitId])
 
   if (status === 'init') {
     return <Spinner withMessage />
@@ -71,6 +87,10 @@ export const Strategy = () => {
     })
   }
 
+  function handleSelectUnit(id: number) {
+    setActiveUnitId((curr) => (curr === id ? null : id))
+  }
+
   return (
     <BaseLayout.Container>
       <Box as="header" display="flex" justifyContent="space-between" mb={8}>
@@ -78,10 +98,15 @@ export const Strategy = () => {
         <Title value="Commands" />
       </Box>
       <Flex flexDir="row">
-        <Units handleOnAdd={handleOnAdd} gameState={gameState} />
+        <Units
+          handleOnAdd={handleOnAdd}
+          gameState={gameState}
+          handleSelectUnit={handleSelectUnit}
+          activeUnit={activeUnit}
+        />
         <Flex flexDir="row" flexWrap="wrap" flex={1}>
-          <TacticalMapWithRef ref={ref} />
-          <Commands />
+          <TacticalMapWithRef ref={ref} gameState={gameState} />
+          <Commands activeUnit={activeUnit} />
         </Flex>
       </Flex>
     </BaseLayout.Container>

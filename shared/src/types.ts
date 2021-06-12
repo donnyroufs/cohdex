@@ -33,7 +33,10 @@ export interface IGetFactionsResponseDto {
 }
 
 export interface ICreateStrategyDto
-  extends Omit<Strategy, 'id' | 'slug' | 'createdAt' | 'updatedAt'> {}
+  extends Omit<
+    Strategy,
+    'id' | 'slug' | 'createdAt' | 'updatedAt' | 'spawnPoint'
+  > {}
 
 export interface ICreateStrategyUnitDto extends Omit<StrategyUnits, 'id'> {}
 
@@ -61,6 +64,7 @@ export interface IGetAllUserStrategies {
   id: number
   slug: string
   title: string
+  spawnPoint: true
   Map: {
     name: string
   }
@@ -82,6 +86,7 @@ export interface IStrategy {
   id: number
   factionId: number
   title: string
+  spawnPoint: number | null
   AxisFaction: {
     id: number
     name: string
@@ -142,4 +147,11 @@ export interface IAddCommandToStrategyUnitResponseDto {
   strategyUnit: {
     id: number
   }
+}
+
+export interface IChooseSpawnpointDto {
+  /**
+   * Either 1 or 2
+   */
+  spawnpoint: number
 }

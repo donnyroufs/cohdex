@@ -17,6 +17,7 @@ export class SceneHandler {
     this._scenes = scenes.map((scene) => new scene(this))
   }
 
+  // eslint-disable-next-line @typescript-eslint/ban-types
   public async setCurrentAndStart<T extends Object>(
     scene: NewableScene,
     payload?: T

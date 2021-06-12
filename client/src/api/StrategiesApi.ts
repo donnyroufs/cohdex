@@ -22,6 +22,15 @@ export const strategiesApi = new (class StrategiesApi extends BaseApi {
       .then(({ data }) => data)
   }
 
+  async chooseSpawnpoint(
+    strategyId: number,
+    spawnpoint: number
+  ): Promise<void> {
+    return this.axios.put(this.endpoint(`/${strategyId}/spawnpoint`), {
+      spawnpoint,
+    })
+  }
+
   async getStrategy(
     slug: string
   ): Promise<BaseHttpResponse<IGetStrategyResponseDto>> {

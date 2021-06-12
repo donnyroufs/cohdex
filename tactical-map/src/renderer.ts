@@ -4,7 +4,7 @@ import { Vec2 } from './math/vec2.math'
 import { IRendererOptions } from './types'
 
 export class Renderer {
-  public scale: number = 1
+  public scale = 1
   public readonly context: CanvasRenderingContext2D
 
   get width() {

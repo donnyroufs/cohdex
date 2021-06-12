@@ -17,9 +17,11 @@ export class TacticalMap {
     this._options = options
 
     this._state = onChange(
-      { units: [...options.strategy.StrategyUnits] },
+      { units: [...options.strategy.StrategyUnits], spawnpoint: null },
       (prop, value) => options.syncStateHandler(prop, value, this._state)
     )
+
+    this._state.spawnpoint = options.strategy.spawnPoint
 
     this._renderer = new Renderer(options.rendererOptions)
     this._sceneHandler = new SceneHandler([PreloadScene, GameScene])
@@ -32,14 +34,17 @@ export class TacticalMap {
   async start() {
     await this._sceneHandler.setCurrentAndStart(PreloadScene, {
       renderer: this._renderer,
-      map: this._options.strategy.Map,
+      strategy: this._options.strategy,
       basePath: this._options.basePath,
     })
   }
 
   addUnit(unit: IStrategyUnit) {
-    console.log('adding unit', unit)
     this._state.units.push(unit)
+  }
+
+  setSpawnpoint(spawnpoint: number) {
+    this._state.spawnpoint = spawnpoint
   }
 
   /**
@@ -47,5 +52,12 @@ export class TacticalMap {
    */
   getGameState() {
     return this._state
+  }
+
+  clearState() {
+    this._state = {
+      units: [],
+      spawnpoint: null,
+    }
   }
 }
