@@ -71,15 +71,7 @@ export const Strategy = () => {
     // TODO: Create list to choose unit
     const unit = data.strategy.StrategyUnits[0].unit
 
-    const res = await strategyService.addUnit({
-      strategyId: data.strategy.id,
-      unitId: unit.id,
-    })
-
-    TMap.addUnit({
-      id: res.data.strategyUnit.id,
-      unit,
-    })
+    await strategyService.addUnit(data.strategy.id, unit)
   }
 
   function handleSelectUnit(id: number) {

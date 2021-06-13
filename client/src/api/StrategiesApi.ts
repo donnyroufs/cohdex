@@ -8,6 +8,8 @@ import {
   IGetStrategyResponseDto,
   ICreateStrategyUnitDto,
   ICreateStrategyUnitResponseDto,
+  IAddCommandToStrategyUnitDto,
+  IAddCommandToStrategyUnitResponseDto,
 } from '@cohdex/shared'
 import { BaseApi } from '../lib/BaseApi'
 
@@ -20,6 +22,12 @@ export const strategiesApi = new (class StrategiesApi extends BaseApi {
     return this.axios
       .post(this.endpoint('/unit'), data)
       .then(({ data }) => data)
+  }
+
+  async addCommandToUnit(
+    data: IAddCommandToStrategyUnitDto
+  ): Promise<BaseHttpResponse<IAddCommandToStrategyUnitResponseDto>> {
+    return this.axios.post(this.endpoint('/command'), data)
   }
 
   async chooseSpawnpoint(
