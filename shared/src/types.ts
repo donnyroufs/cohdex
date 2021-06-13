@@ -64,7 +64,7 @@ export interface IGetAllUserStrategies {
   id: number
   slug: string
   title: string
-  spawnPoint: true
+  spawnPoint: number | null
   Map: {
     name: string
   }

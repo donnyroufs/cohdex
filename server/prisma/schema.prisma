@@ -125,7 +125,10 @@ model Command {
   id Int @id @default(autoincrement())
 
   type        UnitCommand
-  description String?     @default("")
+  description String
+
+  posX Float
+  posY Float
 
   StrategyUnits   StrategyUnits @relation(fields: [strategyUnitsId], references: [id])
   strategyUnitsId Int

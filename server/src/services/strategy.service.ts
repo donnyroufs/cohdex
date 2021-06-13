@@ -30,6 +30,8 @@ export class StrategyService {
   // Should probably check if owner of strategy
   // even though repo already does that.
   async addCommandToStrategyUnit(data: AddCommandToStrategyUnitDto) {
+    // TODO: Add validation to check if the position could be valid for the given strategy map
+
     return this._strategyRepo.addCommandToStrategyUnit(data)
   }
 

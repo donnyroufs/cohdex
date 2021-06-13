@@ -18,6 +18,14 @@ export class AddCommandToStrategyUnitDto
 
   @Expose()
   @IsNumber()
+  posX: number
+
+  @Expose()
+  @IsNumber()
+  posY: number
+
+  @Expose()
+  @IsNumber()
   strategyUnitsId: number
 
   @Expose()
