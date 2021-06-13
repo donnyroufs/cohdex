@@ -1,14 +1,17 @@
 import { useParams } from 'react-router-dom'
 import React, { useEffect, useRef, useMemo, useState } from 'react'
 import { BaseLayout } from '../../components/layouts'
-import { useAppDispatch, useAppSelector } from '../../store/store'
+import { useAppDispatch } from '../../store/store'
 import { fetchStrategy } from '../../store/slices/strategiesSlice'
 import { GameState } from '@cohdex/tactical-map'
 import { Commands, TacticalMapWithRef, Units } from './components'
 import { Box, Flex } from '@chakra-ui/react'
 import { Spinner, Title } from '../../components'
 import { TMap } from '../../logic/tactical-map'
-import { addUnitToStrategy, restore } from '../../store/slices/strategySlice'
+import { useFetch } from '../../hooks'
+import { strategiesApi } from '../../api'
+import { IGetStrategyResponseDto } from '../../../../shared/dist'
+import { useProviders } from '../../hooks/useProviders'
 
 export interface IStrategyParams {
   slug: string
@@ -16,23 +19,26 @@ export interface IStrategyParams {
 
 export const Strategy = () => {
   const init = useRef(true)
+  const { strategyService } = useProviders()
   const [gameState, setGameState] = useState<GameState>()
   const [activeUnitId, setActiveUnitId] = useState<number | null>(null)
   const { slug } = useParams<IStrategyParams>()
   const ref = useRef<HTMLCanvasElement | null>(null)
   const dispatch = useAppDispatch()
-  const status = useAppSelector((state) => state.strategy.status)
-  const strategy = useAppSelector((state) => state.strategy.data)
+  const { loading, data } = useFetch<IGetStrategyResponseDto>(
+    () => strategyService.getStrategy(slug),
+    undefined!
+  )
 
   useEffect(() => {
     dispatch(fetchStrategy(slug))
   }, [dispatch, slug])
 
   useEffect(() => {
-    if (ref.current && status === 'idle' && init.current) {
+    if (ref.current && !loading && init.current) {
       init.current = false
       TMap.init({
-        strategy,
+        strategy: data!.strategy,
         rendererOptions: {
           canvas: ref.current!,
           size: 640,
@@ -49,21 +55,13 @@ export const Strategy = () => {
 
       TMap.start()
     }
-  }, [status, strategy, slug])
-
-  useEffect(() => {
-    return () => {
-      console.log('restoring')
-      dispatch(restore())
-      TMap.clearState()
-    }
-  }, [dispatch])
+  }, [loading, data, slug])
 
   const activeUnit = useMemo(() => {
     return gameState?.units.find((unit) => unit.id === activeUnitId)
   }, [gameState, activeUnitId])
 
-  if (status === 'init') {
+  if (loading) {
     return <Spinner withMessage />
   }
 
@@ -71,18 +69,15 @@ export const Strategy = () => {
     if (!gameState) return
 
     // TODO: Create list to choose unit
-    const unit = strategy.StrategyUnits[0].unit
+    const unit = data.strategy.StrategyUnits[0].unit
 
-    const res = await dispatch(
-      addUnitToStrategy({
-        strategyId: strategy.id,
-        unitId: unit.id,
-      })
-    )
+    const res = await strategyService.addUnit({
+      strategyId: data.strategy.id,
+      unitId: unit.id,
+    })
 
     TMap.addUnit({
-      // @ts-expect-error not sure how to type dispatch
-      id: res.payload.data.strategyUnit.id,
+      id: res.data.strategyUnit.id,
       unit,
     })
   }
@@ -94,7 +89,7 @@ export const Strategy = () => {
   return (
     <BaseLayout.Container>
       <Box as="header" display="flex" justifyContent="space-between" mb={8}>
-        <Title value={strategy.title} />
+        <Title value={data.strategy.title} />
         <Title value="Commands" />
       </Box>
       <Flex flexDir="row">
@@ -105,7 +100,11 @@ export const Strategy = () => {
           activeUnit={activeUnit}
         />
         <Flex flexDir="row" flexWrap="wrap" flex={1}>
-          <TacticalMapWithRef ref={ref} gameState={gameState} />
+          <TacticalMapWithRef
+            ref={ref}
+            gameState={gameState}
+            strategyId={data.strategy.id}
+          />
           <Commands activeUnit={activeUnit} />
         </Flex>
       </Flex>

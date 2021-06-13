@@ -7,6 +7,7 @@ import {
   IUser,
 } from '@cohdex/shared'
 import { RouteComponentProps } from 'react-router-dom'
+import { StrategyService } from './services/StrategyService'
 
 export interface IAuthState {
   isLoading: boolean
@@ -94,3 +95,7 @@ export interface ITacticalMapOptions {
 }
 
 export type Display = 'circle' | 'rectangle'
+
+export interface IAppContext {
+  strategyService: StrategyService
+}

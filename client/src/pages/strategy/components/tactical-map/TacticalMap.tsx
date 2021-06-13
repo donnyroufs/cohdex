@@ -1,36 +1,31 @@
 import React, { useState } from 'react'
 import { Display } from '../../../../types'
 import { SwitchDisplay } from './SwitchDisplay'
-import { Box, Button, Skeleton } from '@chakra-ui/react'
-import { useAppDispatch, useAppSelector } from '../../../../store/store'
-import { chooseSpawnpoint } from '../../../../store/slices/strategySlice'
+import { Box, Button } from '@chakra-ui/react'
 import { TMap } from '../../../../logic/tactical-map'
-import { Spinner } from '../../../../components'
 import { GameState } from '../../../../../../tactical-map/dist'
+import { useProviders } from '../../../../hooks/useProviders'
 
 export interface ITacticalMapProps {
   tmapRef: React.ForwardedRef<HTMLCanvasElement | null>
   gameState?: GameState
+  strategyId: number
 }
 
-const TacticalMap: React.FC<ITacticalMapProps> = ({ tmapRef, gameState }) => {
+const TacticalMap: React.FC<ITacticalMapProps> = ({
+  tmapRef,
+  gameState,
+  strategyId,
+}) => {
+  const { strategyService } = useProviders()
   const [display, setDisplay] = useState<Display>('circle')
-  const dispatch = useAppDispatch()
-  const strategyId = useAppSelector((state) => state.strategy.data.id)
 
   function handleChangeDisplay() {
     setDisplay((curr) => (curr === 'circle' ? 'rectangle' : 'circle'))
   }
 
   async function handleChooseSpawnpoint(spawn: number) {
-    // We assume that this will never fail.
-    await dispatch(
-      chooseSpawnpoint({
-        strategyId,
-        spawnpoint: spawn,
-      })
-    )
-
+    await strategyService.chooseSpawnpoint(strategyId, spawn)
     TMap.setSpawnpoint(spawn)
   }
 
@@ -134,7 +129,7 @@ const TacticalMap: React.FC<ITacticalMapProps> = ({ tmapRef, gameState }) => {
 
 export const TacticalMapWithRef = React.forwardRef<
   any,
-  { gameState?: GameState }
+  { gameState?: GameState; strategyId: number }
 >((props, ref: React.ForwardedRef<HTMLCanvasElement | null>) => (
   <TacticalMap {...props} tmapRef={ref} />
 ))
