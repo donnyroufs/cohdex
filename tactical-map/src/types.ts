@@ -1,4 +1,11 @@
-import { IStrategy, IStrategyMap, IStrategyUnit } from '@cohdex/shared'
+import {
+  ICommand,
+  IStrategy,
+  IStrategyMap,
+  IStrategyUnit,
+} from '@cohdex/shared'
+import { BaseEntity } from './entities/base-entity'
+import { UnitEntity } from './entities/unit.entity'
 import { AssetLoader } from './loaders/asset.loader'
 import { Vec2 } from './math/vec2.math'
 import { Renderer } from './renderer'
@@ -7,7 +14,7 @@ import { SceneHandler } from './scene.handler'
 import { Scene } from './scenes/scene'
 
 export type GameState = {
-  units: IStrategyUnit[]
+  entities: BaseEntity[]
   spawnpoint: number | null
   [key: string]: unknown
 }
@@ -31,12 +38,20 @@ export interface ITacticalMapOptions {
 }
 
 export interface IBaseEntityProps {
+  id: number
   name: string
   height: number
   width: number
   pos: Vec2
-  // Should maybe be a string? e.g. path
+}
+
+export interface IPointPositionEntity extends IBaseEntityProps {
+  imageUrl: string
   image: HTMLImageElement
+}
+
+export interface IUnitEntityProps extends IBaseEntityProps {
+  imageUrl: string
 }
 
 export interface IGameData {
@@ -51,8 +66,20 @@ export interface IPreloadSetupProps {
   assetLoader: AssetLoader
   strategy: IStrategy
   basePath: string
+  gameState: GameState
 }
 
 export interface IGameSceneContext extends SceneContext {
   map: IStrategyMap
+  gameState: GameState
+  units: IStrategyUnit[]
+}
+
+export interface IUnitEntityProps extends IBaseEntityProps {
+  id: number
+  cappingSpeed: number
+  imageUrl: string
+  movementSpeed: number
+  isActive: boolean
+  commands: ICommand[]
 }

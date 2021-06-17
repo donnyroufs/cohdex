@@ -1,5 +1,7 @@
 import { IStrategyMap } from '@cohdex/shared'
+import { PointPositionEntity } from './entities'
 import { BaseEntity } from './entities/base-entity'
+import { AssetLoader } from './loaders/asset.loader'
 import { Vec2 } from './math/vec2.math'
 import { IRendererOptions } from './types'
 
@@ -64,11 +66,12 @@ export class Renderer {
     this.context.drawImage(image, pos.x, pos.y, w * this.scale, h * this.scale)
   }
 
-  public drawEntity(entity: BaseEntity) {
+  // TODO: Refactor
+  public drawEntity(entity: PointPositionEntity, assetLoader?: AssetLoader) {
     const { x, y } = this.getEntityPosToScreen(entity)
 
     this.context.drawImage(
-      entity.image,
+      assetLoader!.getImage(entity.imageUrl),
       x,
       y,
       entity.width * this.scale,

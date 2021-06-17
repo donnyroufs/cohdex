@@ -1,17 +1,17 @@
 import { Box, Text } from '@chakra-ui/react'
-import { IStrategyUnit } from '@cohdex/shared'
+import { UnitEntity } from '@cohdex/tactical-map'
 import { Command } from './components/Command'
 
 export interface ICommandsProps {
-  activeUnit?: IStrategyUnit
+  activeUnit?: UnitEntity
 }
 
 export const Commands: React.FC<ICommandsProps> = ({ activeUnit }) => {
   return (
     <Box mt={0} flex={1} minW="350px">
       {activeUnit &&
-        activeUnit.unit.commands &&
-        activeUnit.unit.commands.map((command) => (
+        activeUnit.commands &&
+        activeUnit.commands.map((command) => (
           <Command content={command.type} key={command.id} />
         ))}
 
@@ -20,7 +20,7 @@ export const Commands: React.FC<ICommandsProps> = ({ activeUnit }) => {
           Get started by adding and or selecting a unit!
         </Text>
       )}
-      {activeUnit && activeUnit.unit.commands.length <= 0 && (
+      {activeUnit && activeUnit.commands.length <= 0 && (
         <Text p={4} background="header">
           This unit does not have commands yet!
         </Text>

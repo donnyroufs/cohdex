@@ -1,13 +1,12 @@
 import { Flex, IconButton, Image } from '@chakra-ui/react'
-import { GameState } from '@cohdex/tactical-map'
+import { GameState, UnitEntity } from '@cohdex/tactical-map'
 import { FaPlusCircle } from 'react-icons/fa'
-import { IStrategyUnit } from '@cohdex/shared'
 
 export interface IUnitsProps {
   handleOnAdd: () => void
   handleSelectUnit: (id: number) => void
   gameState?: GameState
-  activeUnit?: IStrategyUnit
+  activeUnit?: UnitEntity
 }
 
 export const Units: React.FC<IUnitsProps> = ({
@@ -36,26 +35,28 @@ export const Units: React.FC<IUnitsProps> = ({
         onClick={handleOnAdd}
       />
       {gameState &&
-        gameState.units.map(({ unit, id }) => (
-          <Image
-            key={id}
-            onClick={() => handleSelectUnit(id)}
-            mb={4}
-            h="98px"
-            w="74px"
-            border="2px solid"
-            borderColor={activeUnit?.id === id ? 'primary.600' : 'border'}
-            src={process.env.REACT_APP_BASE_URL + unit.image}
-            alt="unit portrait"
-            opacity={activeUnit?.id === id ? 1 : 0.7}
-            transition="all .15s ease-in-out"
-            _hover={{
-              cursor: 'pointer',
-              opacity: 1,
-              borderColor: 'primary.600',
-            }}
-          />
-        ))}
+        gameState.entities
+          .filter((e) => e instanceof UnitEntity)
+          .map(({ id, imageUrl }: any) => (
+            <Image
+              key={id}
+              onClick={() => handleSelectUnit(id)}
+              mb={4}
+              h="98px"
+              w="74px"
+              border="2px solid"
+              borderColor={activeUnit?.id === id ? 'primary.600' : 'border'}
+              src={process.env.REACT_APP_BASE_URL + imageUrl}
+              alt="unit portrait"
+              opacity={activeUnit?.id === id ? 1 : 0.7}
+              transition="all .15s ease-in-out"
+              _hover={{
+                cursor: 'pointer',
+                opacity: 1,
+                borderColor: 'primary.600',
+              }}
+            />
+          ))}
     </Flex>
   )
 }

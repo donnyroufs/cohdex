@@ -13,6 +13,7 @@ export class PreloadScene extends Scene {
     renderer,
     strategy,
     basePath,
+    gameState,
   }: IPreloadSetupProps): Promise<void> {
     const map = strategy.Map
 
@@ -27,10 +28,13 @@ export class PreloadScene extends Scene {
     await assetLoader.setup()
     renderer.calculateAndSetScale(map)
 
+    // @ts-expect-error diff update props
     this.sceneHandler.setCurrentAndStart<IGameSceneContext>(GameScene, {
       assetLoader: assetLoader,
       map,
       renderer: renderer,
+      gameState,
+      units: strategy.StrategyUnits,
     })
   }
 }

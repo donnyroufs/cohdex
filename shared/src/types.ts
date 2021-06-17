@@ -107,8 +107,11 @@ export interface IStrategyUnit {
 }
 
 export interface IUnitWithCommands extends Unit {
-  commands: Pick<Command, 'id' | 'description' | 'type'>[]
+  commands: ICommand[]
 }
+
+export interface ICommand
+  extends Pick<Command, 'id' | 'description' | 'type'> {}
 
 export interface IStrategyMap {
   name: string

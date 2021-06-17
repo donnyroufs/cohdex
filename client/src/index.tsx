@@ -8,7 +8,7 @@ import { ChakraProvider, CSSReset } from '@chakra-ui/react'
 import { theme } from './theme'
 import { store } from './store/store'
 import { Provider } from 'react-redux'
-import { AppProvider } from './AppProvider'
+import { AppProvider } from './provider/AppProvider'
 
 ReactDOM.render(
   <React.StrictMode>

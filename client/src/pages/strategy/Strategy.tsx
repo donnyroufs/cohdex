@@ -3,13 +3,12 @@ import React, { useEffect, useRef, useMemo, useState } from 'react'
 import { BaseLayout } from '../../components/layouts'
 import { useAppDispatch } from '../../store/store'
 import { fetchStrategy } from '../../store/slices/strategiesSlice'
-import { GameState } from '@cohdex/tactical-map'
+import { GameState, UnitEntity } from '@cohdex/tactical-map'
 import { Commands, TacticalMapWithRef, Units } from './components'
 import { Box, Flex } from '@chakra-ui/react'
 import { Spinner, Title } from '../../components'
 import { TMap } from '../../logic/tactical-map'
 import { useFetch } from '../../hooks'
-import { strategiesApi } from '../../api'
 import { IGetStrategyResponseDto } from '../../../../shared/dist'
 import { useProviders } from '../../hooks/useProviders'
 
@@ -21,7 +20,7 @@ export const Strategy = () => {
   const init = useRef(true)
   const { strategyService } = useProviders()
   const [gameState, setGameState] = useState<GameState>()
-  const [activeUnitId, setActiveUnitId] = useState<number | null>(null)
+  // const [activeUnitId, setActiveUnitId] = useState<number | null>(null)
   const { slug } = useParams<IStrategyParams>()
   const ref = useRef<HTMLCanvasElement | null>(null)
   const dispatch = useAppDispatch()
@@ -35,31 +34,48 @@ export const Strategy = () => {
   }, [dispatch, slug])
 
   useEffect(() => {
-    if (ref.current && !loading && init.current) {
-      init.current = false
-      TMap.init({
-        strategy: data!.strategy,
-        rendererOptions: {
-          canvas: ref.current!,
-          size: 640,
-        },
-        basePath: process.env.REACT_APP_BASE_URL,
-        syncStateHandler: (prop, value, state) => {
-          console.log('updating gameState')
-          setGameState((curr) => ({
-            ...curr,
-            ...state,
-          }))
-        },
-      })
+    async function run() {
+      if (ref.current && !loading && init.current) {
+        init.current = false
+        await TMap.init({
+          strategy: data!.strategy,
+          rendererOptions: {
+            canvas: ref.current!,
+            size: 640,
+          },
+          basePath: process.env.REACT_APP_BASE_URL,
+          syncStateHandler: (prop, value, state) => {
+            setGameState((curr) => ({
+              ...curr,
+              ...state,
+            }))
+          },
+        })
 
-      TMap.start()
+        await TMap.start()
+      }
     }
+    run()
   }, [loading, data, slug])
 
+  // const activeUnit = useMemo(() => {
+  //   return gameState?.units.find((unit) => unit.id === activeUnitId)
+  // }, [gameState, activeUnitId])
+
   const activeUnit = useMemo(() => {
-    return gameState?.units.find((unit) => unit.id === activeUnitId)
-  }, [gameState, activeUnitId])
+    return gameState?.entities.find((e) => {
+      if (e instanceof UnitEntity && e.isActive) {
+        return e
+      }
+    }) as UnitEntity | undefined
+  }, [gameState])
+
+  console.log(activeUnit)
+  // const activeUnit = gameState?.entities.find((e) => {
+  //   if (e instanceof UnitEntity) {
+  //     return e.isActive
+  //   }
+  // }) as UnitEntity | undefined
 
   if (loading) {
     return <Spinner withMessage />
@@ -74,8 +90,12 @@ export const Strategy = () => {
     await strategyService.addUnit(data.strategy.id, unit)
   }
 
+  async function handleAddCommand() {}
+
   function handleSelectUnit(id: number) {
-    setActiveUnitId((curr) => (curr === id ? null : id))
+    // console.log(TMap.getGameState().units[0].id)
+    TMap.selectUnit(id)
+    // setActiveUnitId((curr) => (curr === id ? null : id))
   }
 
   return (
