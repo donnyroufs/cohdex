@@ -5,97 +5,93 @@ import { useAppDispatch } from '../../store/store'
 import { fetchStrategy } from '../../store/slices/strategiesSlice'
 import { GameState, UnitEntity } from '@cohdex/tactical-map'
 import { Commands, TacticalMapWithRef, Units } from './components'
-import { Box, Flex } from '@chakra-ui/react'
+import { Box, Flex, Skeleton } from '@chakra-ui/react'
 import { Spinner, Title } from '../../components'
 import { TMap } from '../../logic/tactical-map'
 import { useFetch } from '../../hooks'
-import { IGetStrategyResponseDto } from '../../../../shared/dist'
+import {
+  IGetStrategyResponseDto,
+  IPointPosition,
+  IStrategy,
+} from '@cohdex/shared'
+import { Image } from '@chakra-ui/react'
 import { useProviders } from '../../hooks/useProviders'
 
 export interface IStrategyParams {
   slug: string
 }
+function flipY(pos: number) {
+  return pos < 0 ? Math.abs(pos) : 0 - pos
+}
+
+function replaceTgaWithPng(url: string) {
+  return url.replace('tga', 'png')
+}
+
+export const PointPosition: React.FC<IPointPosition & { scale: number }> = (
+  point
+) => {
+  const imageUrl =
+    process.env.REACT_APP_BASE_URL + '/public/' + point.fileName + '.png'
+
+  const x = 350 - point.x * point.scale - 16
+  const y = 350 - point.y * point.scale - 16
+
+  return (
+    <Image
+      src={imageUrl}
+      alt={point.fileName}
+      position="absolute"
+      top={y}
+      right={x}
+      h="32px"
+      w="32px"
+      onMouseOver={() => {
+        document.body.style.cursor = 'pointer'
+      }}
+      onMouseOut={() => {
+        document.body.style.cursor = 'default'
+      }}
+    />
+  )
+}
+
+export const TacticalMap: React.FC<{ strategy: IStrategy }> = ({
+  strategy,
+}) => {
+  const scale = 700 / strategy.Map.height
+
+  return (
+    <Box position="relative">
+      <Image
+        src={replaceTgaWithPng(strategy.Map.url)}
+        alt="tactical map"
+        minH={700}
+        h={700}
+        minW={700}
+        w={700}
+      />
+      {/* <Image src={strategy.Map.url} alt="tactical map" /> */}
+      {strategy.Map.pointPositions.map((p) => (
+        <PointPosition {...p} scale={scale} />
+      ))}
+    </Box>
+  )
+}
 
 export const Strategy = () => {
-  const init = useRef(true)
   const { strategyService } = useProviders()
-  const [gameState, setGameState] = useState<GameState>()
-  // const [activeUnitId, setActiveUnitId] = useState<number | null>(null)
   const { slug } = useParams<IStrategyParams>()
-  const ref = useRef<HTMLCanvasElement | null>(null)
-  const dispatch = useAppDispatch()
   const { loading, data } = useFetch<IGetStrategyResponseDto>(
     () => strategyService.getStrategy(slug),
     undefined!
   )
 
-  useEffect(() => {
-    dispatch(fetchStrategy(slug))
-  }, [dispatch, slug])
-
-  useEffect(() => {
-    async function run() {
-      if (ref.current && !loading && init.current) {
-        init.current = false
-        await TMap.init({
-          strategy: data!.strategy,
-          rendererOptions: {
-            canvas: ref.current!,
-            size: 640,
-          },
-          basePath: process.env.REACT_APP_BASE_URL,
-          syncStateHandler: (prop, value, state) => {
-            setGameState((curr) => ({
-              ...curr,
-              ...state,
-            }))
-          },
-        })
-
-        await TMap.start()
-      }
-    }
-    run()
-  }, [loading, data, slug])
-
-  // const activeUnit = useMemo(() => {
-  //   return gameState?.units.find((unit) => unit.id === activeUnitId)
-  // }, [gameState, activeUnitId])
-
-  const activeUnit = useMemo(() => {
-    return gameState?.entities.find((e) => {
-      if (e instanceof UnitEntity && e.isActive) {
-        return e
-      }
-    }) as UnitEntity | undefined
-  }, [gameState])
-
-  // const activeUnit = gameState?.entities.find((e) => {
-  //   if (e instanceof UnitEntity) {
-  //     return e.isActive
-  //   }
-  // }) as UnitEntity | undefined
-
   if (loading) {
     return <Spinner withMessage />
   }
 
-  async function handleOnAdd() {
-    if (!gameState) return
-
-    // TODO: Create list to choose unit
-    const unit = data.strategy.StrategyUnits[0].unit
-
-    await strategyService.addUnit(data.strategy.id, unit)
-  }
-
-  async function handleAddCommand() {}
-
-  function handleSelectUnit(id: number) {
-    // console.log(TMap.getGameState().units[0].id)
-    TMap.selectUnit(id)
-    // setActiveUnitId((curr) => (curr === id ? null : id))
-  }
+  console.log(data)
 
   return (
     <BaseLayout.Container>
@@ -104,7 +100,8 @@ export const Strategy = () => {
         <Title value="Commands" />
       </Box>
       <Flex flexDir="row">
-        <Units
+        <TacticalMap strategy={data.strategy} />
+        {/* <Units
           handleOnAdd={handleOnAdd}
           gameState={gameState}
           handleSelectUnit={handleSelectUnit}
@@ -117,7 +114,7 @@ export const Strategy = () => {
             strategyId={data.strategy.id}
           />
           <Commands activeUnit={activeUnit} />
-        </Flex>
+        </Flex> */}
       </Flex>
     </BaseLayout.Container>
   )
