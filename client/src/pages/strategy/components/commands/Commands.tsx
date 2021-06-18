@@ -7,6 +7,7 @@ export interface ICommandsProps {
 }
 
 export const Commands: React.FC<ICommandsProps> = ({ activeUnit }) => {
+  console.log({ activeUnit })
   return (
     <Box mt={0} flex={1} minW="350px">
       {activeUnit &&

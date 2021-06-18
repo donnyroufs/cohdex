@@ -1,6 +1,5 @@
 import { IStrategyMap, IStrategyUnit } from '@cohdex/shared'
 import { BASE_ENTITY_SIZE } from '../constants'
-import { BaseEntity } from '../entities/base-entity'
 import { PointPositionEntity, UnitEntity } from '../entities'
 import { GameData } from '../game-data'
 import { AssetLoader } from '../loaders/asset.loader'
@@ -61,6 +60,7 @@ export class GameScene extends Scene {
             id: activeUnit.commands.length + 1,
             description: 'some info',
             type: 'CAPTURE',
+            issuedAt: activeUnit.commands.length * 5,
           })
         )
         return
@@ -75,7 +75,12 @@ export class GameScene extends Scene {
   // @ts-ignore
   update(gameState: GameState) {
     this._world.draw(this._gameData)
-    gameState.entities.forEach((entity) => entity.draw(this._gameData))
+    gameState.entities.forEach((entity) => {
+      entity.draw(this._gameData)
+      if (entity instanceof UnitEntity) {
+        console.log(entity.commands)
+      }
+    })
 
     window.requestAnimationFrame(() => this.update(gameState))
   }

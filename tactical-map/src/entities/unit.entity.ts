@@ -1,5 +1,6 @@
 import { ICommand } from '@cohdex/shared'
-import { IGameData, IUnitEntityProps } from '../types'
+import { Command } from '../command'
+import { IGameData, IUnitEntityProps, Tick } from '../types'
 import { BaseEntity } from './base-entity'
 
 export class UnitEntity
@@ -10,7 +11,7 @@ export class UnitEntity
   cappingSpeed: number
   movementSpeed: number
   isActive: boolean
-  commands: ICommand[]
+  commands: Command[]
 
   constructor(props: IUnitEntityProps) {
     super(props)

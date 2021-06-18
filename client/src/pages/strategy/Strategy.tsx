@@ -70,7 +70,6 @@ export const Strategy = () => {
     }) as UnitEntity | undefined
   }, [gameState])
 
-  console.log(activeUnit)
   // const activeUnit = gameState?.entities.find((e) => {
   //   if (e instanceof UnitEntity) {
   //     return e.isActive

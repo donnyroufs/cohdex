@@ -83,3 +83,5 @@ export interface IUnitEntityProps extends IBaseEntityProps {
   isActive: boolean
   commands: ICommand[]
 }
+
+export type Tick = number
