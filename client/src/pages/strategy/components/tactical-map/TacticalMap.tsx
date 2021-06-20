@@ -1,23 +1,35 @@
-import React, { useState } from 'react'
-import { Display } from '../../../../types'
-import { SwitchDisplay } from './SwitchDisplay'
-import { Box, Button } from '@chakra-ui/react'
-import { TMap } from '../../../../logic/tactical-map'
-import { GameState } from '../../../../../../tactical-map/dist'
+import { Box, Button, Image } from '@chakra-ui/react'
+import { IPointPosition } from '@cohdex/shared'
+import { useState } from 'react'
 import { useProviders } from '../../../../hooks/useProviders'
+import { InteractiveUnit } from '../../../../models/InteractiveUnit'
+import { Display, GameState } from '../../../../types'
+import { replaceTgaWithPng } from '../../../../utils'
+import { PointPosition } from './PointPosition'
+import { SwitchDisplay } from './SwitchDisplay'
 
 export interface ITacticalMapProps {
-  tmapRef: React.ForwardedRef<HTMLCanvasElement | null>
-  gameState?: GameState
   strategyId: number
+  spawnpoint: number | null
+  mapHeight: number
+  mapUrl: string
+  pointPositions: IPointPosition[]
+  setGameState: React.Dispatch<React.SetStateAction<GameState>>
+  activeUnit?: InteractiveUnit
 }
 
-const TacticalMap: React.FC<ITacticalMapProps> = ({
-  tmapRef,
-  gameState,
+export const TacticalMap: React.FC<ITacticalMapProps> = ({
   strategyId,
+  spawnpoint,
+  mapHeight,
+  mapUrl,
+  pointPositions,
+  setGameState,
+  activeUnit,
 }) => {
   const { strategyService } = useProviders()
+  const scale = 700 / mapHeight
+
   const [display, setDisplay] = useState<Display>('circle')
 
   function handleChangeDisplay() {
@@ -26,7 +38,16 @@ const TacticalMap: React.FC<ITacticalMapProps> = ({
 
   async function handleChooseSpawnpoint(spawn: number) {
     await strategyService.chooseSpawnpoint(strategyId, spawn)
-    TMap.setSpawnpoint(spawn)
+    setGameState((curr) => ({
+      ...curr,
+      spawnpoint: spawn,
+    }))
+  }
+
+  function onClickPointPosition(point: IPointPosition) {
+    if (!activeUnit) return
+
+    console.log(`clicked point: ${point.fileName}`)
   }
 
   return (
@@ -58,8 +79,25 @@ const TacticalMap: React.FC<ITacticalMapProps> = ({
         />
       </Box>
       <Box position="relative">
-        {/* here */}
-        {!gameState?.spawnpoint && (
+        <Box position="relative">
+          <Image
+            src={replaceTgaWithPng(mapUrl)}
+            alt="tactical map"
+            borderRadius={display === 'circle' ? '100%' : 0}
+            minH={700}
+            h={700}
+            minW={700}
+            w={700}
+          />
+          {pointPositions.map((p) => (
+            <PointPosition
+              point={p}
+              scale={scale}
+              onClickPointPosition={onClickPointPosition}
+            />
+          ))}
+        </Box>
+        {!spawnpoint && (
           <Box
             position="absolute"
             top="0"
@@ -120,10 +158,3 @@ const TacticalMap: React.FC<ITacticalMapProps> = ({
     </Box>
   )
 }
-
-export const TacticalMapWithRef = React.forwardRef<
-  any,
-  { gameState?: GameState; strategyId: number }
->((props, ref: React.ForwardedRef<HTMLCanvasElement | null>) => (
-  <TacticalMap {...props} tmapRef={ref} />
-))

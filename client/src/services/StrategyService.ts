@@ -1,17 +1,9 @@
-import {
-  IAddCommandToStrategyUnitDto,
-  IUnitWithCommands,
-} from '../../../shared/dist'
-import { TacticalMap } from '../../../tactical-map/dist'
+import { IAddCommandToStrategyUnitDto, IUnitWithCommands } from '@cohdex/shared'
 import { strategiesApi } from '../api'
 import { BaseService } from '../lib'
 
 export class StrategyService extends BaseService {
   protected api = strategiesApi
-
-  constructor(private readonly tMap: TacticalMap) {
-    super()
-  }
 
   async getStrategy(slug: string) {
     return this.api.getStrategy(slug)
@@ -27,10 +19,6 @@ export class StrategyService extends BaseService {
       id: res.data.strategyUnit.id,
       unit,
     }
-    // this.tMap.addUnit({
-    //   id: res.data.strategyUnit.id,
-    //   unit,
-    // })
   }
 
   async chooseSpawnpoint(strategyId: number, spawn: number) {

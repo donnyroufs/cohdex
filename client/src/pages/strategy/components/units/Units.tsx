@@ -1,7 +1,7 @@
 import { Flex, IconButton, Image } from '@chakra-ui/react'
-import { UnitEntity } from '@cohdex/tactical-map'
 import { FaPlusCircle } from 'react-icons/fa'
-import { GameState, InteractiveUnit } from '../../Strategy'
+import { InteractiveUnit } from '../../../../models/InteractiveUnit'
+import { GameState } from '../../../../types'
 
 export interface IUnitsProps {
   handleOnAdd: () => void

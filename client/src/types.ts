@@ -8,6 +8,7 @@ import {
 } from '@cohdex/shared'
 import { RouteComponentProps } from 'react-router-dom'
 import { StrategyService } from './services/StrategyService'
+import { InteractiveUnit } from './models/InteractiveUnit'
 
 export interface IAuthState {
   isLoading: boolean
@@ -98,4 +99,10 @@ export type Display = 'circle' | 'rectangle'
 
 export interface IAppContext {
   strategyService: StrategyService
+}
+
+export type GameState = {
+  units: InteractiveUnit[]
+  spawnpoint: null | number
+  strategyData: IStrategy | null
 }

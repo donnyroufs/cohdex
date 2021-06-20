@@ -1,5 +1,5 @@
 import { Box, Text } from '@chakra-ui/react'
-import { InteractiveUnit } from '../../Strategy'
+import { InteractiveUnit } from '../../../../models/InteractiveUnit'
 import { Command } from './components/Command'
 
 export interface ICommandsProps {
