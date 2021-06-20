@@ -58,13 +58,7 @@ const TacticalMap: React.FC<ITacticalMapProps> = ({
         />
       </Box>
       <Box position="relative">
-        <canvas
-          ref={tmapRef}
-          style={{
-            borderRadius: `${display === 'circle' ? '100%' : '0%'}`,
-            border: '6px solid #2D333A',
-          }}
-        ></canvas>
+        {/* here */}
         {!gameState?.spawnpoint && (
           <Box
             position="absolute"

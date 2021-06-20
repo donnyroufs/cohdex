@@ -1,12 +1,13 @@
 import { Flex, IconButton, Image } from '@chakra-ui/react'
-import { GameState, UnitEntity } from '@cohdex/tactical-map'
+import { UnitEntity } from '@cohdex/tactical-map'
 import { FaPlusCircle } from 'react-icons/fa'
+import { GameState, InteractiveUnit } from '../../Strategy'
 
 export interface IUnitsProps {
   handleOnAdd: () => void
   handleSelectUnit: (id: number) => void
   gameState?: GameState
-  activeUnit?: UnitEntity
+  activeUnit?: InteractiveUnit
 }
 
 export const Units: React.FC<IUnitsProps> = ({
@@ -35,28 +36,26 @@ export const Units: React.FC<IUnitsProps> = ({
         onClick={handleOnAdd}
       />
       {gameState &&
-        gameState.entities
-          .filter((e) => e instanceof UnitEntity)
-          .map(({ id, imageUrl }: any) => (
-            <Image
-              key={id}
-              onClick={() => handleSelectUnit(id)}
-              mb={4}
-              h="98px"
-              w="74px"
-              border="2px solid"
-              borderColor={activeUnit?.id === id ? 'primary.600' : 'border'}
-              src={process.env.REACT_APP_BASE_URL + imageUrl}
-              alt="unit portrait"
-              opacity={activeUnit?.id === id ? 1 : 0.7}
-              transition="all .15s ease-in-out"
-              _hover={{
-                cursor: 'pointer',
-                opacity: 1,
-                borderColor: 'primary.600',
-              }}
-            />
-          ))}
+        gameState.units.map(({ id, unit }) => (
+          <Image
+            key={id}
+            onClick={() => handleSelectUnit(id)}
+            mb={4}
+            h="98px"
+            w="74px"
+            border="2px solid"
+            borderColor={activeUnit?.id === id ? 'primary.600' : 'border'}
+            src={process.env.REACT_APP_BASE_URL + unit.image}
+            alt="unit portrait"
+            opacity={activeUnit?.id === id ? 1 : 0.7}
+            transition="all .15s ease-in-out"
+            _hover={{
+              cursor: 'pointer',
+              opacity: 1,
+              borderColor: 'primary.600',
+            }}
+          />
+        ))}
     </Flex>
   )
 }

@@ -23,15 +23,18 @@ export class StrategyService extends BaseService {
       unitId: unit.id,
     })
 
-    this.tMap.addUnit({
+    return {
       id: res.data.strategyUnit.id,
       unit,
-    })
+    }
+    // this.tMap.addUnit({
+    //   id: res.data.strategyUnit.id,
+    //   unit,
+    // })
   }
 
   async chooseSpawnpoint(strategyId: number, spawn: number) {
     await this.api.chooseSpawnpoint(strategyId, spawn)
-    this.tMap.setSpawnpoint(spawn)
   }
 
   async addCommandToUnit(data: IAddCommandToStrategyUnitDto) {
