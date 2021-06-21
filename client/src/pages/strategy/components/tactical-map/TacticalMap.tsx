@@ -89,7 +89,7 @@ export const TacticalMap: React.FC<ITacticalMapProps> = ({
     }))
   }
 
-  function onClickPointPosition(point: IPointPosition) {
+  async function onClickPointPosition(point: IPointPosition) {
     if (!activeUnit) return
 
     const obj: IAddCommandToStrategyUnitDto = {
@@ -100,7 +100,8 @@ export const TacticalMap: React.FC<ITacticalMapProps> = ({
       type: 'CAPTURE',
     }
 
-    // TOOD: Make net request
+    await strategyService.addCommandToUnit(obj)
+
     const res: ICommand = {
       description: '',
       targetX: point.x,
@@ -128,9 +129,6 @@ export const TacticalMap: React.FC<ITacticalMapProps> = ({
         return u
       }),
     }))
-    // TOOD: Add Command
-    // console.log(`clicked point: ${point.fileName}`)
-    console.log(obj)
   }
 
   return (

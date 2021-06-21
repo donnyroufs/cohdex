@@ -10,6 +10,7 @@ import {
   ICreateStrategyUnitResponseDto,
   IAddCommandToStrategyUnitDto,
   IAddCommandToStrategyUnitResponseDto,
+  IRemoveCommandFromStrategyUnit,
 } from '@cohdex/shared'
 import { BaseApi } from '../lib/BaseApi'
 
@@ -66,5 +67,9 @@ export const strategiesApi = new (class StrategiesApi extends BaseApi {
 
   async getMaps(): Promise<BaseHttpResponse<IGetMapsResponseDto>> {
     return this.axios.get(this.endpoint('/maps')).then(({ data }) => data)
+  }
+
+  async removeCommandFromUnit(data: IRemoveCommandFromStrategyUnit) {
+    return this.axios.delete(this.endpoint(`/command/${data.id}`))
   }
 })()

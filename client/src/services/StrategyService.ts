@@ -1,4 +1,8 @@
-import { IAddCommandToStrategyUnitDto, IUnitWithCommands } from '@cohdex/shared'
+import {
+  IAddCommandToStrategyUnitDto,
+  IRemoveCommandFromStrategyUnit,
+  IUnitWithCommands,
+} from '@cohdex/shared'
 import { strategiesApi } from '../api'
 import { BaseService } from '../lib'
 
@@ -27,5 +31,9 @@ export class StrategyService extends BaseService {
 
   async addCommandToUnit(data: IAddCommandToStrategyUnitDto) {
     return this.api.addCommandToUnit(data)
+  }
+
+  async removeCommandFromUnit(data: IRemoveCommandFromStrategyUnit) {
+    return this.api.removeCommandFromUnit(data)
   }
 }

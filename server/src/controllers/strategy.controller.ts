@@ -1,14 +1,22 @@
 import { HttpContext } from '@kondah/http-context'
-import { Controller, Get, Middleware, Post, Put } from '@kondah/http-controller'
+import {
+  Controller,
+  Delete,
+  Get,
+  Middleware,
+  Post,
+  Put,
+} from '@kondah/http-controller'
 import { StrategyService } from '../services/strategy.service'
 import {
   AddCommandToStrategyUnitDto,
   ChooseSpawnPointDto,
   CreateStrategyDto,
   CreateStrategyUnitDto,
+  RemoveCommandFromStrategyUnitDto,
 } from '../dtos'
 import { isAuthGuard } from '../guards/is-auth.guard'
-import { validateBody, validateBodyWithParamsToInt } from '../lib'
+import { paramsToInt, validateBody, validateBodyWithParamsToInt } from '../lib'
 import { BadRequestException } from '../exceptions'
 import { BaseHttpResponse } from '../lib/base-http-response'
 import {
@@ -103,6 +111,16 @@ export class StrategyController {
         strategyUnit,
       })
     )
+  }
+
+  @Delete('/command/:id')
+  @Middleware(
+    isAuthGuard,
+    validateBodyWithParamsToInt(RemoveCommandFromStrategyUnitDto)
+  )
+  async removeCommandFromUnit(ctx: HttpContext) {
+    await this._strategyService.removeCommandFromStrategyUnit(ctx.data)
+    ctx.res.sendStatus(204)
   }
 
   @Put('/:strategyId/spawnpoint')

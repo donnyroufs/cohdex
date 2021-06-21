@@ -249,13 +249,17 @@ export class StrategyRepository {
     })
   }
 
-  // TODO: Implement
   async removeCommandFromStrategyUnit(data: RemoveCommandFromStrategyUnitDto) {
-    return !!this.command.delete({ where: { ...data } })
+    return this.command.deleteMany({
+      where: {
+        id: data.id,
+        userId: data.userId,
+      },
+    })
   }
 
   async chooseSpawnpoint(data: ChooseSpawnPointDto) {
-    await this.strategy.update({
+    this.strategy.update({
       where: {
         id: data.strategyId,
       },

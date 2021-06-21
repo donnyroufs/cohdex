@@ -186,6 +186,8 @@ export const Strategy = () => {
         <Commands
           activeUnit={activeUnit}
           removeCommand={async (id) => {
+            await strategyService.removeCommandFromUnit({ id })
+
             setGameState((curr) => ({
               ...curr,
               units: curr.units.map((u) => ({

@@ -41,8 +41,6 @@ export class StrategyService {
     return this._strategyRepo.removeCommandFromStrategyUnit(data)
   }
 
-  async removeCommandFromUnit() {}
-
   async addUnitToStrategy(data: ICreateStrategyUnitDto) {
     const foundFaction = await this._strategyRepo.getFactionByStrategyId(
       data.strategyId

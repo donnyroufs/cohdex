@@ -23,6 +23,13 @@ export function validateBody(dto: new (args: any) => any) {
   }
 }
 
+export function paramsToInt(req: Request, res: Response, next: NextFunction) {
+  // @ts-ignore
+  req.params.id = Number(req.params.id)
+
+  next()
+}
+
 export function validateBodyWithParamsToInt(dto: new (args: any) => any) {
   return async (req: Request, res: Response, next: NextFunction) => {
     const [data, errors] = new dto({
