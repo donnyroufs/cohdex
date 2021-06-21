@@ -79,13 +79,7 @@ export class StrategyRepository {
           select: {
             id: true,
             unit: true,
-            commands: {
-              select: {
-                id: true,
-                description: true,
-                type: true,
-              },
-            },
+            commands: true,
           },
         },
       },

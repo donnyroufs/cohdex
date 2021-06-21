@@ -3,6 +3,7 @@ import { IPointPosition } from '@cohdex/shared'
 import { useState } from 'react'
 import { useProviders } from '../../../../hooks/useProviders'
 import { InteractiveUnit } from '../../../../models/InteractiveUnit'
+import { ReplayableCommand } from '../../../../models/ReplayableCommand'
 import { Display, GameState } from '../../../../types'
 import { replaceTgaWithPng } from '../../../../utils'
 import { PointPosition } from './PointPosition'
@@ -16,6 +17,7 @@ export interface ITacticalMapProps {
   pointPositions: IPointPosition[]
   setGameState: React.Dispatch<React.SetStateAction<GameState>>
   activeUnit?: InteractiveUnit
+  commands: ReplayableCommand[]
 }
 
 export const TacticalMap: React.FC<ITacticalMapProps> = ({
@@ -26,6 +28,7 @@ export const TacticalMap: React.FC<ITacticalMapProps> = ({
   pointPositions,
   setGameState,
   activeUnit,
+  commands,
 }) => {
   const { strategyService } = useProviders()
   const scale = 700 / mapHeight
@@ -95,6 +98,17 @@ export const TacticalMap: React.FC<ITacticalMapProps> = ({
               scale={scale}
               onClickPointPosition={onClickPointPosition}
             />
+          ))}
+          {commands.map((c) => (
+            <Box
+              pos="absolute"
+              top={c.target.y}
+              left={c.target.x}
+              color="cyan"
+              fontSize="1.5rem"
+            >
+              {c.unitId}
+            </Box>
           ))}
         </Box>
         {!spawnpoint && (

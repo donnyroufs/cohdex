@@ -1,19 +1,16 @@
 import { useParams } from 'react-router-dom'
 import React, { useMemo, useEffect, useState } from 'react'
 import { BaseLayout } from '../../components/layouts'
-import { Box, Button, Flex } from '@chakra-ui/react'
+import { Box, Flex } from '@chakra-ui/react'
 import { Spinner, Title } from '../../components'
-import {
-  IPointPosition,
-  IStrategy,
-  IStrategyUnit,
-  IUnitWithCommands,
-} from '@cohdex/shared'
-import { Display, GameState } from '../../types'
-import { Image } from '@chakra-ui/react'
+import { GameState, Tick } from '../../types'
 import { useProviders } from '../../hooks/useProviders'
 import { Commands, TacticalMap, Units } from './components'
 import { InteractiveUnit } from '../../models/InteractiveUnit'
+import { ReplayableCommand, Vec2 } from '../../models/ReplayableCommand'
+
+// Commands logic in replay format
+// https://codesandbox.io/s/young-haze-cmf7o?file=/src/index.ts
 
 export interface IStrategyParams {
   slug: string
@@ -28,6 +25,7 @@ export const Strategy = () => {
     spawnpoint: null,
     strategyData: null,
   })
+  const [tick, setTick] = useState<Tick>(0)
 
   const { slug } = useParams<IStrategyParams>()
 
@@ -53,10 +51,42 @@ export const Strategy = () => {
       })
   }, [strategyService, slug])
 
+  const DELAY = 5
+  // TODO: Remove x,y and take in account spawnpoint? + command order
+  const replayData = useMemo(() => {
+    return gameState.units.flatMap((u, unitIndex) => {
+      return u.unit.commands.map(
+        (c, i) =>
+          new ReplayableCommand(
+            new Vec2(c.x, c.y),
+            new Vec2(c.targetX, c.targetY),
+            DELAY * (i + unitIndex),
+            u.id
+          )
+      )
+    })
+  }, [gameState.units])
+
+  const currentReplayData = useMemo(() => {
+    return replayData.filter((c) => c.tick / 5 < tick)
+  }, [tick, replayData])
+
   const activeUnit = useMemo(
     () => gameState.units.find((u) => u.isActive),
     [gameState.units]
   )
+
+  // TODO: Required to calculate starting location for the first command
+  const currentSpawn = useMemo(() => {
+    return gameState.strategyData?.Map.pointPositions.find(
+      (p) =>
+        p.fileName ===
+        `starting_position_shared_territory-${gameState.spawnpoint}`
+    )
+  }, [gameState.spawnpoint, gameState.strategyData?.Map.pointPositions])
+
+  const allTicks = replayData.flatMap((c) => c.tick)
+  const max = Math.max(...allTicks) / 5 + 1
 
   if (loading) {
     return <Spinner withMessage />
@@ -110,15 +140,25 @@ export const Strategy = () => {
           handleSelectUnit={handleSelectUnit}
           activeUnit={activeUnit}
         />
-        <TacticalMap
-          strategyId={gameState.strategyData!.id}
-          mapHeight={gameState.strategyData!.Map.height}
-          spawnpoint={gameState.spawnpoint}
-          setGameState={setGameState}
-          mapUrl={gameState.strategyData!.Map.url}
-          pointPositions={gameState.strategyData!.Map.pointPositions}
-          activeUnit={activeUnit}
-        />
+        <Box>
+          <TacticalMap
+            strategyId={gameState.strategyData!.id}
+            mapHeight={gameState.strategyData!.Map.height}
+            spawnpoint={gameState.spawnpoint}
+            setGameState={setGameState}
+            mapUrl={gameState.strategyData!.Map.url}
+            pointPositions={gameState.strategyData!.Map.pointPositions}
+            activeUnit={activeUnit}
+            commands={currentReplayData}
+          />
+          <input
+            type="range"
+            onChange={(e) => setTick(+e.target.value)}
+            value={tick}
+            max={max}
+            style={{ width: '100%', marginTop: '.5rem' }}
+          />
+        </Box>
         <Commands activeUnit={activeUnit} />
       </Flex>
     </BaseLayout.Container>

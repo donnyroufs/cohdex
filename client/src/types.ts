@@ -106,3 +106,5 @@ export type GameState = {
   spawnpoint: null | number
   strategyData: IStrategy | null
 }
+
+export type Tick = number

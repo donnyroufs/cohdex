@@ -110,8 +110,7 @@ export interface IUnitWithCommands extends Unit {
   commands: ICommand[]
 }
 
-export interface ICommand
-  extends Pick<Command, 'id' | 'description' | 'type'> {}
+export interface ICommand extends Command {}
 
 export interface IStrategyMap {
   name: string
