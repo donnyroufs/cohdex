@@ -4,15 +4,24 @@ import { Command } from './components/Command'
 
 export interface ICommandsProps {
   activeUnit?: InteractiveUnit
+  removeCommand(id: number): Promise<void>
 }
 
-export const Commands: React.FC<ICommandsProps> = ({ activeUnit }) => {
+export const Commands: React.FC<ICommandsProps> = ({
+  activeUnit,
+  removeCommand,
+}) => {
   return (
     <Box mt={0} flex={1} minW="350px">
       {activeUnit &&
         activeUnit.unit.commands &&
         activeUnit.unit.commands.map((command) => (
-          <Command content={command.type} key={command.id} />
+          <Command
+            content={command.type}
+            key={command.id}
+            id={command.id}
+            handleClick={removeCommand}
+          />
         ))}
 
       {!activeUnit && (

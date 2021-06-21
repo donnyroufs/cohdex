@@ -1,14 +1,22 @@
 import { Box, Button, Image } from '@chakra-ui/react'
+import { IAddCommandToStrategyUnitDto, ICommand } from '@cohdex/shared'
 import { IPointPosition } from '@cohdex/shared'
 import { useState } from 'react'
 import { useProviders } from '../../../../hooks/useProviders'
 import { InteractiveUnit } from '../../../../models/InteractiveUnit'
-import { ReplayableCommand } from '../../../../models/ReplayableCommand'
+import { ReplayableCommand, Vec2 } from '../../../../models/ReplayableCommand'
 import { Display, GameState } from '../../../../types'
 import { replaceTgaWithPng } from '../../../../utils'
 import { PointPosition } from './PointPosition'
 import { SwitchDisplay } from './SwitchDisplay'
 
+function posToScreen(pos: Vec2, scale: number) {
+  return new Vec2(350 - pos.x * scale - 16, 350 - pos.y * scale - 16)
+}
+
+function singleCoordinateToScreen(coordinate: number, scale: number) {
+  return 350 - coordinate * scale
+}
 export interface ITacticalMapProps {
   strategyId: number
   spawnpoint: number | null
@@ -18,6 +26,40 @@ export interface ITacticalMapProps {
   setGameState: React.Dispatch<React.SetStateAction<GameState>>
   activeUnit?: InteractiveUnit
   commands: ReplayableCommand[]
+}
+
+export interface ILineProps {
+  x1: number
+  y1: number
+  x2: number
+  y2: number
+  scale: number
+}
+
+export const Line: React.FC<ILineProps> = ({ x1, x2, y1, y2, scale }) => {
+  console.log({ x1, x2, y1, y2 })
+  // console.log({
+  //   x1: singleCoordinateToScreen(x1, scale),
+  //   x2,
+  //   y1: singleCoordinateToScreen(y1, scale),
+  //   y2,
+  // })
+  return (
+    <line
+      // x1={0}
+      // y1={0}
+      // x2={100}
+      // y2={100}
+      x1={singleCoordinateToScreen(-x1, scale)}
+      y1={singleCoordinateToScreen(y1, scale)}
+      x2={singleCoordinateToScreen(-x2, scale)}
+      y2={singleCoordinateToScreen(y2, scale)}
+      style={{
+        stroke: 'rgb(255,0,0)',
+        strokeWidth: 2,
+      }}
+    />
+  )
 }
 
 export const TacticalMap: React.FC<ITacticalMapProps> = ({
@@ -50,7 +92,45 @@ export const TacticalMap: React.FC<ITacticalMapProps> = ({
   function onClickPointPosition(point: IPointPosition) {
     if (!activeUnit) return
 
-    console.log(`clicked point: ${point.fileName}`)
+    const obj: IAddCommandToStrategyUnitDto = {
+      description: '',
+      targetX: point.x,
+      targetY: point.y,
+      strategyUnitsId: activeUnit.id,
+      type: 'CAPTURE',
+    }
+
+    // TOOD: Make net request
+    const res: ICommand = {
+      description: '',
+      targetX: point.x,
+      targetY: point.y,
+      strategyUnitsId: activeUnit.id,
+      type: 'CAPTURE',
+      id: Math.random() * 2031,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      userId: 1,
+    }
+
+    setGameState((curr) => ({
+      ...curr,
+      units: curr.units.map((u) => {
+        if (u.id === activeUnit.id) {
+          return {
+            ...u,
+            unit: {
+              ...u.unit,
+              commands: [...u.unit.commands, res],
+            },
+          }
+        }
+        return u
+      }),
+    }))
+    // TOOD: Add Command
+    // console.log(`clicked point: ${point.fileName}`)
+    console.log(obj)
   }
 
   return (
@@ -92,6 +172,25 @@ export const TacticalMap: React.FC<ITacticalMapProps> = ({
             minW={700}
             w={700}
           />
+          <svg
+            height="700"
+            width="700"
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+            }}
+          >
+            {commands.map((c) => (
+              <Line
+                x1={c.pos.x}
+                x2={c.target.x}
+                y1={c.pos.y}
+                y2={c.target.y}
+                scale={scale}
+              />
+            ))}
+          </svg>
           {pointPositions.map((p) => (
             <PointPosition
               point={p}
@@ -102,8 +201,8 @@ export const TacticalMap: React.FC<ITacticalMapProps> = ({
           {commands.map((c) => (
             <Box
               pos="absolute"
-              top={c.target.y}
-              left={c.target.x}
+              top={singleCoordinateToScreen(c.target.y, scale)}
+              right={singleCoordinateToScreen(c.target.x, scale)}
               color="cyan"
               fontSize="1.5rem"
             >

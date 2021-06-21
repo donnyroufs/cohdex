@@ -51,21 +51,54 @@ export const Strategy = () => {
       })
   }, [strategyService, slug])
 
+  // TODO: Required to calculate starting location for the first command
+  const currentSpawn = useMemo(() => {
+    return gameState.strategyData?.Map.pointPositions.find(
+      (p) =>
+        p.fileName ===
+        `starting_position_shared_territory-${gameState.spawnpoint}`
+    )
+  }, [gameState.spawnpoint, gameState.strategyData?.Map.pointPositions])
+
+  function calcPreviousLocation(iteration: number, unitId: number) {
+    console.log(iteration)
+    if (currentSpawn && iteration === 0) {
+      return {
+        x: currentSpawn.x,
+        y: currentSpawn.y,
+      }
+    }
+
+    const unit = gameState.units.find((u) => u.id === unitId)
+
+    if (!unit) return
+
+    const command = unit.unit.commands[iteration - 1]
+
+    return {
+      x: command.targetX,
+      y: command.targetY,
+    }
+  }
+
   const DELAY = 5
   // TODO: Remove x,y and take in account spawnpoint? + command order
   const replayData = useMemo(() => {
     return gameState.units.flatMap((u, unitIndex) => {
-      return u.unit.commands.map(
-        (c, i) =>
-          new ReplayableCommand(
-            new Vec2(c.x, c.y),
-            new Vec2(c.targetX, c.targetY),
-            DELAY * (i + unitIndex),
-            u.id
-          )
-      )
+      if (!currentSpawn) return []
+
+      return u.unit.commands.map((c, i) => {
+        const prevLocation = calcPreviousLocation(i, u.id)!
+
+        return new ReplayableCommand(
+          new Vec2(prevLocation.x, prevLocation.y),
+          new Vec2(c.targetX, c.targetY),
+          DELAY * (i + unitIndex),
+          u.id
+        )
+      })
     })
-  }, [gameState.units])
+  }, [gameState.units, currentSpawn])
 
   const currentReplayData = useMemo(() => {
     return replayData.filter((c) => c.tick / 5 < tick)
@@ -76,17 +109,8 @@ export const Strategy = () => {
     [gameState.units]
   )
 
-  // TODO: Required to calculate starting location for the first command
-  const currentSpawn = useMemo(() => {
-    return gameState.strategyData?.Map.pointPositions.find(
-      (p) =>
-        p.fileName ===
-        `starting_position_shared_territory-${gameState.spawnpoint}`
-    )
-  }, [gameState.spawnpoint, gameState.strategyData?.Map.pointPositions])
-
   const allTicks = replayData.flatMap((c) => c.tick)
-  const max = Math.max(...allTicks) / 5 + 1
+  const max = allTicks.length > 0 ? Math.max(...allTicks) / 5 + 1 : 0
 
   if (loading) {
     return <Spinner withMessage />
@@ -159,7 +183,21 @@ export const Strategy = () => {
             style={{ width: '100%', marginTop: '.5rem' }}
           />
         </Box>
-        <Commands activeUnit={activeUnit} />
+        <Commands
+          activeUnit={activeUnit}
+          removeCommand={async (id) => {
+            setGameState((curr) => ({
+              ...curr,
+              units: curr.units.map((u) => ({
+                ...u,
+                unit: {
+                  ...u.unit,
+                  commands: u.unit.commands.filter((c) => c.id !== id),
+                },
+              })),
+            }))
+          }}
+        />
       </Flex>
     </BaseLayout.Container>
   )

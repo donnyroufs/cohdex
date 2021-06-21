@@ -139,7 +139,7 @@ export interface IRemoveUnitFromStrategyDto {
 }
 
 export interface IAddCommandToStrategyUnitDto
-  extends Omit<Command, 'createdAt' | 'updatedAt' | 'id'> {}
+  extends Omit<Command, 'createdAt' | 'updatedAt' | 'id' | 'userId'> {}
 
 export interface IRemoveCommandFromStrategyUnit {
   id: number

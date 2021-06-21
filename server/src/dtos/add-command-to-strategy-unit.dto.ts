@@ -18,11 +18,11 @@ export class AddCommandToStrategyUnitDto
 
   @Expose()
   @IsNumber()
-  posX: number
+  targetX: number
 
   @Expose()
   @IsNumber()
-  posY: number
+  targetY: number
 
   @Expose()
   @IsNumber()

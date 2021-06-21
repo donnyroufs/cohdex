@@ -130,9 +130,6 @@ model Command {
   targetX Float
   targetY Float
 
-  x Float
-  y Float
-
   StrategyUnits   StrategyUnits @relation(fields: [strategyUnitsId], references: [id])
   strategyUnitsId Int
 
