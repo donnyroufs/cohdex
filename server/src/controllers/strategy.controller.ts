@@ -102,13 +102,13 @@ export class StrategyController {
   @Post('/command')
   @Middleware(isAuthGuard, validateBody(AddCommandToStrategyUnitDto))
   async addCommandToStrategy(ctx: HttpContext<AddCommandToStrategyUnitDto>) {
-    const strategyUnit = await this._strategyService.addCommandToStrategyUnit(
+    const command = await this._strategyService.addCommandToStrategyUnit(
       ctx.data
     )
 
     return ctx.res.json(
       new BaseHttpResponse<IAddCommandToStrategyUnitResponseDto>({
-        strategyUnit,
+        command,
       })
     )
   }

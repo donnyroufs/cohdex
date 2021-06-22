@@ -28,7 +28,9 @@ export const strategiesApi = new (class StrategiesApi extends BaseApi {
   async addCommandToUnit(
     data: IAddCommandToStrategyUnitDto
   ): Promise<BaseHttpResponse<IAddCommandToStrategyUnitResponseDto>> {
-    return this.axios.post(this.endpoint('/command'), data)
+    return this.axios
+      .post(this.endpoint('/command'), data)
+      .then(({ data }) => data)
   }
 
   async chooseSpawnpoint(

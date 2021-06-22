@@ -146,8 +146,10 @@ export interface IRemoveCommandFromStrategyUnit {
 }
 
 export interface IAddCommandToStrategyUnitResponseDto {
-  strategyUnit: {
+  command: {
     id: number
+    createdAt: Date
+    updatedAt: Date
   }
 }
 

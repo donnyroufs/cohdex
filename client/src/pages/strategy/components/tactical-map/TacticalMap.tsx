@@ -10,10 +10,6 @@ import { replaceTgaWithPng } from '../../../../utils'
 import { PointPosition } from './PointPosition'
 import { SwitchDisplay } from './SwitchDisplay'
 
-function posToScreen(pos: Vec2, scale: number) {
-  return new Vec2(350 - pos.x * scale - 16, 350 - pos.y * scale - 16)
-}
-
 function singleCoordinateToScreen(coordinate: number, scale: number) {
   return 350 - coordinate * scale
 }
@@ -37,19 +33,8 @@ export interface ILineProps {
 }
 
 export const Line: React.FC<ILineProps> = ({ x1, x2, y1, y2, scale }) => {
-  console.log({ x1, x2, y1, y2 })
-  // console.log({
-  //   x1: singleCoordinateToScreen(x1, scale),
-  //   x2,
-  //   y1: singleCoordinateToScreen(y1, scale),
-  //   y2,
-  // })
   return (
     <line
-      // x1={0}
-      // y1={0}
-      // x2={100}
-      // y2={100}
       x1={singleCoordinateToScreen(-x1, scale)}
       y1={singleCoordinateToScreen(y1, scale)}
       x2={singleCoordinateToScreen(-x2, scale)}
@@ -100,15 +85,15 @@ export const TacticalMap: React.FC<ITacticalMapProps> = ({
       type: 'CAPTURE',
     }
 
-    await strategyService.addCommandToUnit(obj)
+    const localId = Math.random() * 1000
 
-    const res: ICommand = {
+    const command: ICommand = {
       description: '',
       targetX: point.x,
       targetY: point.y,
       strategyUnitsId: activeUnit.id,
       type: 'CAPTURE',
-      id: Math.random() * 2031,
+      id: localId,
       createdAt: new Date(),
       updatedAt: new Date(),
       userId: 1,
@@ -122,7 +107,32 @@ export const TacticalMap: React.FC<ITacticalMapProps> = ({
             ...u,
             unit: {
               ...u.unit,
-              commands: [...u.unit.commands, res],
+              commands: [...u.unit.commands, command],
+            },
+          }
+        }
+        return u
+      }),
+    }))
+
+    const { data } = await strategyService.addCommandToUnit(obj)
+
+    setGameState((curr) => ({
+      ...curr,
+      units: curr.units.map((u) => {
+        if (u.id === activeUnit.id) {
+          return {
+            ...u,
+            unit: {
+              ...u.unit,
+              commands: u.unit.commands.map((c) =>
+                c.id === localId
+                  ? {
+                      ...c,
+                      ...data.command,
+                    }
+                  : c
+              ),
             },
           }
         }
@@ -179,8 +189,9 @@ export const TacticalMap: React.FC<ITacticalMapProps> = ({
               left: 0,
             }}
           >
-            {commands.map((c) => (
+            {commands.map((c, i) => (
               <Line
+                key={i}
                 x1={c.pos.x}
                 x2={c.target.x}
                 y1={c.pos.y}
@@ -191,13 +202,15 @@ export const TacticalMap: React.FC<ITacticalMapProps> = ({
           </svg>
           {pointPositions.map((p) => (
             <PointPosition
+              key={p.id}
               point={p}
               scale={scale}
               onClickPointPosition={onClickPointPosition}
             />
           ))}
-          {commands.map((c) => (
+          {commands.map((c, i) => (
             <Box
+              key={i + c.unitId}
               pos="absolute"
               top={singleCoordinateToScreen(c.target.y, scale)}
               right={singleCoordinateToScreen(c.target.x, scale)}

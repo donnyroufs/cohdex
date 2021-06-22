@@ -35,7 +35,6 @@ export const Strategy = () => {
     strategyService
       .getStrategy(slug)
       .then((res) => {
-        console.log(res.data)
         // TODO: add units
         setGameState({
           units: res.data.strategy.StrategyUnits.map(
@@ -61,7 +60,6 @@ export const Strategy = () => {
   }, [gameState.spawnpoint, gameState.strategyData?.Map.pointPositions])
 
   function calcPreviousLocation(iteration: number, unitId: number) {
-    console.log(iteration)
     if (currentSpawn && iteration === 0) {
       return {
         x: currentSpawn.x,
@@ -186,7 +184,7 @@ export const Strategy = () => {
         <Commands
           activeUnit={activeUnit}
           removeCommand={async (id) => {
-            await strategyService.removeCommandFromUnit({ id })
+            strategyService.removeCommandFromUnit({ id })
 
             setGameState((curr) => ({
               ...curr,

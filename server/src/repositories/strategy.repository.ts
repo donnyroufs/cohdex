@@ -245,6 +245,8 @@ export class StrategyRepository {
       data,
       select: {
         id: true,
+        updatedAt: true,
+        createdAt: true,
       },
     })
   }
@@ -259,7 +261,7 @@ export class StrategyRepository {
   }
 
   async chooseSpawnpoint(data: ChooseSpawnPointDto) {
-    this.strategy.update({
+    await this.strategy.update({
       where: {
         id: data.strategyId,
       },
