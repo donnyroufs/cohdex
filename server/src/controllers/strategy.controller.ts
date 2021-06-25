@@ -28,6 +28,7 @@ import {
   ICreateStrategyUnitResponseDto,
   IAddCommandToStrategyUnitResponseDto,
 } from '@cohdex/shared'
+import { UpdateStrategyUnitColourDto } from '../dtos/update-strategy-unit-colour.dto'
 
 @Controller('/strategies')
 export class StrategyController {
@@ -111,6 +112,14 @@ export class StrategyController {
         command,
       })
     )
+  }
+
+  @Put('/colour')
+  @Middleware(isAuthGuard, validateBody(UpdateStrategyUnitColourDto))
+  async updateColour(ctx: HttpContext<UpdateStrategyUnitColourDto>) {
+    await this._strategyService.updateStrategyUnitColour(ctx.data)
+
+    return ctx.res.sendStatus(204)
   }
 
   @Delete('/command/:id')

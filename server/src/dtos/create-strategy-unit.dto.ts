@@ -1,6 +1,6 @@
 import { ICreateStrategyUnitDto } from '@cohdex/shared'
 import { Expose } from 'class-transformer'
-import { IsNumber } from 'class-validator'
+import { IsNumber, IsString } from 'class-validator'
 import { DTO } from '../lib'
 
 export class CreateStrategyUnitDto
@@ -10,6 +10,10 @@ export class CreateStrategyUnitDto
   @Expose()
   @IsNumber()
   unitId: number
+
+  // @Expose()
+  // @IsString()
+  // colour: string
 
   @Expose()
   @IsNumber()

@@ -38,7 +38,8 @@ export interface ICreateStrategyDto
     'id' | 'slug' | 'createdAt' | 'updatedAt' | 'spawnPoint'
   > {}
 
-export interface ICreateStrategyUnitDto extends Omit<StrategyUnits, 'id'> {}
+export interface ICreateStrategyUnitDto
+  extends Omit<StrategyUnits, 'id' | 'colour'> {}
 
 export interface ICreateStrategyUnitResponseDto {
   strategyUnit: {
@@ -104,6 +105,7 @@ export interface IStrategy {
 
 export interface IStrategyUnit {
   id: number
+  colour: string
   unit: IUnitWithCommands
 }
 
@@ -159,4 +161,9 @@ export interface IChooseSpawnpointDto {
    * Either 1 or 2
    */
   spawnpoint: number
+}
+
+export interface IUpdateStrategyUnitColourDto {
+  id: number
+  colour: string
 }

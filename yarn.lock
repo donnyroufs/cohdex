@@ -10768,6 +10768,11 @@ react-clientside-effect@^1.2.2:
   dependencies:
     "@babel/runtime" "^7.12.13"
 
+react-colorful@^5.2.2:
+  version "5.2.2"
+  resolved "https://registry.yarnpkg.com/react-colorful/-/react-colorful-5.2.2.tgz#0a69d0648db47e51359d343854d83d250a742243"
+  integrity sha512-Xdb1Rl6lZ5SMdNBH59eE0lGqR1g2LVD8IgPlw0WeMDrOC65lYI8fgMEwj/0dDpVRVMh5qp73ciISDst/t2O2iQ==
+
 react-dev-utils@^11.0.3:
   version "11.0.4"
   resolved "https://registry.yarnpkg.com/react-dev-utils/-/react-dev-utils-11.0.4.tgz#a7ccb60257a1ca2e0efe7a83e38e6700d17aa37a"
@@ -13075,6 +13080,11 @@ use-callback-ref@^1.2.1, use-callback-ref@^1.2.3:
   version "1.2.5"
   resolved "https://registry.yarnpkg.com/use-callback-ref/-/use-callback-ref-1.2.5.tgz#6115ed242cfbaed5915499c0a9842ca2912f38a5"
   integrity sha512-gN3vgMISAgacF7sqsLPByqoePooY3n2emTH59Ur5d/M8eg4WTWu1xp8i8DHjohftIyEx0S08RiYxbffr4j8Peg==
+
+use-debouncy@^4.2.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/use-debouncy/-/use-debouncy-4.2.0.tgz#d85a593a9ec7fd1310e79246132389f04bcc5e3a"
+  integrity sha512-v8X/yyi+IDiBiJ1pVNJBluxlhN3s2jsj6X7oeHWwMUliYfiPhbkUKoWefr8tG0/a1o9+J2klv+lHsjGz4U/C8A==
 
 use-sidecar@^1.0.1:
   version "1.0.5"

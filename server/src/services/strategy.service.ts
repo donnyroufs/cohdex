@@ -5,6 +5,7 @@ import {
   ChooseSpawnPointDto,
   RemoveCommandFromStrategyUnitDto,
 } from '../dtos'
+import { UpdateStrategyUnitColourDto } from '../dtos/update-strategy-unit-colour.dto'
 import {
   InvalidFactionsException,
   InvalidTeamsException,
@@ -111,5 +112,9 @@ export class StrategyService {
 
   async chooseSpawnpoint(spawn: ChooseSpawnPointDto) {
     return this._strategyRepo.chooseSpawnpoint(spawn)
+  }
+
+  async updateStrategyUnitColour(data: UpdateStrategyUnitColourDto) {
+    return this._strategyRepo.updateStrategyUnitColour(data)
   }
 }

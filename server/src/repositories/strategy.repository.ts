@@ -11,6 +11,7 @@ import {
   ChooseSpawnPointDto,
   RemoveCommandFromStrategyUnitDto,
 } from '../dtos'
+import { UpdateStrategyUnitColourDto } from '../dtos/update-strategy-unit-colour.dto'
 import { PrismaService } from '../services/prisma.service'
 
 @Injectable()
@@ -80,6 +81,7 @@ export class StrategyRepository {
             id: true,
             unit: true,
             commands: true,
+            colour: true,
           },
         },
       },
@@ -280,6 +282,17 @@ export class StrategyRepository {
     return this.unit.findMany({
       where: {
         factionId,
+      },
+    })
+  }
+
+  async updateStrategyUnitColour(data: UpdateStrategyUnitColourDto) {
+    return this.strategyUnits.update({
+      where: {
+        id: data.id,
+      },
+      data: {
+        colour: data.colour,
       },
     })
   }
