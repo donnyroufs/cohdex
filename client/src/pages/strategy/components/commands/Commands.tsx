@@ -17,6 +17,7 @@ export const Commands: React.FC<ICommandsProps> = ({
         activeUnit.unit.commands &&
         activeUnit.unit.commands.map((command) => (
           <Command
+            description={command.description}
             content={command.type}
             key={command.id}
             id={command.id}

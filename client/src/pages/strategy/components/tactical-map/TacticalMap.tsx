@@ -7,6 +7,7 @@ import { InteractiveUnit } from '../../../../models/InteractiveUnit'
 import { ReplayableCommand, Vec2 } from '../../../../models/ReplayableCommand'
 import { Display, GameState } from '../../../../types'
 import { replaceTgaWithPng } from '../../../../utils'
+import { parsePointPositionName } from '../../../../utils/parsePointPositionName'
 import { PointPosition } from './PointPosition'
 import { SwitchDisplay } from './SwitchDisplay'
 
@@ -78,7 +79,7 @@ export const TacticalMap: React.FC<ITacticalMapProps> = ({
     if (!activeUnit) return
 
     const obj: IAddCommandToStrategyUnitDto = {
-      description: '',
+      description: parsePointPositionName(point.fileName),
       targetX: point.x,
       targetY: point.y,
       strategyUnitsId: activeUnit.id,
@@ -88,7 +89,7 @@ export const TacticalMap: React.FC<ITacticalMapProps> = ({
     const localId = Math.random() * 1000
 
     const command: ICommand = {
-      description: '',
+      description: parsePointPositionName(point.fileName),
       targetX: point.x,
       targetY: point.y,
       strategyUnitsId: activeUnit.id,
