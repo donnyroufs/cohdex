@@ -103,7 +103,7 @@ model Faction {
 
 model Unit {
   id   Int    @id @default(autoincrement())
-  name String @unique
+  name String 
 
   image String
 

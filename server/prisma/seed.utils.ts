@@ -89,39 +89,180 @@ export async function seedUnits(prisma: PrismaClient) {
     await prisma.unit.createMany({
       data: [
         {
-          id: 1,
           name: 'pioneer',
-          image: '/public/pioneer.png',
+          image: '/wehr/icons_units_unit_german_pioneer.png',
           factionId: 1,
           startingUnit: true,
         },
         {
-          id: 2,
           name: 'sturm pioneers',
-          image: '/public/sturm_pioneers.png',
+          image: '/okw/icons_units_unit_west_german_sturmpioneers.png',
           factionId: 2,
           startingUnit: true,
         },
         {
-          id: 3,
           name: 'rear echelons',
-          image: '/public/rear_echelons.png',
+          image: '/usf/icons_units_unit_aef_rear_echelon_troops.png',
           factionId: 3,
           startingUnit: true,
         },
         {
-          id: 4,
           name: 'infantry section',
-          image: '/public/infantry_section.png',
+          image: '/ukf/icons_units_unit_british_tommy_with_tommy.png',
           factionId: 4,
           startingUnit: true,
         },
         {
-          id: 5,
           name: 'combat engineers',
-          image: '/public/combat_engineers.png',
+          image: '/sov/icons_units_unit_soviet_engineer.png',
           factionId: 5,
           startingUnit: true,
+        },
+
+        {
+          name: 'volksgrenadiers',
+          image: '/okw/icons_units_unit_west_german_volksgrenadiers.png',
+          factionId: 2,
+        },
+        {
+          name: 'mg34',
+          image: '/okw/icons_units_unit_west_german_mg34_hmg.png',
+          factionId: 2,
+        },
+        {
+          name: 'panzerfusilier',
+          image: '/okw/icons_units_unit_west_german_panzerfusilier.png',
+          factionId: 2,
+        },
+        {
+          name: 'conscripts',
+          image: '/sov/icons_units_unit_soviet_conscript_03.png',
+          factionId: 5,
+        },
+        {
+          name: 'maxim mg',
+          image: '/sov/icons_units_unit_soviet_mg.png',
+          factionId: 5,
+        },
+        {
+          name: 'mortar',
+          image: '/sov/icons_units_unit_soviet_mortar.png',
+          factionId: 5,
+        },
+        {
+          name: 'penal battalion',
+          image: '/sov/icons_units_unit_soviet_penal_battalion.png',
+          factionId: 5,
+        },
+        {
+          name: 'sniper',
+          image: '/sov/icons_units_unit_soviet_sniper.png',
+          factionId: 5,
+        },
+        {
+          name: 'smg section',
+          image: '/ukf/icons_units_brit_smg_section_8.png',
+          factionId: 4,
+        },
+        {
+          name: 'sappers',
+          image: '/ukf/icons_units_unit_british_engineer.png',
+          factionId: 4,
+        },
+        {
+          name: 'sniper',
+          image: '/ukf/icons_units_unit_british_sniper.png',
+          factionId: 4,
+        },
+        {
+          name: 'vickers hmg',
+          image: '/ukf/icons_units_unit_british_vickers_hmg.png',
+          factionId: 4,
+        },
+        {
+          name: 'assault engineers',
+          image: '/usf/icons_units_unit_aef_assault_engineers.png',
+          factionId: 3,
+        },
+        {
+          name: 'cavalry riflement',
+          image: '/usf/icons_units_unit_aef_cavalry_riflemen.png',
+          factionId: 3,
+        },
+        {
+          name: 'hmg',
+          image: '/usf/icons_units_unit_aef_hmg_m2hb.png',
+          factionId: 3,
+        },
+        {
+          name: 'hmg',
+          image: '/usf/icons_units_unit_aef_hmg_m2hb.png',
+          factionId: 3,
+        },
+        {
+          name: 'mortar',
+          image: '/usf/icons_units_unit_aef_mortar_crew.png',
+          factionId: 3,
+        },
+        {
+          name: 'captain',
+          image: '/usf/icons_units_unit_aef_officer_captain.png',
+          factionId: 3,
+        },
+        {
+          name: 'lieutenant',
+          image: '/usf/icons_units_unit_aef_officer_lieutenant.png',
+          factionId: 3,
+        },
+        {
+          name: 'pathfinders',
+          image: '/usf/icons_units_unit_aef_pathfinders.png',
+          factionId: 3,
+        },
+        {
+          name: 'pathfinders I&R',
+          image: '/usf/icons_units_unit_aef_pathfinders_i_and_r.png',
+          factionId: 3,
+        },
+        {
+          name: 'riflemen',
+          image: '/usf/icons_units_unit_aef_riflemen.png',
+          factionId: 3,
+        },
+        {
+          name: 'assault grenadiers',
+          image: '/wehr/icons_units_unit_german_assault_grenadier.png',
+          factionId: 1,
+        },
+        {
+          name: 'mortar',
+          image: '/wehr/icons_units_unit_german_granatwerfer_34_mortar.png',
+          factionId: 1,
+        },
+        {
+          name: 'grenadiers',
+          image: '/wehr/icons_units_unit_german_grenadier.png',
+          factionId: 1,
+        },
+        {
+          name: 'hmg',
+          image: '/wehr/icons_units_unit_german_m1910_hmg.png',
+          factionId: 1,
+        },
+        {
+          name: 'ostruppen',
+          image: '/wehr/icons_units_unit_german_ostruppen.png',
+          factionId: 1,
+        },
+        {
+          name: 'panzer grenadiers',
+          image: '/wehr/icons_units_unit_german_panzer_grenadier.png',
+          factionId: 1,
+        },
+        {
+          name: 'sniper',
+          image: '/wehr/icons_units_unit_german_sniper.png',
+          factionId: 1,
         },
       ],
     })

@@ -25,7 +25,7 @@ export const Units: React.FC<IUnitsProps> = ({
         alignItems="center"
         border="1px solid"
         borderColor="border"
-        h="98px"
+        h="84px"
         w="74px"
         aria-label="add unit"
         variant="unstyled"
@@ -41,11 +41,11 @@ export const Units: React.FC<IUnitsProps> = ({
             key={id}
             onClick={() => handleSelectUnit(id)}
             mb={4}
-            h="98px"
+            h="84px"
             w="74px"
             border="2px solid"
             borderColor={activeUnit?.id === id ? 'primary.600' : 'border'}
-            src={process.env.REACT_APP_BASE_URL + unit.image}
+            src={process.env.REACT_APP_BASE_URL + '/public' + unit.image}
             alt="unit portrait"
             opacity={activeUnit?.id === id ? 1 : 0.7}
             transition="all .15s ease-in-out"
