@@ -99,6 +99,7 @@ export interface IStrategy {
   }
   Map: IStrategyMap
   StrategyUnits: IStrategyUnit[]
+  units: IUnit[]
 }
 
 export interface IStrategyUnit {

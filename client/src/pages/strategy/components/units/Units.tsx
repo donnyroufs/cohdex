@@ -1,10 +1,12 @@
 import { Flex, IconButton, Image } from '@chakra-ui/react'
+import { useState } from 'react'
 import { FaPlusCircle } from 'react-icons/fa'
 import { InteractiveUnit } from '../../../../models/InteractiveUnit'
 import { GameState } from '../../../../types'
+import { SelectUnit } from './SelectUnit'
 
 export interface IUnitsProps {
-  handleOnAdd: () => void
+  handleOnAdd: (id: number) => void
   handleSelectUnit: (id: number) => void
   gameState?: GameState
   activeUnit?: InteractiveUnit
@@ -16,8 +18,14 @@ export const Units: React.FC<IUnitsProps> = ({
   handleSelectUnit,
   activeUnit,
 }) => {
+  const [isOpen, setIsOpen] = useState(false)
+
+  function handleClick() {
+    setIsOpen((curr) => !curr)
+  }
+
   return (
-    <Flex flexDir="column" mr={4}>
+    <Flex flexDir="column" mr={4} position="relative">
       <IconButton
         icon={<FaPlusCircle size={20} />}
         display="flex"
@@ -33,8 +41,15 @@ export const Units: React.FC<IUnitsProps> = ({
           outline: 'none',
         }}
         mb={4}
-        onClick={handleOnAdd}
+        onClick={handleClick}
       />
+      {/* @ts-ignore being a bitch like always */}
+      {isOpen && (
+        <SelectUnit
+          units={gameState?.strategyData?.units}
+          handleOnAdd={handleOnAdd}
+        />
+      )}
       {gameState &&
         gameState.units.map(({ id, unit }) => (
           <Image

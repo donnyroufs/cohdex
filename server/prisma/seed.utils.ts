@@ -195,11 +195,6 @@ export async function seedUnits(prisma: PrismaClient) {
           factionId: 3,
         },
         {
-          name: 'hmg',
-          image: '/usf/icons_units_unit_aef_hmg_m2hb.png',
-          factionId: 3,
-        },
-        {
           name: 'mortar',
           image: '/usf/icons_units_unit_aef_mortar_crew.png',
           factionId: 3,

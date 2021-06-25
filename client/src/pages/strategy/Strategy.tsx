@@ -115,18 +115,30 @@ export const Strategy = () => {
   }
 
   // TODO: Make interactive menu to choose available units
-  async function handleOnAdd() {
-    if (!gameState.strategyData) return
+  async function handleOnAdd(id: number) {
+    // @ts-ignore
+    const unit = gameState.strategyData.units.find((u) => u.id === id)
 
-    const { unit } = gameState.strategyData.StrategyUnits[0]
+    if (!unit) return
+
     const strategyUnit = await strategyService.addUnit(
+      // @ts-ignore
       gameState.strategyData.id,
       unit
     )
 
     setGameState((curr) => ({
       ...curr,
-      units: [...curr.units, new InteractiveUnit(strategyUnit)],
+      units: [
+        ...curr.units,
+        new InteractiveUnit({
+          id: strategyUnit.id,
+          unit: {
+            ...unit,
+            commands: [],
+          },
+        }),
+      ],
     }))
   }
 

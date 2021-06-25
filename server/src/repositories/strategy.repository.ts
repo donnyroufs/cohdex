@@ -89,9 +89,12 @@ export class StrategyRepository {
       return null
     }
 
+    const units = await this.getUnitsByFactionId(strategy.factionId)
+
     // TODO: Implement with class-transformer
     return {
       ...strategy,
+      units,
       StrategyUnits: strategy.StrategyUnits.map((unit) => ({
         ...unit,
         unit: {
@@ -271,5 +274,13 @@ export class StrategyRepository {
     })
 
     return true
+  }
+
+  private async getUnitsByFactionId(factionId: number) {
+    return this.unit.findMany({
+      where: {
+        factionId,
+      },
+    })
   }
 }
