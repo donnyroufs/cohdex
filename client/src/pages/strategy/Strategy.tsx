@@ -1,7 +1,14 @@
 import { useParams } from 'react-router-dom'
 import React, { useMemo, useEffect, useState } from 'react'
 import { BaseLayout } from '../../components/layouts'
-import { Box, Flex } from '@chakra-ui/react'
+import {
+  Box,
+  Flex,
+  Slider,
+  SliderTrack,
+  SliderThumb,
+  SliderFilledTrack,
+} from '@chakra-ui/react'
 import { Spinner, Title } from '../../components'
 import { GameState, Tick } from '../../types'
 import { useProviders } from '../../hooks/useProviders'
@@ -196,13 +203,19 @@ export const Strategy = () => {
             activeUnit={activeUnit}
             commands={currentReplayData}
           />
-          <input
-            type="range"
-            onChange={(e) => setTick(+e.target.value)}
+          <Slider
+            aria-label="slider-ex-2"
+            // colorScheme="pink"
+            defaultValue={tick}
             value={tick}
             max={max}
-            style={{ width: '100%', marginTop: '.5rem' }}
-          />
+            onChange={(e) => setTick(+e)}
+          >
+            <SliderTrack backgroundColor="#2B1A21" h={3}>
+              <SliderFilledTrack backgroundColor="primary.800" />
+            </SliderTrack>
+            <SliderThumb backgroundColor="primary.600" />
+          </Slider>
         </Box>
         <Commands
           activeUnit={activeUnit}

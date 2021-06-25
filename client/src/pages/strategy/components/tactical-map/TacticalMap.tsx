@@ -130,7 +130,7 @@ export const TacticalMap: React.FC<ITacticalMapProps> = ({
       justifyContent="center"
       alignItems="center"
       p={8}
-      mr={8}
+      mr={0}
       userSelect="none"
     >
       <Box
