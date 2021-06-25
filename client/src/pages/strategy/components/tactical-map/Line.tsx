@@ -1,3 +1,4 @@
+import { InteractiveUnit } from '../../../../models/InteractiveUnit'
 import { singleCoordinateToScreen } from '../../../../utils/singleCooridnateToScreen'
 
 export interface ILineProps {
@@ -7,6 +8,8 @@ export interface ILineProps {
   y2: number
   scale: number
   colour: string
+  activeUnit?: InteractiveUnit
+  id: number
 }
 
 // TODO: add is active
@@ -17,7 +20,12 @@ export const Line: React.FC<ILineProps> = ({
   y2,
   scale,
   colour,
+  activeUnit,
+  id,
 }) => {
+  const isUnit = activeUnit?.id === id
+  const opacity = isUnit ? 1 : 0.25
+
   return (
     <line
       x1={singleCoordinateToScreen(-x1, scale)}
@@ -26,8 +34,8 @@ export const Line: React.FC<ILineProps> = ({
       y2={singleCoordinateToScreen(y2, scale)}
       style={{
         stroke: colour,
-        strokeWidth: 2,
-        opacity: 1,
+        strokeWidth: 5,
+        opacity: activeUnit ? opacity : 1,
       }}
     />
   )

@@ -43,6 +43,10 @@ export const UnitColourPicker: React.FC<IUnitColourPickerProps> = ({
         onClick={() => {
           setIsOpen((curr) => !curr)
         }}
+        _hover={{
+          borderColor: '#ceeff1',
+          cursor: 'pointer',
+        }}
       ></Box>
 
       {isOpen && (

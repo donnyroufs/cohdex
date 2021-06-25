@@ -1,4 +1,4 @@
-import { Flex, IconButton, Image } from '@chakra-ui/react'
+import { Box, Flex, IconButton } from '@chakra-ui/react'
 import { useState } from 'react'
 import { FaPlusCircle } from 'react-icons/fa'
 import { InteractiveUnit } from '../../../../models/InteractiveUnit'
@@ -27,6 +27,15 @@ export const Units: React.FC<IUnitsProps> = ({
     setIsOpen((curr) => !curr)
   }
 
+  function handleClose(e: Event) {
+    // @ts-ignore
+    if (e.target.nodeName === 'path') return
+    // @ts-ignore
+    if (e.target.ariaLabel === 'add unit') return
+
+    setIsOpen(false)
+  }
+
   return (
     <Flex flexDir="column" mr={4} position="relative">
       <IconButton
@@ -51,6 +60,7 @@ export const Units: React.FC<IUnitsProps> = ({
         <SelectUnit
           units={gameState?.strategyData?.units}
           handleOnAdd={handleOnAdd}
+          handleClose={handleClose}
         />
       )}
       {gameState &&

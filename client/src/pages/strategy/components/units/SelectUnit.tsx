@@ -1,20 +1,32 @@
-import { Grid, Image } from '@chakra-ui/react'
+import { Grid, Image, useOutsideClick } from '@chakra-ui/react'
 import { IUnit } from '@cohdex/shared'
+import { useRef } from 'react'
 
 export interface ISelectUnitProps {
   units?: IUnit[]
   handleOnAdd(id: number): void
+  handleClose(e: Event): void
 }
 
 export const SelectUnit: React.FC<ISelectUnitProps> = ({
   units,
   handleOnAdd,
+  handleClose,
 }) => {
+  const ref = useRef<any>()
+
+  useOutsideClick({
+    ref: ref,
+    handler: (e: Event) => handleClose(e),
+  })
+
   return (
     <Grid
+      ref={ref}
       bgColor="background.900"
       templateColumns="repeat(3, 1fr)"
       position="absolute"
+      top={0}
       left="90px"
       w={275}
       zIndex={50}

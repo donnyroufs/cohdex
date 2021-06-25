@@ -19,7 +19,7 @@ export const Commands: React.FC<ICommandsProps> = ({
           <Command
             description={command.description}
             content={command.type}
-            key={command.id}
+            key={new Date(command.updatedAt).getTime()}
             id={command.id}
             handleClick={removeCommand}
           />

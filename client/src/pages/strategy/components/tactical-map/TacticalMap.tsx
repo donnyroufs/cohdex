@@ -8,7 +8,6 @@ import { ReplayableCommand, Vec2 } from '../../../../models/ReplayableCommand'
 import { Display, GameState } from '../../../../types'
 import { replaceTgaWithPng } from '../../../../utils'
 import { parsePointPositionName } from '../../../../utils/parsePointPositionName'
-import { singleCoordinateToScreen } from '../../../../utils/singleCooridnateToScreen'
 import { Line } from './Line'
 import { PointPosition } from './PointPosition'
 import { SwitchDisplay } from './SwitchDisplay'
@@ -175,6 +174,8 @@ export const TacticalMap: React.FC<ITacticalMapProps> = ({
                 y2={c.target.y}
                 scale={scale}
                 colour={c.colour}
+                id={c.unitId}
+                activeUnit={activeUnit}
               />
             ))}
           </svg>
@@ -186,9 +187,9 @@ export const TacticalMap: React.FC<ITacticalMapProps> = ({
               onClickPointPosition={onClickPointPosition}
             />
           ))}
-          {commands.map((c, i) => (
+          {/* {commands.map((c, i) => (
             <Box
-              key={i + c.unitId}
+              key={i}
               pos="absolute"
               top={singleCoordinateToScreen(c.target.y, scale)}
               right={singleCoordinateToScreen(c.target.x, scale)}
@@ -197,7 +198,7 @@ export const TacticalMap: React.FC<ITacticalMapProps> = ({
             >
               {c.unitId}
             </Box>
-          ))}
+          ))} */}
         </Box>
         {!spawnpoint && (
           <Box
