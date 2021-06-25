@@ -36,7 +36,7 @@ export const TacticalMap: React.FC<ITacticalMapProps> = ({
   const { strategyService } = useProviders()
   const scale = 700 / mapHeight
 
-  const [display, setDisplay] = useState<Display>('circle')
+  const [display, setDisplay] = useState<Display>('rectangle')
 
   function handleChangeDisplay() {
     setDisplay((curr) => (curr === 'circle' ? 'rectangle' : 'circle'))
@@ -131,6 +131,7 @@ export const TacticalMap: React.FC<ITacticalMapProps> = ({
       alignItems="center"
       p={8}
       mr={8}
+      userSelect="none"
     >
       <Box
         as="header"

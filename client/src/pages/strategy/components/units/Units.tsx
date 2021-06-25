@@ -65,11 +65,7 @@ export const Units: React.FC<IUnitsProps> = ({
       )}
       {gameState &&
         [...gameState.units]
-          .sort(
-            (a, b) =>
-              new Date(a.unit.createdAt).getTime() -
-              new Date(b.unit.createdAt).getTime()
-          )
+          .sort((a, b) => a.id - b.id)
           .map(({ id, unit, colour }) => (
             <Unit
               {...unit}
