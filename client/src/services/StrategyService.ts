@@ -2,7 +2,7 @@ import {
   IAddCommandToStrategyUnitDto,
   IRemoveCommandFromStrategyUnit,
   IUnit,
-  IUnitWithCommands,
+  IUpdateStrategyUnitColourDto,
 } from '@cohdex/shared'
 import { strategiesApi } from '../api'
 import { BaseService } from '../lib'
@@ -14,10 +14,12 @@ export class StrategyService extends BaseService {
     return this.api.getStrategy(slug)
   }
 
-  async addUnit(id: number, unit: IUnit) {
+  // TODO: Alternate colour
+  async addUnit(id: number, unit: IUnit, colour: string) {
     const res = await this.api.addUnitToStrategy({
       strategyId: id,
       unitId: unit.id,
+      // colour,
     })
 
     return {
@@ -36,5 +38,9 @@ export class StrategyService extends BaseService {
 
   async removeCommandFromUnit(data: IRemoveCommandFromStrategyUnit) {
     return this.api.removeCommandFromUnit(data)
+  }
+
+  async changeUnitColour(data: IUpdateStrategyUnitColourDto) {
+    return this.api.changeUnitColour(data)
   }
 }

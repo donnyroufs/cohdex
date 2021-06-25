@@ -8,9 +8,7 @@ import { useProviders } from '../../hooks/useProviders'
 import { Commands, TacticalMap, Units } from './components'
 import { InteractiveUnit } from '../../models/InteractiveUnit'
 import { ReplayableCommand, Vec2 } from '../../models/ReplayableCommand'
-
-// Commands logic in replay format
-// https://codesandbox.io/s/young-haze-cmf7o?file=/src/index.ts
+import { debounce } from 'lodash'
 
 export interface IStrategyParams {
   slug: string
@@ -92,7 +90,8 @@ export const Strategy = () => {
           new Vec2(prevLocation.x, prevLocation.y),
           new Vec2(c.targetX, c.targetY),
           DELAY * (i + unitIndex),
-          u.id
+          u.id,
+          u.colour
         )
       })
     })
@@ -114,17 +113,27 @@ export const Strategy = () => {
     return <Spinner withMessage />
   }
 
-  // TODO: Make interactive menu to choose available units
+  function updateLocalUnitColour(id: number, colour: string) {
+    setGameState((curr) => ({
+      ...curr,
+      units: curr.units.map((u) => (u.id === id ? { ...u, colour } : u)),
+    }))
+  }
+
+  const debouncedUpdateColour = debounce(
+    (id: number, colour: string) => updateLocalUnitColour(id, colour),
+    75
+  )
+
   async function handleOnAdd(id: number) {
-    // @ts-ignore
-    const unit = gameState.strategyData.units.find((u) => u.id === id)
+    const unit = gameState.strategyData!.units.find((u) => u.id === id)
 
     if (!unit) return
 
     const strategyUnit = await strategyService.addUnit(
-      // @ts-ignore
-      gameState.strategyData.id,
-      unit
+      gameState.strategyData!.id,
+      unit,
+      'red'
     )
 
     setGameState((curr) => ({
@@ -137,6 +146,7 @@ export const Strategy = () => {
             ...unit,
             commands: [],
           },
+          colour: 'red',
         }),
       ],
     }))
@@ -173,6 +183,7 @@ export const Strategy = () => {
           gameState={gameState}
           handleSelectUnit={handleSelectUnit}
           activeUnit={activeUnit}
+          updateLocalUnitColour={debouncedUpdateColour}
         />
         <Box>
           <TacticalMap

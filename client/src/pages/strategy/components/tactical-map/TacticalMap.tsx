@@ -8,12 +8,11 @@ import { ReplayableCommand, Vec2 } from '../../../../models/ReplayableCommand'
 import { Display, GameState } from '../../../../types'
 import { replaceTgaWithPng } from '../../../../utils'
 import { parsePointPositionName } from '../../../../utils/parsePointPositionName'
+import { singleCoordinateToScreen } from '../../../../utils/singleCooridnateToScreen'
+import { Line } from './Line'
 import { PointPosition } from './PointPosition'
 import { SwitchDisplay } from './SwitchDisplay'
 
-function singleCoordinateToScreen(coordinate: number, scale: number) {
-  return 350 - coordinate * scale
-}
 export interface ITacticalMapProps {
   strategyId: number
   spawnpoint: number | null
@@ -23,29 +22,6 @@ export interface ITacticalMapProps {
   setGameState: React.Dispatch<React.SetStateAction<GameState>>
   activeUnit?: InteractiveUnit
   commands: ReplayableCommand[]
-}
-
-export interface ILineProps {
-  x1: number
-  y1: number
-  x2: number
-  y2: number
-  scale: number
-}
-
-export const Line: React.FC<ILineProps> = ({ x1, x2, y1, y2, scale }) => {
-  return (
-    <line
-      x1={singleCoordinateToScreen(-x1, scale)}
-      y1={singleCoordinateToScreen(y1, scale)}
-      x2={singleCoordinateToScreen(-x2, scale)}
-      y2={singleCoordinateToScreen(y2, scale)}
-      style={{
-        stroke: 'rgb(255,0,0)',
-        strokeWidth: 2,
-      }}
-    />
-  )
 }
 
 export const TacticalMap: React.FC<ITacticalMapProps> = ({
@@ -198,6 +174,7 @@ export const TacticalMap: React.FC<ITacticalMapProps> = ({
                 y1={c.pos.y}
                 y2={c.target.y}
                 scale={scale}
+                colour={c.colour}
               />
             ))}
           </svg>

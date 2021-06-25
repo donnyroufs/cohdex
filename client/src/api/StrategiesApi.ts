@@ -11,6 +11,7 @@ import {
   IAddCommandToStrategyUnitDto,
   IAddCommandToStrategyUnitResponseDto,
   IRemoveCommandFromStrategyUnit,
+  IUpdateStrategyUnitColourDto,
 } from '@cohdex/shared'
 import { BaseApi } from '../lib/BaseApi'
 
@@ -73,5 +74,9 @@ export const strategiesApi = new (class StrategiesApi extends BaseApi {
 
   async removeCommandFromUnit(data: IRemoveCommandFromStrategyUnit) {
     return this.axios.delete(this.endpoint(`/command/${data.id}`))
+  }
+
+  async changeUnitColour(data: IUpdateStrategyUnitColourDto) {
+    return this.axios.put(this.endpoint('/colour'), data)
   }
 })()

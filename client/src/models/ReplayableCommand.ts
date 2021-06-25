@@ -15,7 +15,8 @@ export class ReplayableCommand extends Entity {
     pos: Vec2,
     public readonly target: Vec2,
     public readonly tick: Tick,
-    public readonly unitId: number
+    public readonly unitId: number,
+    public readonly colour: string
   ) {
     super(pos)
   }

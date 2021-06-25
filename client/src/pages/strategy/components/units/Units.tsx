@@ -4,12 +4,14 @@ import { FaPlusCircle } from 'react-icons/fa'
 import { InteractiveUnit } from '../../../../models/InteractiveUnit'
 import { GameState } from '../../../../types'
 import { SelectUnit } from './SelectUnit'
+import { Unit } from './Unit'
 
 export interface IUnitsProps {
   handleOnAdd: (id: number) => void
   handleSelectUnit: (id: number) => void
   gameState?: GameState
   activeUnit?: InteractiveUnit
+  updateLocalUnitColour(id: number, colour: string): void
 }
 
 export const Units: React.FC<IUnitsProps> = ({
@@ -17,6 +19,7 @@ export const Units: React.FC<IUnitsProps> = ({
   gameState,
   handleSelectUnit,
   activeUnit,
+  updateLocalUnitColour,
 }) => {
   const [isOpen, setIsOpen] = useState(false)
 
@@ -51,26 +54,22 @@ export const Units: React.FC<IUnitsProps> = ({
         />
       )}
       {gameState &&
-        gameState.units.map(({ id, unit }) => (
-          <Image
-            key={id}
-            onClick={() => handleSelectUnit(id)}
-            mb={4}
-            h="84px"
-            w="74px"
-            border="2px solid"
-            borderColor={activeUnit?.id === id ? 'primary.600' : 'border'}
-            src={process.env.REACT_APP_BASE_URL + '/public' + unit.image}
-            alt="unit portrait"
-            opacity={activeUnit?.id === id ? 1 : 0.7}
-            transition="all .15s ease-in-out"
-            _hover={{
-              cursor: 'pointer',
-              opacity: 1,
-              borderColor: 'primary.600',
-            }}
-          />
-        ))}
+        [...gameState.units]
+          .sort(
+            (a, b) =>
+              new Date(a.unit.createdAt).getTime() -
+              new Date(b.unit.createdAt).getTime()
+          )
+          .map(({ id, unit, colour }) => (
+            <Unit
+              {...unit}
+              colour={colour}
+              id={id}
+              activeUnit={activeUnit}
+              handleSelectUnit={handleSelectUnit}
+              updateLocalUnitColour={updateLocalUnitColour}
+            />
+          ))}
     </Flex>
   )
 }
