@@ -18,13 +18,12 @@ import { ReplayableCommand, Vec2 } from '../../models/ReplayableCommand'
 import { debounce } from 'lodash'
 
 const COLOURS = [
-  '#FF0000',
-  '#00FF00',
-  '#0000FF',
-  '#FFFF00',
-  '#e100ff',
-  '#0bd3f7',
+  '#EF1080',
+  '#97D5B0',
+  '#C9CADA',
+  '#116AF0',
   '#ffa600',
+  '#E5FF16',
 ]
 
 export interface IStrategyParams {
@@ -33,6 +32,7 @@ export interface IStrategyParams {
 
 export const Strategy = () => {
   const { strategyService } = useProviders()
+  const [playing, setPlaying] = useState(false)
   const [loading, setLoading] = React.useState(true)
   const [error, setError] = React.useState(null)
   const [gameState, setGameState] = useState<GameState>({
@@ -73,6 +73,22 @@ export const Strategy = () => {
         `starting_position_shared_territory-${gameState.spawnpoint}`
     )
   }, [gameState.spawnpoint, gameState.strategyData?.Map.pointPositions])
+
+  useEffect(() => {
+    let id: NodeJS.Timeout
+
+    if (playing && tick !== max) {
+      id = setInterval(() => setTick((curr) => curr + 1), 800)
+    }
+
+    if (playing && tick === max) {
+      setPlaying(false)
+    }
+
+    return () => {
+      clearInterval(id)
+    }
+  }, [playing, tick])
 
   function calcPreviousLocation(iteration: number, unitId: number) {
     if (currentSpawn && iteration === 0) {
@@ -124,7 +140,7 @@ export const Strategy = () => {
   )
 
   const allTicks = replayData.flatMap((c) => c.tick)
-  const max = allTicks.length > 0 ? Math.max(...allTicks) / 5 + 1 : 0
+  const max = allTicks.length > 0 ? Math.max(...allTicks) / 5 : 0
 
   if (loading) {
     return <Spinner withMessage />
@@ -190,6 +206,28 @@ export const Strategy = () => {
     }))
   }
 
+  function removeLocalUnit(id: number) {
+    setGameState((curr) => ({
+      ...curr,
+      units: curr.units.filter((u) => u.id !== id),
+    }))
+  }
+
+  function handlePlay() {
+    if (playing) {
+      setPlaying(false)
+      return
+    }
+
+    if (!playing && tick === max) {
+      setTick(0)
+      setPlaying(true)
+      return
+    }
+
+    setPlaying((curr) => !curr)
+  }
+
   return (
     <BaseLayout.Container>
       <Box as="header" display="flex" justifyContent="space-between" mb={8}>
@@ -203,6 +241,7 @@ export const Strategy = () => {
           handleSelectUnit={handleSelectUnit}
           activeUnit={activeUnit}
           updateLocalUnitColour={debouncedUpdateColour}
+          removeLocalUnit={removeLocalUnit}
         />
         <Box>
           <TacticalMap
@@ -214,6 +253,8 @@ export const Strategy = () => {
             pointPositions={gameState.strategyData!.Map.pointPositions}
             activeUnit={activeUnit}
             commands={currentReplayData}
+            handlePlay={handlePlay}
+            playing={playing}
           />
           <Slider
             aria-label="slider-ex-2"

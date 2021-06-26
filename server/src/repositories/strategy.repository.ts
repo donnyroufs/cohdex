@@ -237,8 +237,15 @@ export class StrategyRepository {
   }
 
   // TODO: Add user validation
-  // TODO: Implement in service / create DTO
   async removeUnitFromStrategy(data: IRemoveUnitFromStrategyDto) {
+    // TODO:
+    // if first unit then we cannot delete
+    await this.command.deleteMany({
+      where: {
+        strategyUnitsId: data.id,
+      },
+    })
+
     await this.strategyUnits.delete({
       where: {
         id: data.id,
@@ -294,6 +301,18 @@ export class StrategyRepository {
       },
       data: {
         colour: data.colour,
+      },
+    })
+  }
+
+  // Used internally
+  async getUnitById(id: number) {
+    return this.unit.findUnique({
+      where: {
+        id,
+      },
+      select: {
+        startingUnit: true,
       },
     })
   }

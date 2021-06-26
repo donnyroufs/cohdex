@@ -10,6 +10,7 @@ export interface IUnitProps extends IUnitWithCommands {
   activeUnit?: InteractiveUnit
   colour: string
   updateLocalUnitColour(id: number, colour: string): void
+  handleRemoveUnit(id: number): Promise<void>
 }
 
 export const Unit: React.FC<IUnitProps> = ({
@@ -19,6 +20,7 @@ export const Unit: React.FC<IUnitProps> = ({
   image,
   colour,
   updateLocalUnitColour,
+  handleRemoveUnit,
 }) => {
   const { strategyService } = useProviders()
   const [currentColour, setCurrentColour] = useState(colour)
@@ -27,6 +29,12 @@ export const Unit: React.FC<IUnitProps> = ({
     <Box position="relative">
       <Image
         key={id}
+        onContextMenu={(e) => {
+          if (e.type !== 'contextmenu') return
+          e.preventDefault()
+
+          handleRemoveUnit(id)
+        }}
         onClick={() => handleSelectUnit(id)}
         mb={4}
         h="84px"

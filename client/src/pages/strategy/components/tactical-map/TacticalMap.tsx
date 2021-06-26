@@ -7,10 +7,8 @@ import {
   Modal,
   ModalOverlay,
   ModalContent,
-  ModalHeader,
   ModalCloseButton,
   ModalBody,
-  ModalFooter,
   Heading,
   Text,
   OrderedList,
@@ -22,7 +20,7 @@ import { useState } from 'react'
 import { BiHelpCircle } from 'react-icons/bi'
 import { useProviders } from '../../../../hooks/useProviders'
 import { InteractiveUnit } from '../../../../models/InteractiveUnit'
-import { ReplayableCommand, Vec2 } from '../../../../models/ReplayableCommand'
+import { ReplayableCommand } from '../../../../models/ReplayableCommand'
 import { Display, GameState } from '../../../../types'
 import { replaceTgaWithPng } from '../../../../utils'
 import { parsePointPositionName } from '../../../../utils/parsePointPositionName'
@@ -39,6 +37,8 @@ export interface ITacticalMapProps {
   setGameState: React.Dispatch<React.SetStateAction<GameState>>
   activeUnit?: InteractiveUnit
   commands: ReplayableCommand[]
+  handlePlay(): void
+  playing: boolean
 }
 
 export const TacticalMap: React.FC<ITacticalMapProps> = ({
@@ -50,6 +50,8 @@ export const TacticalMap: React.FC<ITacticalMapProps> = ({
   setGameState,
   activeUnit,
   commands,
+  handlePlay,
+  playing,
 }) => {
   const { strategyService } = useProviders()
   const scale = 700 / mapHeight
@@ -71,6 +73,15 @@ export const TacticalMap: React.FC<ITacticalMapProps> = ({
 
   async function onClickPointPosition(point: IPointPosition) {
     if (!activeUnit) return
+    if (point.fileName.includes('starting')) return
+
+    const alreadyCaptured = activeUnit.unit.commands.find(
+      (c) => c.targetX === point.x && c.targetY === point.y
+    )
+
+    if (alreadyCaptured) {
+      return
+    }
 
     const obj: IAddCommandToStrategyUnitDto = {
       description: parsePointPositionName(point.fileName),
@@ -343,7 +354,30 @@ export const TacticalMap: React.FC<ITacticalMapProps> = ({
           </Box>
         )}
       </Box>
-      <Box as="footer" flex={1}></Box>
+      <Box
+        as="footer"
+        w="100%"
+        flex={1}
+        display="flex"
+        justifyContent="flex-end"
+        alignItems="center"
+      >
+        <Button
+          onClick={handlePlay}
+          variant="unstyled"
+          background="primary.600"
+          color="white"
+          _hover={{ opacity: 0.8 }}
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          w={20}
+          borderRadius="0"
+        >
+          {playing && 'stop'}
+          {!playing && 'start'}
+        </Button>
+      </Box>
     </Box>
   )
 }

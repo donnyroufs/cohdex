@@ -1,6 +1,7 @@
 import {
   IAddCommandToStrategyUnitDto,
   IRemoveCommandFromStrategyUnit,
+  IRemoveUnitFromStrategyDto,
   IUnit,
   IUpdateStrategyUnitColourDto,
 } from '@cohdex/shared'
@@ -38,6 +39,10 @@ export class StrategyService extends BaseService {
 
   async removeCommandFromUnit(data: IRemoveCommandFromStrategyUnit) {
     return this.api.removeCommandFromUnit(data)
+  }
+
+  async removeUnitFromStrategy(data: IRemoveUnitFromStrategyDto) {
+    return this.api.removeUnitFromStrategy(data)
   }
 
   async changeUnitColour(data: IUpdateStrategyUnitColourDto) {

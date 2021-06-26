@@ -29,6 +29,7 @@ import {
   IAddCommandToStrategyUnitResponseDto,
 } from '@cohdex/shared'
 import { UpdateStrategyUnitColourDto } from '../dtos/update-strategy-unit-colour.dto'
+import { RemoveUnitFromStrategyDto } from '../dtos/remove-unit-from-strategy.dto'
 
 @Controller('/strategies')
 export class StrategyController {
@@ -120,6 +121,17 @@ export class StrategyController {
     await this._strategyService.updateStrategyUnitColour(ctx.data)
 
     return ctx.res.sendStatus(204)
+  }
+
+  @Delete('/unit/:id')
+  @Middleware(
+    isAuthGuard,
+    validateBodyWithParamsToInt(RemoveUnitFromStrategyDto)
+  )
+  async removeUnitFromStrategy(ctx: HttpContext<RemoveUnitFromStrategyDto>) {
+    await this._strategyService.removeUnitFromStrategy(ctx.data)
+
+    ctx.res.sendStatus(204)
   }
 
   @Delete('/command/:id')

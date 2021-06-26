@@ -1,4 +1,8 @@
-import { ICreateStrategyDto, ICreateStrategyUnitDto } from '@cohdex/shared'
+import {
+  ICreateStrategyDto,
+  ICreateStrategyUnitDto,
+  IRemoveUnitFromStrategyDto,
+} from '@cohdex/shared'
 import { Injectable } from '@kondah/core'
 import {
   AddCommandToStrategyUnitDto,
@@ -13,6 +17,7 @@ import {
   StrategyAlreadyExistsException,
   UnitDoesNotBelongToFactionException,
 } from '../exceptions'
+import { UnitDoesNotExistException } from '../exceptions/domain/unit-does-not-exist.exception'
 import { UnknownStrategyException } from '../exceptions/domain/unknown-strategy.exception'
 import { StrategyRepository } from '../repositories/strategy.repository'
 
@@ -116,5 +121,18 @@ export class StrategyService {
 
   async updateStrategyUnitColour(data: UpdateStrategyUnitColourDto) {
     return this._strategyRepo.updateStrategyUnitColour(data)
+  }
+
+  async removeUnitFromStrategy(data: IRemoveUnitFromStrategyDto) {
+    const unit = await this._strategyRepo.getUnitById(data.id)
+
+    if (!unit) {
+      throw new UnitDoesNotExistException()
+    }
+
+    // TODO: Validate if first unit
+    // requires schema to be changed.
+
+    return this._strategyRepo.removeUnitFromStrategy(data)
   }
 }

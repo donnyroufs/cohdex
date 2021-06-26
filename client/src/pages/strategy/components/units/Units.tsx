@@ -1,6 +1,7 @@
 import { Box, Flex, IconButton } from '@chakra-ui/react'
 import { useState } from 'react'
 import { FaPlusCircle } from 'react-icons/fa'
+import { useProviders } from '../../../../hooks/useProviders'
 import { InteractiveUnit } from '../../../../models/InteractiveUnit'
 import { GameState } from '../../../../types'
 import { SelectUnit } from './SelectUnit'
@@ -12,6 +13,7 @@ export interface IUnitsProps {
   gameState?: GameState
   activeUnit?: InteractiveUnit
   updateLocalUnitColour(id: number, colour: string): void
+  removeLocalUnit(id: number): void
 }
 
 export const Units: React.FC<IUnitsProps> = ({
@@ -20,8 +22,10 @@ export const Units: React.FC<IUnitsProps> = ({
   handleSelectUnit,
   activeUnit,
   updateLocalUnitColour,
+  removeLocalUnit,
 }) => {
   const [isOpen, setIsOpen] = useState(false)
+  const { strategyService } = useProviders()
 
   function handleClick() {
     setIsOpen((curr) => !curr)
@@ -34,6 +38,11 @@ export const Units: React.FC<IUnitsProps> = ({
     if (e.target.ariaLabel === 'add unit') return
 
     setIsOpen(false)
+  }
+
+  async function handleRemoveUnit(id: number) {
+    await strategyService.removeUnitFromStrategy({ id })
+    removeLocalUnit(id)
   }
 
   return (
@@ -55,7 +64,6 @@ export const Units: React.FC<IUnitsProps> = ({
         mb={4}
         onClick={handleClick}
       />
-      {/* @ts-ignore being a bitch like always */}
       {isOpen && (
         <SelectUnit
           units={gameState?.strategyData?.units}
@@ -73,6 +81,7 @@ export const Units: React.FC<IUnitsProps> = ({
               id={id}
               activeUnit={activeUnit}
               handleSelectUnit={handleSelectUnit}
+              handleRemoveUnit={handleRemoveUnit}
               updateLocalUnitColour={updateLocalUnitColour}
             />
           ))}

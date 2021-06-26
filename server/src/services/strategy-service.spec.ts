@@ -69,6 +69,7 @@ describe('strategy service', () => {
       const result = await service.addUnitToStrategy({
         strategyId: 1,
         unitId: 1,
+        colour: 'green',
       })
 
       expect(result).toStrictEqual({ id: 1 })
@@ -81,6 +82,7 @@ describe('strategy service', () => {
           service.addUnitToStrategy({
             strategyId: 2,
             unitId: 1,
+            colour: 'green',
           })
         ).rejects.toThrowError(new UnknownStrategyException())
       })
@@ -92,6 +94,7 @@ describe('strategy service', () => {
           service.addUnitToStrategy({
             strategyId: 1,
             unitId: 2,
+            colour: 'green',
           })
         ).rejects.toThrowError(new UnitDoesNotBelongToFactionException())
       })

@@ -20,7 +20,7 @@ export const UnitColourPicker: React.FC<IUnitColourPickerProps> = ({
   const [value, setValue] = useState(currentColour)
   const [isOpen, setIsOpen] = useState(false)
   const ref = useRef<any>()
-  useDebouncyEffect(() => onChange(value), 600, [value])
+  useDebouncyEffect(() => onChange(value), 400, [value])
 
   useOutsideClick({
     ref: ref,
