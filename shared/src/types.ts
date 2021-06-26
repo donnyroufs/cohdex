@@ -38,8 +38,7 @@ export interface ICreateStrategyDto
     'id' | 'slug' | 'createdAt' | 'updatedAt' | 'spawnPoint'
   > {}
 
-export interface ICreateStrategyUnitDto
-  extends Omit<StrategyUnits, 'id' | 'colour'> {}
+export interface ICreateStrategyUnitDto extends Omit<StrategyUnits, 'id'> {}
 
 export interface ICreateStrategyUnitResponseDto {
   strategyUnit: {

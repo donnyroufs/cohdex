@@ -19,7 +19,7 @@ export class StrategyService extends BaseService {
     const res = await this.api.addUnitToStrategy({
       strategyId: id,
       unitId: unit.id,
-      // colour,
+      colour,
     })
 
     return {

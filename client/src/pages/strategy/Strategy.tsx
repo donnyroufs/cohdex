@@ -17,6 +17,16 @@ import { InteractiveUnit } from '../../models/InteractiveUnit'
 import { ReplayableCommand, Vec2 } from '../../models/ReplayableCommand'
 import { debounce } from 'lodash'
 
+const COLOURS = [
+  '#FF0000',
+  '#00FF00',
+  '#0000FF',
+  '#FFFF00',
+  '#e100ff',
+  '#0bd3f7',
+  '#ffa600',
+]
+
 export interface IStrategyParams {
   slug: string
 }
@@ -137,10 +147,12 @@ export const Strategy = () => {
 
     if (!unit) return
 
+    const unitsLength = gameState.units.length
+
     const strategyUnit = await strategyService.addUnit(
       gameState.strategyData!.id,
       unit,
-      'red'
+      COLOURS[unitsLength]
     )
 
     setGameState((curr) => ({
@@ -153,7 +165,7 @@ export const Strategy = () => {
             ...unit,
             commands: [],
           },
-          colour: 'red',
+          colour: COLOURS[unitsLength % COLOURS.length],
         }),
       ],
     }))

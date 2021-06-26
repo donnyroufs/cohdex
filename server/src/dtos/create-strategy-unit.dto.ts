@@ -11,9 +11,9 @@ export class CreateStrategyUnitDto
   @IsNumber()
   unitId: number
 
-  // @Expose()
-  // @IsString()
-  // colour: string
+  @Expose()
+  @IsString()
+  colour: string
 
   @Expose()
   @IsNumber()

@@ -146,7 +146,7 @@ model StrategyUnits {
   unit   Unit @relation(fields: [unitId], references: [id])
   unitId Int
 
-	colour String @default("red")
+	colour String @default("#FF0000")
 
   strategy   Strategy @relation(fields: [strategyId], references: [id])
   strategyId Int

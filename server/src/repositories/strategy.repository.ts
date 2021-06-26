@@ -198,6 +198,7 @@ export class StrategyRepository {
 
   // TODO: Add user validation
   async addUnit(data: ICreateStrategyUnitDto) {
+    console.log({ data })
     return this.strategyUnits.create({
       data,
       select: {
