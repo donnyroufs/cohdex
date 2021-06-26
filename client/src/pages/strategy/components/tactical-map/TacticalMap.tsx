@@ -1,7 +1,25 @@
-import { Box, Button, Image } from '@chakra-ui/react'
+import {
+  Box,
+  Button,
+  Image,
+  IconButton,
+  useDisclosure,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+  ModalFooter,
+  Heading,
+  Text,
+  OrderedList,
+  ListItem,
+} from '@chakra-ui/react'
 import { IAddCommandToStrategyUnitDto, ICommand } from '@cohdex/shared'
 import { IPointPosition } from '@cohdex/shared'
 import { useState } from 'react'
+import { BiHelpCircle } from 'react-icons/bi'
 import { useProviders } from '../../../../hooks/useProviders'
 import { InteractiveUnit } from '../../../../models/InteractiveUnit'
 import { ReplayableCommand, Vec2 } from '../../../../models/ReplayableCommand'
@@ -35,6 +53,7 @@ export const TacticalMap: React.FC<ITacticalMapProps> = ({
 }) => {
   const { strategyService } = useProviders()
   const scale = 700 / mapHeight
+  const { isOpen, onOpen, onClose } = useDisclosure()
 
   const [display, setDisplay] = useState<Display>('rectangle')
 
@@ -137,10 +156,76 @@ export const TacticalMap: React.FC<ITacticalMapProps> = ({
         as="header"
         flex={1}
         display="flex"
-        justifyContent="flex-end"
+        pb={6}
+        justifyContent="space-between"
         alignItems="flex-start"
         w="100%"
       >
+        <IconButton
+          icon={<BiHelpCircle color="white" fontSize={24} />}
+          aria-label="instructions"
+          background="primary.600"
+          variant="unstyled"
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          borderRadius="0"
+          _hover={{
+            opacity: 0.8,
+          }}
+          onClick={onOpen}
+        />
+
+        <Modal
+          isOpen={isOpen}
+          onClose={onClose}
+          isCentered
+          motionPreset="scale"
+        >
+          <ModalOverlay />
+          <ModalContent
+            maxW="550px"
+            bg="background.900"
+            border="1px solid"
+            borderColor="border"
+            p={4}
+          >
+            <ModalCloseButton color="vintage.400" />
+            <ModalBody mt={6} mb={6}>
+              <Heading size="lg" mb={2} color="vintage.400">
+                Instructions
+              </Heading>
+              <Text mb={6} color="text.400">
+                Start clicking on capture points and see the magic happen.
+                <br /> Remove commands / units by right clicking.
+              </Text>
+              <Heading mb={2} size="lg" color="vintage.400">
+                How does it work?
+              </Heading>
+              <Text mb={6} color="text.400">
+                Every unit will spawn 5 ticks later on the map this way it can
+                easily create a replayable strategy for you
+              </Text>
+              <Heading mb={2} size="lg" color="vintage.400">
+                Upcoming
+              </Heading>
+              <Text mb={6}>
+                <OrderedList color="text.400">
+                  <ListItem>
+                    Integrated game logic, that way it's more true to the real
+                    game.
+                  </ListItem>
+                  <ListItem>
+                    Being able to build/place sandbags, mines...
+                  </ListItem>
+                  <ListItem>Unit direction</ListItem>
+                  <ListItem>Move Command</ListItem>
+                </OrderedList>
+              </Text>
+            </ModalBody>
+          </ModalContent>
+        </Modal>
+
         <SwitchDisplay
           display={display}
           handleChangeDisplay={handleChangeDisplay}

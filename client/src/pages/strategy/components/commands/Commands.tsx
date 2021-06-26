@@ -11,6 +11,13 @@ export const Commands: React.FC<ICommandsProps> = ({
   activeUnit,
   removeCommand,
 }) => {
+  async function handleClick(e: MouseEvent, id: number) {
+    if (e.type !== 'contextmenu') return
+    e.preventDefault()
+
+    removeCommand(id)
+  }
+
   return (
     <Box mt={0} flex={1} minW="350px" ml={16}>
       {activeUnit &&
@@ -21,7 +28,7 @@ export const Commands: React.FC<ICommandsProps> = ({
             content={command.type}
             key={new Date(command.updatedAt).getTime()}
             id={command.id}
-            handleClick={removeCommand}
+            handleClick={handleClick}
           />
         ))}
 

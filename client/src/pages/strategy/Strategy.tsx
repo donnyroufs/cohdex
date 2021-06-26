@@ -217,7 +217,6 @@ export const Strategy = () => {
           />
           <Slider
             aria-label="slider-ex-2"
-            // colorScheme="pink"
             defaultValue={tick}
             value={tick}
             max={max}
