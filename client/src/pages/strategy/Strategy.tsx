@@ -77,6 +77,11 @@ export const Strategy = () => {
   useEffect(() => {
     let id: NodeJS.Timeout
 
+    // new command has been added
+    if (playing && tick > max) {
+      setTick(0)
+    }
+
     if (playing && tick !== max) {
       id = setInterval(() => setTick((curr) => curr + 1), 800)
     }
@@ -140,7 +145,9 @@ export const Strategy = () => {
   )
 
   const allTicks = replayData.flatMap((c) => c.tick)
-  const max = allTicks.length > 0 ? Math.max(...allTicks) / 5 : 0
+  // NOTE: The +1 will cause issues the longer the replay is.
+  // It will add an empty step, might need to check if last one has commands
+  const max = allTicks.length > 0 ? Math.max(...allTicks) / 5 + 1 : 0
 
   if (loading) {
     return <Spinner withMessage />
@@ -255,6 +262,8 @@ export const Strategy = () => {
             commands={currentReplayData}
             handlePlay={handlePlay}
             playing={playing}
+            setTick={setTick}
+            max={max}
           />
           <Slider
             aria-label="slider-ex-2"

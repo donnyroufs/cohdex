@@ -123,12 +123,13 @@ export class StrategyService {
     return this._strategyRepo.updateStrategyUnitColour(data)
   }
 
+  // TODO: Refactor
   async removeUnitFromStrategy(data: IRemoveUnitFromStrategyDto) {
-    const unit = await this._strategyRepo.getUnitById(data.id)
+    // const unit = await this._strategyRepo.getUnitById(data.id)
 
-    if (!unit) {
-      throw new UnitDoesNotExistException()
-    }
+    // if (!unit) {
+    //   throw new UnitDoesNotExistException()
+    // }
 
     // TODO: Validate if first unit
     // requires schema to be changed.

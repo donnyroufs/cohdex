@@ -16,7 +16,7 @@ import {
 } from '@chakra-ui/react'
 import { IAddCommandToStrategyUnitDto, ICommand } from '@cohdex/shared'
 import { IPointPosition } from '@cohdex/shared'
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { BiHelpCircle } from 'react-icons/bi'
 import { useProviders } from '../../../../hooks/useProviders'
 import { InteractiveUnit } from '../../../../models/InteractiveUnit'
@@ -39,6 +39,8 @@ export interface ITacticalMapProps {
   commands: ReplayableCommand[]
   handlePlay(): void
   playing: boolean
+  setTick: React.Dispatch<React.SetStateAction<number>>
+  max: number
 }
 
 export const TacticalMap: React.FC<ITacticalMapProps> = ({
@@ -52,6 +54,8 @@ export const TacticalMap: React.FC<ITacticalMapProps> = ({
   commands,
   handlePlay,
   playing,
+  setTick,
+  max,
 }) => {
   const { strategyService } = useProviders()
   const scale = 700 / mapHeight
@@ -120,6 +124,8 @@ export const TacticalMap: React.FC<ITacticalMapProps> = ({
         return u
       }),
     }))
+
+    setTick(max + 5)
 
     const { data } = await strategyService.addCommandToUnit(obj)
 
