@@ -2,6 +2,7 @@ import { useParams } from 'react-router-dom'
 import React, { useMemo, useEffect, useState } from 'react'
 import { BaseLayout } from '../../components/layouts'
 import {
+  Text,
   Box,
   Flex,
   Slider,
@@ -16,6 +17,7 @@ import { Commands, TacticalMap, Units } from './components'
 import { InteractiveUnit } from '../../models/InteractiveUnit'
 import { ReplayableCommand, Vec2 } from '../../models/ReplayableCommand'
 import { debounce } from 'lodash'
+import useWindowSize from '../../hooks/useWindowSize'
 
 const COLOURS = [
   '#EF1080',
@@ -32,6 +34,7 @@ export interface IStrategyParams {
 
 export const Strategy = () => {
   const { strategyService } = useProviders()
+  const { width } = useWindowSize()
   const [playing, setPlaying] = useState(false)
   const [loading, setLoading] = React.useState(true)
   const [error, setError] = React.useState(null)
@@ -235,66 +238,92 @@ export const Strategy = () => {
     setPlaying((curr) => !curr)
   }
 
+  if (width <= 1140) {
+    return (
+      <Box
+        bgColor="table"
+        p={6}
+        border="1px solid"
+        borderColor="primary.700"
+        mt={20}
+      >
+        <Text color="vintage.500">
+          Sorry but we do not support this resolution.
+        </Text>
+      </Box>
+    )
+  }
+
   return (
     <BaseLayout.Container>
-      <Box as="header" display="flex" justifyContent="space-between" mb={8}>
-        <Title value={gameState.strategyData!.title} />
-        <Title value="Commands" />
-      </Box>
-      <Flex flexDir="row" flexWrap="wrap">
-        <Units
-          handleOnAdd={handleOnAdd}
-          gameState={gameState}
-          handleSelectUnit={handleSelectUnit}
-          activeUnit={activeUnit}
-          updateLocalUnitColour={debouncedUpdateColour}
-          removeLocalUnit={removeLocalUnit}
-        />
-        <Box>
-          <TacticalMap
-            strategyId={gameState.strategyData!.id}
-            mapHeight={gameState.strategyData!.Map.height}
-            spawnpoint={gameState.spawnpoint}
-            setGameState={setGameState}
-            mapUrl={gameState.strategyData!.Map.url}
-            pointPositions={gameState.strategyData!.Map.pointPositions}
-            activeUnit={activeUnit}
-            commands={currentReplayData}
-            handlePlay={handlePlay}
-            playing={playing}
-            setTick={setTick}
-            max={max}
-          />
-          <Slider
-            aria-label="slider-ex-2"
-            defaultValue={tick}
-            value={tick}
-            max={max}
-            onChange={(e) => setTick(+e)}
-          >
-            <SliderTrack backgroundColor="#2B1A21" h={3}>
-              <SliderFilledTrack backgroundColor="primary.800" />
-            </SliderTrack>
-            <SliderThumb backgroundColor="primary.600" />
-          </Slider>
-        </Box>
-        <Commands
-          activeUnit={activeUnit}
-          removeCommand={async (id) => {
-            strategyService.removeCommandFromUnit({ id })
+      <Flex flexDir="row">
+        <Flex flexDir="row" flexWrap="wrap" flex="1" justifyContent="center">
+          <Flex flexDir="row">
+            <Units
+              handleOnAdd={handleOnAdd}
+              gameState={gameState}
+              handleSelectUnit={handleSelectUnit}
+              activeUnit={activeUnit}
+              updateLocalUnitColour={debouncedUpdateColour}
+              removeLocalUnit={removeLocalUnit}
+            />
+            <Box>
+              <Title value={gameState.strategyData!.title} mt={0} mb={6} />
+              <TacticalMap
+                strategyId={gameState.strategyData!.id}
+                mapHeight={gameState.strategyData!.Map.height}
+                spawnpoint={gameState.spawnpoint}
+                setGameState={setGameState}
+                mapUrl={gameState.strategyData!.Map.url}
+                pointPositions={gameState.strategyData!.Map.pointPositions}
+                activeUnit={activeUnit}
+                commands={currentReplayData}
+                handlePlay={handlePlay}
+                playing={playing}
+                setTick={setTick}
+                max={max}
+              />
+              <Slider
+                aria-label="slider-ex-2"
+                defaultValue={tick}
+                value={tick}
+                max={max}
+                onChange={(e) => setTick(+e)}
+              >
+                <SliderTrack backgroundColor="#2B1A21" h={3}>
+                  <SliderFilledTrack backgroundColor="primary.800" />
+                </SliderTrack>
+                <SliderThumb backgroundColor="primary.600" />
+              </Slider>
+            </Box>
+          </Flex>
+          <Flex flexDir="column" flex="1" ml={{ lg: 0, xl: 16 }}>
+            <Title
+              value="Commands"
+              mt={0}
+              mb={6}
+              ml={{ xl: 'auto' }}
+              className="commands"
+            />
+            <Commands
+              activeUnit={activeUnit}
+              removeCommand={async (id) => {
+                strategyService.removeCommandFromUnit({ id })
 
-            setGameState((curr) => ({
-              ...curr,
-              units: curr.units.map((u) => ({
-                ...u,
-                unit: {
-                  ...u.unit,
-                  commands: u.unit.commands.filter((c) => c.id !== id),
-                },
-              })),
-            }))
-          }}
-        />
+                setGameState((curr) => ({
+                  ...curr,
+                  units: curr.units.map((u) => ({
+                    ...u,
+                    unit: {
+                      ...u.unit,
+                      commands: u.unit.commands.filter((c) => c.id !== id),
+                    },
+                  })),
+                }))
+              }}
+            />
+          </Flex>
+        </Flex>
       </Flex>
     </BaseLayout.Container>
   )

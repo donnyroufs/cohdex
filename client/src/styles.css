@@ -1,0 +1,17 @@
+/* hacky stuff */
+
+.hide {
+  display: none;
+}
+
+.commands {
+  margin-left: 0 !important;
+  margin-top: 2rem !important;
+}
+
+@media screen and (min-width: 1453px) {
+  .commands {
+    margin-top: 0 !important;
+    margin-left: auto !important;
+  }
+}

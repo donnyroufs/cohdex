@@ -30,7 +30,7 @@ export const BaseLayout: CompoundComponent<IBaseLayoutProps> = ({
 
 BaseLayout.Container = ({ children }) => {
   return (
-    <ChakraContainer maxW="1700px" mt={12} mb={14}>
+    <ChakraContainer maxW="1700px" mt={20} mb={14}>
       {children}
     </ChakraContainer>
   )

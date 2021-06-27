@@ -1,4 +1,4 @@
-import { Box, Flex, IconButton } from '@chakra-ui/react'
+import { Flex, IconButton } from '@chakra-ui/react'
 import { useState } from 'react'
 import { FaPlusCircle } from 'react-icons/fa'
 import { useProviders } from '../../../../hooks/useProviders'
@@ -46,7 +46,7 @@ export const Units: React.FC<IUnitsProps> = ({
   }
 
   return (
-    <Flex flexDir="column" mr={4} position="relative">
+    <Flex flexDir="column" mr={4} position="relative" mt="3.25rem">
       <IconButton
         icon={<FaPlusCircle size={20} />}
         display="flex"
