@@ -23,5 +23,8 @@
       "yarn eslint",
       "yarn prettier --write"
     ]
+  },
+  "dependencies": {
+    "@jest-decorated/core": "^0.0.23"
   }
 }
