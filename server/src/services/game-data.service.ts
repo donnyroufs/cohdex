@@ -1,5 +1,4 @@
 import { Injectable } from '@kondah/core'
-import { v2 as cloudinary } from 'cloudinary'
 import {
   ICloudinaryResponse,
   ICloudinaryResponseUrls,
@@ -12,6 +11,7 @@ import parser from 'luaparse'
 import axios, { AxiosResponse } from 'axios'
 import { PrismaService } from './prisma.service'
 import { PointPosition } from '.prisma/client'
+import { CloudinaryService } from './cloudinary.service'
 
 @Injectable()
 export class GameDataService implements IGameDataService {
@@ -19,13 +19,10 @@ export class GameDataService implements IGameDataService {
     return this._prismaService.map
   }
 
-  constructor(private readonly _prismaService: PrismaService) {
-    cloudinary.config({
-      cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-      api_key: process.env.CLOUDINARY_API_KEY,
-      api_secret: process.env.CLOUDINARY_API_SECRET,
-    })
-  }
+  constructor(
+    private readonly _prismaService: PrismaService,
+    private readonly _cloudinaryService: CloudinaryService
+  ) {}
 
   /*
    * scenarioname (for replays)
@@ -210,7 +207,7 @@ export class GameDataService implements IGameDataService {
   }
 
   private async getAllMapImages() {
-    const response = (await cloudinary.api.resources({
+    const response = (await this._cloudinaryService.cloudinary.api.resources({
       type: 'upload',
       prefix: 'maps',
     })) as ICloudinaryResponse
@@ -219,7 +216,7 @@ export class GameDataService implements IGameDataService {
   }
 
   private async getAllMapMetadata() {
-    const response = (await cloudinary.api.resources({
+    const response = (await this._cloudinaryService.cloudinary.api.resources({
       type: 'upload',
       resource_type: 'raw',
       prefix: 'maps',
