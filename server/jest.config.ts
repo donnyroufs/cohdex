@@ -4,6 +4,7 @@
  */
 
 export default {
+  setupFilesAfterEnv: ['@jest-decorated/core/globals'],
   // All imported modules in your tests should be mocked automatically
   // automock: false,
 

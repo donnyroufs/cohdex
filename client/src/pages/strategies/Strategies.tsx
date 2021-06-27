@@ -75,19 +75,23 @@ export const Strategies = () => {
               )}
               {strategies.length > 0 && (
                 <Table
-                  tableData={strategies.map((strategy) => ({
-                    id: strategy.id,
-                    slug: strategy.slug,
-                    title: strategy.title,
-                    you: strategy.Faction.name,
-                    opponent:
-                      strategy.AlliedFaction.name === strategy.Faction.name
-                        ? strategy.AxisFaction.name
-                        : strategy.AlliedFaction.name,
-                    mapName: strategy.Map.name,
-                    // TODO: Not implemented yet.
-                    spawns: Math.floor(Math.random() * 3).toString(),
-                  }))}
+                  tableData={strategies
+                    .map((strategy) => ({
+                      id: strategy.id,
+                      slug: strategy.slug,
+                      title: strategy.title,
+                      you: strategy.Faction.name,
+                      opponent:
+                        strategy.AlliedFaction.name === strategy.Faction.name
+                          ? strategy.AxisFaction.name
+                          : strategy.AlliedFaction.name,
+                      mapName: strategy.Map.name,
+                      // TODO: Not implemented yet.
+                      spawn: strategy.spawnPoint
+                        ? String(strategy.spawnPoint)
+                        : 'Not picked yet',
+                    }))
+                    .sort((a, b) => b.id - a.id)} // For now we dont need to look at dates
                 />
               )}
             </Skeleton>

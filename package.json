@@ -4,14 +4,13 @@
     "client": "yarn workspace @cohdex/client start",
     "server": "yarn workspace @cohdex/server dev",
     "shared": "yarn workspace @cohdex/shared watch",
-    "tmap": "yarn workspace @cohdex/tactical-map watch",
+    "test:watch": "yarn workspace @cohdex/server test:watch --silent",
     "prepare": "husky install"
   },
   "workspaces": [
     "client",
     "server",
-    "shared",
-    "tactical-map"
+    "shared"
   ],
   "devDependencies": {
     "husky": "^6.0.0",
@@ -22,5 +21,8 @@
       "yarn eslint",
       "yarn prettier --write"
     ]
+  },
+  "dependencies": {
+    "@jest-decorated/core": "^0.0.23"
   }
 }

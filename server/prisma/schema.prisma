@@ -17,6 +17,7 @@ model User {
   profileUrl String
 
   strategies Strategy[]
+  command    Command[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -54,9 +55,7 @@ model Strategy {
   title String
   slug  String
 
-  // units Unit[]
-
-  // # Required for later
+  spawnPoint Int?
 
   // commanderId Int?
   // tierId Int?
@@ -76,13 +75,14 @@ model Strategy {
   AxisFaction   Faction @relation(fields: [axisFactionId], references: [id], name: "axisFaction")
   axisFactionId Int
 
+  StrategyUnits StrategyUnits[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@unique([title, userId, factionId, alliedFactionId, axisFactionId, mapId])
 }
 
-// Add faction image
 model Faction {
   id Int @id @default(autoincrement())
 
@@ -90,10 +90,9 @@ model Faction {
   abbreviation String @unique
   imgUrl       String @unique
 
-
-
   team Team
 
+  units            Unit[]
   strategies       Strategy[] @relation("userFaction")
   alliesStrategies Strategy[] @relation("alliedFaction")
   axisStrategies   Strategy[] @relation("axisFaction")
@@ -102,27 +101,57 @@ model Faction {
   updatedAt DateTime @updatedAt
 }
 
-// has to be a many to many relation
-// revisit later, not important rn.
-// model Unit {
-//   id Int @id @default(autoincrement())
+model Unit {
+  id   Int    @id @default(autoincrement())
+  name String 
 
-//   commands Command[]
+  image String
 
-//   createdAt  DateTime  @default(now())
-//   updatedAt  DateTime  @updatedAt
-//   Strategy   Strategy? @relation(fields: [strategyId], references: [id])
-//   strategyId Int?
-// }
+  movementSpeed Float @default(0.25)
+  cappingSpeed  Float @default(1)
+
+  Faction   Faction @relation(fields: [factionId], references: [id])
+  factionId Int
+
+  StrategyUnits StrategyUnits[]
+
+  startingUnit Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
 
 model Command {
   id Int @id @default(autoincrement())
 
   type        UnitCommand
-  description String?
+  description String
+
+  targetX Float
+  targetY Float
+
+  StrategyUnits   StrategyUnits @relation(fields: [strategyUnitsId], references: [id])
+  strategyUnitsId Int
+
+  User   User @relation(fields: [userId], references: [id])
+  userId Int
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model StrategyUnits {
+  id Int @id @default(autoincrement())
+
+  unit   Unit @relation(fields: [unitId], references: [id])
+  unitId Int
+
+	colour String @default("#FF0000")
+
+  strategy   Strategy @relation(fields: [strategyId], references: [id])
+  strategyId Int
+
+  commands Command[]
 }
 
 enum UnitCommand {

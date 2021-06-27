@@ -23,6 +23,7 @@ import { BaseHttpResponse } from './lib/base-http-response'
 import { DomainInputValidationException } from './exceptions/domain/domain-input-validation.exception'
 import { GameDataService } from './services/game-data.service'
 import { DITypes } from './di-types'
+import { errorCodeToHttpStatus } from './lib'
 
 export const API_VERSION = 1
 
@@ -117,7 +118,8 @@ export class Application extends Kondah {
 
     server.handleGlobalExceptions(
       (err: Error & { code?: number }, req, res, next) => {
-        const code = err?.code || 500
+        const code = errorCodeToHttpStatus(err?.code)
+
         let response = new BaseHttpResponse(
           undefined,
           err.message || 'Something unknown happend'

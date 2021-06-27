@@ -1,9 +1,23 @@
 import { HttpContext } from '@kondah/http-context'
-import { Controller, Get, Middleware, Post } from '@kondah/http-controller'
+import {
+  Controller,
+  Delete,
+  Get,
+  Middleware,
+  Patch,
+  Post,
+  Put,
+} from '@kondah/http-controller'
 import { StrategyService } from '../services/strategy.service'
-import { CreateStrategyDto } from '../dtos/create-strategy.dto'
+import {
+  AddCommandToStrategyUnitDto,
+  ChooseSpawnPointDto,
+  CreateStrategyDto,
+  CreateStrategyUnitDto,
+  RemoveCommandFromStrategyUnitDto,
+} from '../dtos'
 import { isAuthGuard } from '../guards/is-auth.guard'
-import { validateBody } from '../lib'
+import { paramsToInt, validateBody, validateBodyWithParamsToInt } from '../lib'
 import { BadRequestException } from '../exceptions'
 import { BaseHttpResponse } from '../lib/base-http-response'
 import {
@@ -12,7 +26,11 @@ import {
   IGetFactionsResponseDto,
   IGetMapsResponseDto,
   IGetStrategyResponseDto,
+  ICreateStrategyUnitResponseDto,
+  IAddCommandToStrategyUnitResponseDto,
 } from '@cohdex/shared'
+import { UpdateStrategyUnitColourDto } from '../dtos/update-strategy-unit-colour.dto'
+import { RemoveUnitFromStrategyDto } from '../dtos/remove-unit-from-strategy.dto'
 
 @Controller('/strategies')
 export class StrategyController {
@@ -64,6 +82,86 @@ export class StrategyController {
         strategy,
       })
     )
+  }
+
+  @Post('/unit')
+  @Middleware(isAuthGuard, validateBody(CreateStrategyUnitDto))
+  async addUnit(ctx: HttpContext<CreateStrategyUnitDto>) {
+    const { id } = await this._strategyService
+      .addUnitToStrategy(ctx.data)
+      .catch((e) => {
+        throw new BadRequestException(e.message)
+      })
+
+    ctx.res.json(
+      new BaseHttpResponse<ICreateStrategyUnitResponseDto>({
+        strategyUnit: {
+          id,
+        },
+      })
+    )
+  }
+
+  @Post('/command')
+  @Middleware(isAuthGuard, validateBody(AddCommandToStrategyUnitDto))
+  async addCommandToStrategy(ctx: HttpContext<AddCommandToStrategyUnitDto>) {
+    const command = await this._strategyService.addCommandToStrategyUnit(
+      ctx.data
+    )
+
+    return ctx.res.json(
+      new BaseHttpResponse<IAddCommandToStrategyUnitResponseDto>({
+        command,
+      })
+    )
+  }
+
+  @Patch('/unit/:id/colour')
+  @Middleware(
+    isAuthGuard,
+    validateBodyWithParamsToInt(UpdateStrategyUnitColourDto)
+  )
+  async updateColour(ctx: HttpContext<UpdateStrategyUnitColourDto>) {
+    await this._strategyService.updateStrategyUnitColour(ctx.data)
+
+    return ctx.res.sendStatus(204)
+  }
+
+  @Delete('/unit/:id')
+  @Middleware(
+    isAuthGuard,
+    validateBodyWithParamsToInt(RemoveUnitFromStrategyDto)
+  )
+  async removeUnitFromStrategy(ctx: HttpContext<RemoveUnitFromStrategyDto>) {
+    await this._strategyService.removeUnitFromStrategy(ctx.data)
+
+    ctx.res.sendStatus(204)
+  }
+
+  @Delete('/command/:id')
+  @Middleware(
+    isAuthGuard,
+    validateBodyWithParamsToInt(RemoveCommandFromStrategyUnitDto)
+  )
+  async removeCommandFromUnit(ctx: HttpContext) {
+    await this._strategyService.removeCommandFromStrategyUnit(ctx.data)
+    ctx.res.sendStatus(204)
+  }
+
+  @Patch('/:strategyId/spawnpoint')
+  @Middleware(isAuthGuard, validateBodyWithParamsToInt(ChooseSpawnPointDto))
+  async updateSpawnpoint(ctx: HttpContext<ChooseSpawnPointDto>) {
+    const result = await this._strategyService
+      .chooseSpawnpoint(ctx.data)
+      .catch((err) => {
+        throw new BadRequestException(err.message)
+      })
+
+    if (!result) {
+      throw new BadRequestException('Could not update spawnpoint')
+    }
+
+    return ctx.res.sendStatus(204)
   }
 
   @Get('/:slug')

@@ -7,13 +7,19 @@ import {
   IUser,
 } from '@cohdex/shared'
 import { RouteComponentProps } from 'react-router-dom'
+import { StrategyService } from './services/StrategyService'
+import { InteractiveUnit } from './models/InteractiveUnit'
 
 export interface IAuthState {
   isLoading: boolean
   user: IUser | null
 }
 
-export type StrategyLoadingType = 'init' | 'idle'
+export type StrategyLoadingType =
+  | 'init'
+  | 'idle'
+  | 'adding-unit'
+  | 'updating-spawnpoint'
 
 export interface IStrategySliceState {
   status: StrategyLoadingType
@@ -90,3 +96,15 @@ export interface ITacticalMapOptions {
 }
 
 export type Display = 'circle' | 'rectangle'
+
+export interface IAppContext {
+  strategyService: StrategyService
+}
+
+export type GameState = {
+  units: InteractiveUnit[]
+  spawnpoint: null | number
+  strategyData: IStrategy | null
+}
+
+export type Tick = number

@@ -3,14 +3,22 @@ import React from 'react'
 
 interface ITitleProps {
   value: string
-  ml?: number | string
+  ml?: any
   mt?: number | string
   mb?: number | string
+  className?: string
 }
 
-export const Title: React.FC<ITitleProps> = ({ value, ml, mt, mb }) => {
+export const Title: React.FC<ITitleProps> = ({
+  value,
+  ml,
+  mt,
+  mb,
+  className,
+}) => {
   return (
     <Box
+      className={className}
       display="flex"
       alignItems="center"
       mt={mt != null ? mt : 12}
