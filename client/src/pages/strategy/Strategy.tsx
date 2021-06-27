@@ -78,6 +78,11 @@ export const Strategy = () => {
   }, [gameState.spawnpoint, gameState.strategyData?.Map.pointPositions])
 
   useEffect(() => {
+    const renderAllCommands = 1337
+    setTick(renderAllCommands)
+  }, [])
+
+  useEffect(() => {
     let id: NodeJS.Timeout
 
     // new command has been added
