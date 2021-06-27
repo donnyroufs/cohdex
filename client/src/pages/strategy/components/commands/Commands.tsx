@@ -19,7 +19,7 @@ export const Commands: React.FC<ICommandsProps> = ({
   }
 
   return (
-    <Box mt={0} flex={1} minW="350px" ml={16}>
+    <Box mt={0} flex={1} minW="250px" ml={16}>
       {activeUnit &&
         activeUnit.unit.commands &&
         activeUnit.unit.commands.map((command) => (

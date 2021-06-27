@@ -241,7 +241,7 @@ export const Strategy = () => {
         <Title value={gameState.strategyData!.title} />
         <Title value="Commands" />
       </Box>
-      <Flex flexDir="row">
+      <Flex flexDir="row" flexWrap="wrap">
         <Units
           handleOnAdd={handleOnAdd}
           gameState={gameState}

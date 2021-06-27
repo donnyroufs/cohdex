@@ -1,3 +1,4 @@
+import React from 'react'
 import { useLocation } from 'react-router-dom'
 import { Box, Container as ChakraContainer } from '@chakra-ui/react'
 import { CompoundComponent } from '../../../types'
@@ -29,7 +30,7 @@ export const BaseLayout: CompoundComponent<IBaseLayoutProps> = ({
 
 BaseLayout.Container = ({ children }) => {
   return (
-    <ChakraContainer maxW="1700px" mt={12}>
+    <ChakraContainer maxW="1700px" mt={12} mb={14}>
       {children}
     </ChakraContainer>
   )
