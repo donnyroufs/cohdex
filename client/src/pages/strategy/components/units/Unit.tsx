@@ -57,10 +57,12 @@ export const Unit: React.FC<IUnitProps> = ({
         colour={currentColour}
         onChange={(e) => {
           setCurrentColour(e.toString())
-          strategyService.changeUnitColour({
-            id,
-            colour: colour.toString(),
-          })
+          strategyService.changeUnitColour(
+            {
+              colour: colour.toString(),
+            },
+            id
+          )
         }}
       />
     </Box>

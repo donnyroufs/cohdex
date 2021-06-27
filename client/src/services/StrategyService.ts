@@ -45,7 +45,7 @@ export class StrategyService extends BaseService {
     return this.api.removeUnitFromStrategy(data)
   }
 
-  async changeUnitColour(data: IUpdateStrategyUnitColourDto) {
-    return this.api.changeUnitColour(data)
+  async changeUnitColour(data: IUpdateStrategyUnitColourDto, unitId: number) {
+    return this.api.changeUnitColour(data, unitId)
   }
 }

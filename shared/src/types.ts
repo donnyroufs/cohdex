@@ -163,6 +163,5 @@ export interface IChooseSpawnpointDto {
 }
 
 export interface IUpdateStrategyUnitColourDto {
-  id: number
   colour: string
 }

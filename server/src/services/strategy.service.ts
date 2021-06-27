@@ -33,19 +33,16 @@ export class StrategyService {
     return this._strategyRepo.findOne(userId, slug)
   }
 
-  // Should probably check if owner of strategy
-  // even though repo already does that.
+  // When Kondah middleare is fixed we might want to do some resource ownership validation
+  // on the controller. For now we do it in the repo.
   async addCommandToStrategyUnit(data: AddCommandToStrategyUnitDto) {
-    // TODO: Add validation to check if the position could be valid for the given strategy map
-
     return this._strategyRepo.addCommandToStrategyUnit(data)
   }
 
-  // Should probably check if owner of strategy
-  // even though repo already does that.
   async removeCommandFromStrategyUnit(data: RemoveCommandFromStrategyUnitDto) {
     return this._strategyRepo.removeCommandFromStrategyUnit(data)
   }
+  // end
 
   async addUnitToStrategy(data: ICreateStrategyUnitDto) {
     const foundFaction = await this._strategyRepo.getFactionByStrategyId(
@@ -123,17 +120,7 @@ export class StrategyService {
     return this._strategyRepo.updateStrategyUnitColour(data)
   }
 
-  // TODO: Refactor
   async removeUnitFromStrategy(data: IRemoveUnitFromStrategyDto) {
-    // const unit = await this._strategyRepo.getUnitById(data.id)
-
-    // if (!unit) {
-    //   throw new UnitDoesNotExistException()
-    // }
-
-    // TODO: Validate if first unit
-    // requires schema to be changed.
-
     return this._strategyRepo.removeUnitFromStrategy(data)
   }
 }

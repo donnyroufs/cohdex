@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Middleware,
+  Patch,
   Post,
   Put,
 } from '@kondah/http-controller'
@@ -115,8 +116,11 @@ export class StrategyController {
     )
   }
 
-  @Put('/colour')
-  @Middleware(isAuthGuard, validateBody(UpdateStrategyUnitColourDto))
+  @Patch('/unit/:id/colour')
+  @Middleware(
+    isAuthGuard,
+    validateBodyWithParamsToInt(UpdateStrategyUnitColourDto)
+  )
   async updateColour(ctx: HttpContext<UpdateStrategyUnitColourDto>) {
     await this._strategyService.updateStrategyUnitColour(ctx.data)
 
@@ -144,7 +148,7 @@ export class StrategyController {
     ctx.res.sendStatus(204)
   }
 
-  @Put('/:strategyId/spawnpoint')
+  @Patch('/:strategyId/spawnpoint')
   @Middleware(isAuthGuard, validateBodyWithParamsToInt(ChooseSpawnPointDto))
   async updateSpawnpoint(ctx: HttpContext<ChooseSpawnPointDto>) {
     const result = await this._strategyService

@@ -57,7 +57,7 @@ const mockedRepo = {
 } as any
 
 @Describe()
-class StrategyServiceTest {
+export class StrategyServiceTest {
   service: StrategyService
 
   @BeforeEach()
@@ -128,7 +128,7 @@ class StrategyServiceTest {
 }
 
 @Describe()
-class CreatingAStrategyShouldThrowWhen {
+export class CreatingAStrategyShouldThrowWhen {
   service: StrategyService
 
   @BeforeEach()

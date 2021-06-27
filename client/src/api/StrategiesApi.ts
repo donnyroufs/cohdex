@@ -39,7 +39,7 @@ export const strategiesApi = new (class StrategiesApi extends BaseApi {
     strategyId: number,
     spawnpoint: number
   ): Promise<void> {
-    return this.axios.put(this.endpoint(`/${strategyId}/spawnpoint`), {
+    return this.axios.patch(this.endpoint(`/${strategyId}/spawnpoint`), {
       spawnpoint,
     })
   }
@@ -81,7 +81,7 @@ export const strategiesApi = new (class StrategiesApi extends BaseApi {
     return this.axios.delete(this.endpoint(`/unit/${data.id}`))
   }
 
-  async changeUnitColour(data: IUpdateStrategyUnitColourDto) {
-    return this.axios.put(this.endpoint('/colour'), data)
+  async changeUnitColour(data: IUpdateStrategyUnitColourDto, unitId: number) {
+    return this.axios.patch(this.endpoint(`/unit/${unitId}/colour`), data)
   }
 })()
