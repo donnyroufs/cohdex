@@ -59,6 +59,8 @@ export class Application extends Kondah {
       server.addGlobalMiddleware(morgan('dev'))
     }
 
+    const isProd = process.env.NODE_ENV === 'prod'
+
     server.addGlobalMiddleware(
       cookieParser(),
       express.json(),
@@ -68,9 +70,10 @@ export class Application extends Kondah {
         resave: false,
         saveUninitialized: false,
         store,
+        proxy: true,
         cookie: {
           maxAge: milliseconds({ days: 7 }),
-          secure: process.env.NODE_ENV === 'prod',
+          secure: isProd,
           httpOnly: true,
           sameSite: 'strict',
         },
