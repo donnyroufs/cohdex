@@ -13,6 +13,6 @@ export abstract class BaseApi {
   abstract prefix: string
 
   protected endpoint(endpoint: string = '/') {
-    return process.env.REACT_APP_BASE_URL + '/api/v1' + this.prefix + endpoint
+    return '/api/v1' + this.prefix + endpoint
   }
 }
