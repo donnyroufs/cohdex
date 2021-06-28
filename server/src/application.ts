@@ -69,6 +69,7 @@ export class Application extends Kondah {
         saveUninitialized: false,
         proxy: true,
         cookie: {
+          domain: process.env.ORIGIN,
           maxAge: milliseconds({ days: 7 }),
           secure: process.env.NODE_ENV === 'prod',
           httpOnly: true,
