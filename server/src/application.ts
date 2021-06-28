@@ -24,6 +24,7 @@ import { DomainInputValidationException } from './exceptions/domain/domain-input
 import { GameDataService } from './services/game-data.service'
 import { DITypes } from './di-types'
 import { errorCodeToHttpStatus } from './lib'
+import { CloudinaryService } from './services/cloudinary.service'
 
 export const API_VERSION = 1
 
@@ -38,6 +39,8 @@ export class Application extends Kondah {
 
     services.register(StrategyRepository)
     services.register(StrategyService)
+
+    services.register(CloudinaryService)
 
     services.register<IGameDataService>(DITypes.GameDataService, {
       asClass: GameDataService,
