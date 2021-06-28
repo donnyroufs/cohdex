@@ -251,6 +251,8 @@ export const TacticalMap: React.FC<ITacticalMapProps> = ({
       <Box position="relative">
         <Box position="relative">
           <Image
+            border="6px solid"
+            borderColour="border"
             src={replaceTgaWithPng(mapUrl)}
             alt="tactical map"
             borderRadius={display === 'circle' ? '100%' : 0}
