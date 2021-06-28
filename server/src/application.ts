@@ -71,14 +71,11 @@ export class Application extends Kondah {
         saveUninitialized: false,
         proxy: true,
         cookie: {
-          domain: process.env.DOMAIN,
           maxAge: milliseconds({ days: 7 }),
+          domain: process.env.DOMAIN,
           secure: isProd,
           httpOnly: true,
-          // For showing the current app we put this on none because we need to setup
-          // a docker environment. Otherwise we cannot setup a reverse proxy
-          // which causes our cookies not to be saved since a subdomain is also considered a "different" domain.
-          sameSite: 'none',
+          sameSite: 'strict',
         },
       }),
       cors({
