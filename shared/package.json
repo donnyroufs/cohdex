@@ -1,0 +1,14 @@
+{
+  "name": "@cohdex/shared",
+  "version": "1.0.0",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "watch": "tsc -w",
+    "build": "tsc"
+  },
+  "files": [
+    "dist"
+  ],
+  "main": "dist/index.js",
+  "license": "MIT"
+}

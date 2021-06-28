@@ -1,0 +1,28 @@
+{
+  "private": true,
+  "scripts": {
+    "client": "yarn workspace @cohdex/client start",
+    "server": "yarn workspace @cohdex/server dev",
+    "shared": "yarn workspace @cohdex/shared watch",
+    "test:watch": "yarn workspace @cohdex/server test:watch --silent",
+    "prepare": "husky install"
+  },
+  "workspaces": [
+    "client",
+    "server",
+    "shared"
+  ],
+  "devDependencies": {
+    "husky": "^6.0.0",
+    "lint-staged": "^11.0.0"
+  },
+  "lint-staged": {
+    "**/*.{js,jsx,ts,tsx}": [
+      "yarn eslint",
+      "yarn prettier --write"
+    ]
+  },
+  "dependencies": {
+    "@jest-decorated/core": "^0.0.23"
+  }
+}

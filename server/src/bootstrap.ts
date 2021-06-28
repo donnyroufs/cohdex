@@ -1,24 +1,15 @@
+import 'dotenv/config'
+
 import { Logger } from '@kondah/core'
 import { HttpControllerPlugin } from '@kondah/http-controller'
-import { HttpContextPlugin } from '@kondah/http-context'
-
-import path from 'path'
 
 import { Application } from './application'
-import { WelcomePlugin } from './plugins/welcome.plugin'
+import { AppConfig } from './app.config'
+
+console.clear()
 
 new Application({
   logger: new Logger('border'),
-  plugins: [WelcomePlugin, HttpControllerPlugin, HttpContextPlugin],
-  config: {
-    'http-controller': {
-      controllersPath: [path.join(__dirname, '../src/controllers')],
-      catchExceptions: true,
-    },
-  },
+  plugins: [HttpControllerPlugin],
+  config: AppConfig,
 })
-
-/*** Kondah is currently in pre-alpha! ***/
-
-//  available plugins: https://github.com/donnyroufs/kondah/tree/master/packages
-//  official website: https://kondah.dev

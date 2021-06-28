@@ -1,0 +1,165 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id         Int    @id @default(autoincrement())
+  steamId    String @unique
+  avatar     String
+  profileUrl String
+
+  strategies Strategy[]
+  command    Command[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Map {
+  id           Int    @id @default(autoincrement())
+  name         String @unique
+  url          String
+  scenarioName String @unique
+  height       Float
+  width        Float
+  maxPlayers   Int    @default(2)
+  version      Int
+
+  pointPositions PointPosition[]
+  strategy       Strategy[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model PointPosition {
+  id       Int    @id @default(autoincrement())
+  x        Float
+  y        Float
+  ownerId  Int
+  fileName String
+  Map      Map    @relation(fields: [mapId], references: [id])
+  mapId    Int
+}
+
+model Strategy {
+  id    Int    @id @default(autoincrement())
+  title String
+  slug  String
+
+  spawnPoint Int?
+
+  // commanderId Int?
+  // tierId Int?
+
+  User   User @relation(fields: [userId], references: [id])
+  userId Int
+
+  Map   Map @relation(fields: [mapId], references: [id])
+  mapId Int
+
+  Faction   Faction @relation(fields: [factionId], references: [id], name: "userFaction")
+  factionId Int
+
+  AlliedFaction   Faction @relation(fields: [alliedFactionId], references: [id], name: "alliedFaction")
+  alliedFactionId Int
+
+  AxisFaction   Faction @relation(fields: [axisFactionId], references: [id], name: "axisFaction")
+  axisFactionId Int
+
+  StrategyUnits StrategyUnits[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([title, userId, factionId, alliedFactionId, axisFactionId, mapId])
+}
+
+model Faction {
+  id Int @id @default(autoincrement())
+
+  name         String @unique
+  abbreviation String @unique
+  imgUrl       String @unique
+
+  team Team
+
+  units            Unit[]
+  strategies       Strategy[] @relation("userFaction")
+  alliesStrategies Strategy[] @relation("alliedFaction")
+  axisStrategies   Strategy[] @relation("axisFaction")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Unit {
+  id   Int    @id @default(autoincrement())
+  name String 
+
+  image String
+
+  movementSpeed Float @default(0.25)
+  cappingSpeed  Float @default(1)
+
+  Faction   Faction @relation(fields: [factionId], references: [id])
+  factionId Int
+
+  StrategyUnits StrategyUnits[]
+
+  startingUnit Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Command {
+  id Int @id @default(autoincrement())
+
+  type        UnitCommand
+  description String
+
+  targetX Float
+  targetY Float
+
+  StrategyUnits   StrategyUnits @relation(fields: [strategyUnitsId], references: [id])
+  strategyUnitsId Int
+
+  User   User @relation(fields: [userId], references: [id])
+  userId Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model StrategyUnits {
+  id Int @id @default(autoincrement())
+
+  unit   Unit @relation(fields: [unitId], references: [id])
+  unitId Int
+
+	colour String @default("#FF0000")
+
+  strategy   Strategy @relation(fields: [strategyId], references: [id])
+  strategyId Int
+
+  commands Command[]
+}
+
+enum UnitCommand {
+  MOVE
+  CAPTURE
+}
+
+enum Team {
+  AXIS
+  ALLIES
+}
