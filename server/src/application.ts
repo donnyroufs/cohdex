@@ -47,8 +47,8 @@ export class Application extends Kondah {
   protected async setup({ server, addControllers, energizor }: AppContext) {
     const prisma = energizor.get(PrismaService)
 
-    const RedisStore = connectRedis(session)
-    const store = new RedisStore({ client: redis.createClient() })
+    // const RedisStore = connectRedis(session)
+    // const store = new RedisStore({ client: redis.createClient() })
 
     server.addMiddleware(
       '/public',
