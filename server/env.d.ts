@@ -3,6 +3,7 @@ declare namespace NodeJS {
     NODE_ENV: string
     DOMAIN: string
     ORIGIN: string
+    PORT: number
     DATABASE_URL: string
     SESSION_SECRET: string
     API_KEY_STEAM: string

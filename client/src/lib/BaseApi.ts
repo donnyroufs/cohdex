@@ -5,6 +5,7 @@ export abstract class BaseApi {
 
   constructor() {
     this.axios = axios.create({
+      baseURL: process.env.REACT_APP_BASE_URL + '/api/v1',
       withCredentials: true,
     })
   }

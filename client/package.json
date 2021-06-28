@@ -66,6 +66,5 @@
     "@types/react-router-redux": "^5.0.18",
     "@types/react-select": "^4.0.15",
     "@types/react-table": "^7.7.1"
-  },
-  "proxy": "http://localhost:5000/api/v1"
+  }
 }
