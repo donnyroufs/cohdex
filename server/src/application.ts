@@ -75,7 +75,7 @@ export class Application extends Kondah {
           maxAge: milliseconds({ days: 7 }),
           secure: isProd,
           httpOnly: true,
-          sameSite: 'strict',
+          sameSite: 'none',
         },
       }),
       cors({
@@ -145,6 +145,6 @@ export class Application extends Kondah {
 
     await energizor.get<IGameDataService>(DITypes.GameDataService).syncMaps()
     await prisma.connect()
-    server.run(5000)
+    server.run(process.env.PORT || 5000)
   }
 }
