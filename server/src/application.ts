@@ -72,10 +72,10 @@ export class Application extends Kondah {
         proxy: true,
         cookie: {
           maxAge: milliseconds({ days: 7 }),
-          domain: process.env.DOMAIN,
+          // domain: process.env.DOMAIN,
           secure: isProd,
           httpOnly: true,
-          sameSite: 'strict',
+          sameSite: 'none',
         },
       }),
       cors({
