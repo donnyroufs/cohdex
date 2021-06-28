@@ -67,7 +67,6 @@ export class Application extends Kondah {
         name: 'sid',
         resave: false,
         saveUninitialized: false,
-        store,
         cookie: {
           maxAge: milliseconds({ days: 7 }),
           secure: process.env.NODE_ENV === 'prod',
