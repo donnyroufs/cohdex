@@ -5,13 +5,16 @@
   "author": "donny roufs <iamchets@yahoo.com>",
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only --no-notify --exit-child src/bootstrap.ts",
+    "start": "node dist/src/bootstrap.js",
     "migrate": "prisma migrate dev",
     "test": "dotenv -e test.env -- jest",
     "test:watch": "dotenv -e test.env -- jest --watch",
     "test:migrate": "dotenv -e test.env -- prisma migrate deploy",
     "lint": "eslint . --ext .ts",
     "gen:env": "npx gen-env-types .env",
-    "seed": "prisma db seed --preview-feature"
+    "seed": "prisma db seed --preview-feature",
+    "build": "tsc",
+    "prebuild": "cd ../shared && yarn build"
   },
   "license": "MIT",
   "devDependencies": {
