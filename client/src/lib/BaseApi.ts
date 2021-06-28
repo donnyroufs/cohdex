@@ -7,9 +7,6 @@ export abstract class BaseApi {
     this.axios = axios.create({
       withCredentials: true,
       xsrfCookieName: 'csrf-token',
-      headers: {
-        'Access-Control-Allow-Origin': process.env.REACT_APP_BASE_URL,
-      },
     })
   }
 
