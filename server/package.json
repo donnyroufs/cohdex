@@ -5,7 +5,7 @@
   "author": "donny roufs <iamchets@yahoo.com>",
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only --no-notify --exit-child src/bootstrap.ts",
-    "start": "node dist/src/bootstrap.js",
+    "start": "prisma migrate deploy && node dist/src/bootstrap.js",
     "migrate": "prisma migrate dev",
     "test": "dotenv -e test.env -- jest",
     "test:watch": "dotenv -e test.env -- jest --watch",
