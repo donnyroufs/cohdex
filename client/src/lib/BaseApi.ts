@@ -7,20 +7,15 @@ export abstract class BaseApi {
     this.axios = axios.create({
       withCredentials: true,
       xsrfCookieName: 'csrf-token',
-      // validateStatus: (status) => status >= 200 && status < 300,
+      headers: {
+        'Access-Control-Allow-Origin': process.env.REACT_APP_BASE_URL,
+      },
     })
-
-    // this.axios.interceptors.response.use(
-    //   (response) => response,
-    //   (err) => {
-    //     Promise.reject(err.response.data)
-    //   }
-    // )
   }
 
   abstract prefix: string
 
   protected endpoint(endpoint: string = '/') {
-    return this.prefix + endpoint
+    return process.env.REACT_APP_BASE_URL + '/api/v1' + this.prefix + endpoint
   }
 }
