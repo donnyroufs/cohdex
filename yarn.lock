@@ -2145,10 +2145,10 @@
     "@kondah/core" "^0.0.10"
     reflect-metadata "^0.1.13"
 
-"@kondah/http-controller@0.0.10":
-  version "0.0.10"
-  resolved "https://registry.yarnpkg.com/@kondah/http-controller/-/http-controller-0.0.10.tgz#fa63180e51c8e65f08cb8c008a09802ba929b426"
-  integrity sha512-YXFi/Q2Uz0vpooIseVrYhIK95iTpCmJd0tAk6M9CVfNmDP+/Q0PYdrc/HX0/3QT4B8xp+OSM+iJTWJWNBEFV0w==
+"@kondah/http-controller@0.0.11":
+  version "0.0.11"
+  resolved "https://registry.yarnpkg.com/@kondah/http-controller/-/http-controller-0.0.11.tgz#0ffeeaf0c18b35a1e5e6d4b7894d0447cc90ba22"
+  integrity sha512-dl5PzquQGo7tPe3tZp5pYFQrZnJs0inzZ+iWTpbfdxABUb5XyYiCCDke3HDLZMvKgXPddFP7ueX47+fYKfkhZA==
   dependencies:
     "@kondah/core" "^0.0.10"
     "@kondah/http-context" "^0.0.7"

@@ -16,8 +16,8 @@ import {
   CreateStrategyUnitDto,
   RemoveCommandFromStrategyUnitDto,
 } from '../dtos'
-import { isAuthGuard } from '../guards/is-auth.guard'
-import { paramsToInt, validateBody, validateBodyWithParamsToInt } from '../lib'
+import { IsAuthGuard } from '../guards/is-auth.guard'
+import { ValidateBody } from '../lib'
 import { BadRequestException } from '../exceptions'
 import { BaseHttpResponse } from '../lib/base-http-response'
 import {
@@ -37,7 +37,7 @@ export class StrategyController {
   constructor(private readonly _strategyService: StrategyService) {}
 
   @Get('/')
-  @Middleware(isAuthGuard)
+  @Middleware([IsAuthGuard])
   async index({ req, res }: HttpContext) {
     // @ts-expect-error because kondah does not handle types properly yet.
     const strategies = await this._strategyService.all(req.user.id)
@@ -71,7 +71,7 @@ export class StrategyController {
   }
 
   @Post('/')
-  @Middleware(isAuthGuard, validateBody(CreateStrategyDto))
+  @Middleware([IsAuthGuard, ValidateBody.with(CreateStrategyDto)])
   async store(ctx: HttpContext<CreateStrategyDto>) {
     const strategy = await this._strategyService.create(ctx.data).catch((e) => {
       throw new BadRequestException(e.message)
@@ -85,7 +85,7 @@ export class StrategyController {
   }
 
   @Post('/unit')
-  @Middleware(isAuthGuard, validateBody(CreateStrategyUnitDto))
+  @Middleware([IsAuthGuard, ValidateBody.with(CreateStrategyUnitDto)])
   async addUnit(ctx: HttpContext<CreateStrategyUnitDto>) {
     const { id } = await this._strategyService
       .addUnitToStrategy(ctx.data)
@@ -103,7 +103,7 @@ export class StrategyController {
   }
 
   @Post('/command')
-  @Middleware(isAuthGuard, validateBody(AddCommandToStrategyUnitDto))
+  @Middleware([IsAuthGuard, ValidateBody.with(AddCommandToStrategyUnitDto)])
   async addCommandToStrategy(ctx: HttpContext<AddCommandToStrategyUnitDto>) {
     const command = await this._strategyService.addCommandToStrategyUnit(
       ctx.data
@@ -117,10 +117,10 @@ export class StrategyController {
   }
 
   @Patch('/unit/:id/colour')
-  @Middleware(
-    isAuthGuard,
-    validateBodyWithParamsToInt(UpdateStrategyUnitColourDto)
-  )
+  @Middleware([
+    IsAuthGuard,
+    ValidateBody.with(UpdateStrategyUnitColourDto, true),
+  ])
   async updateColour(ctx: HttpContext<UpdateStrategyUnitColourDto>) {
     await this._strategyService.updateStrategyUnitColour(ctx.data)
 
@@ -128,10 +128,7 @@ export class StrategyController {
   }
 
   @Delete('/unit/:id')
-  @Middleware(
-    isAuthGuard,
-    validateBodyWithParamsToInt(RemoveUnitFromStrategyDto)
-  )
+  @Middleware([IsAuthGuard, ValidateBody.with(RemoveUnitFromStrategyDto, true)])
   async removeUnitFromStrategy(ctx: HttpContext<RemoveUnitFromStrategyDto>) {
     await this._strategyService.removeUnitFromStrategy(ctx.data)
 
@@ -139,17 +136,17 @@ export class StrategyController {
   }
 
   @Delete('/command/:id')
-  @Middleware(
-    isAuthGuard,
-    validateBodyWithParamsToInt(RemoveCommandFromStrategyUnitDto)
-  )
+  @Middleware([
+    IsAuthGuard,
+    ValidateBody.with(RemoveCommandFromStrategyUnitDto, true),
+  ])
   async removeCommandFromUnit(ctx: HttpContext) {
     await this._strategyService.removeCommandFromStrategyUnit(ctx.data)
     ctx.res.sendStatus(204)
   }
 
   @Patch('/:strategyId/spawnpoint')
-  @Middleware(isAuthGuard, validateBodyWithParamsToInt(ChooseSpawnPointDto))
+  @Middleware([IsAuthGuard, ValidateBody.with(ChooseSpawnPointDto, true)])
   async updateSpawnpoint(ctx: HttpContext<ChooseSpawnPointDto>) {
     const result = await this._strategyService
       .chooseSpawnpoint(ctx.data)
@@ -165,7 +162,7 @@ export class StrategyController {
   }
 
   @Get('/:slug')
-  @Middleware(isAuthGuard)
+  @Middleware([IsAuthGuard])
   async show({ req, res }: HttpContext) {
     const strategy = await this._strategyService.findOne(
       // @ts-expect-error because kondah does not handle types properly yet.

@@ -49,7 +49,7 @@
     "@cohdex/shared": "1.0.0",
     "@kondah/core": "0.0.10",
     "@kondah/http-context": "0.0.7",
-    "@kondah/http-controller": "0.0.10",
+    "@kondah/http-controller": "0.0.11",
     "@prisma/client": "^2.23.0",
     "axios": "^0.21.1",
     "class-transformer": "^0.4.0",
