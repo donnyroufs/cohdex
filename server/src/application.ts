@@ -24,6 +24,7 @@ import { DomainInputValidationException } from './exceptions/domain/domain-input
 import { GameDataService } from './services/game-data.service'
 import { DITypes } from './di-types'
 import { errorCodeToHttpStatus } from './lib'
+import { User } from '@prisma/client'
 
 export const API_VERSION = 1
 
@@ -86,15 +87,21 @@ export class Application extends Kondah {
       passport.session()
     )
 
+    const userService = energizor.get(UserService)
+
     passport.serializeUser(function (user, done) {
       done(null, user)
     })
 
-    passport.deserializeUser(function (obj: any, done) {
-      done(null, obj)
-    })
+    passport.deserializeUser(async (obj: User, done) => {
+      const user = await userService.findUser(obj.id)
 
-    const userService = energizor.get(UserService)
+      if (!user) {
+        return done(null, false)
+      }
+
+      done(null, user)
+    })
 
     passport.use(
       new SteamStrategy(

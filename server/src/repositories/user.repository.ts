@@ -10,6 +10,14 @@ export class UserRepository {
 
   constructor(private readonly _prismaService: PrismaService) {}
 
+  async findOne(id: number) {
+    return this.user.findFirst({
+      where: {
+        id,
+      },
+    })
+  }
+
   async createOrUpdate(data: ICreateUserDto) {
     return this.user.upsert({
       where: {
