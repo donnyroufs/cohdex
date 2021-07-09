@@ -16,9 +16,7 @@ export class ValidateBody implements IMiddleware {
   execute({ req }: HttpContext) {
     const [data, errors] = new this._dto({
       ...req.body,
-      // @ts-expect-error need to setup types in kondah
       userId: req.user!.id,
-      // @ts-expect-error issue with kondah
       ...this.addParamsIfRequested(req),
     }).validate()
 
@@ -26,8 +24,6 @@ export class ValidateBody implements IMiddleware {
       throw new InputValidationException(errors as ValidationError[])
     }
 
-    // TODO: Kondah expose types!
-    // @ts-expect-error http-context does not expose this yet in middleware
     req.kondah.httpContext.data = data
 
     return true

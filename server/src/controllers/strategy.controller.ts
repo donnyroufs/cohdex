@@ -39,8 +39,7 @@ export class StrategyController {
   @Get('/')
   @Middleware([IsAuthGuard])
   async index({ req, res }: HttpContext) {
-    // @ts-expect-error because kondah does not handle types properly yet.
-    const strategies = await this._strategyService.all(req.user.id)
+    const strategies = await this._strategyService.all(req.user!.id)
     return res.json(
       new BaseHttpResponse<IGetAllUserStrategiesResponseDto>({
         strategies,
@@ -165,7 +164,6 @@ export class StrategyController {
   @Middleware([IsAuthGuard])
   async show({ req, res }: HttpContext) {
     const strategy = await this._strategyService.findOne(
-      // @ts-expect-error because kondah does not handle types properly yet.
       req.user!.id,
       req.params.slug
     )
