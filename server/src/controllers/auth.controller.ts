@@ -11,11 +11,13 @@ export class AuthController {
   @Get('/login')
   @Middleware([PassportAdapter.with('steam')])
   login(ctx: HttpContext) {}
+
   @Delete('/logout')
   logout(ctx: HttpContext) {
     ctx.req.logout()
     ctx.res.sendStatus(204)
   }
+
   @Get('/callback')
   @Middleware([PassportAdapter.toCallback('steam')])
   callback(ctx: HttpContext) {}

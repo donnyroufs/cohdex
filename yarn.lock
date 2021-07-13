@@ -2127,31 +2127,31 @@
   resolved "https://registry.yarnpkg.com/@js-utilities/typecheck/-/typecheck-0.1.4.tgz#48dc56e476653cb4953d03e80e887adb337da0e5"
   integrity sha512-u+M2exrXH9xz1ifgw76amR6uL8RNxSau0JOGnIi4Tse4NhZpaMRElVmvKMhDFgflFzPrhxLHr+rWKBSIvz345Q==
 
-"@kondah/core@0.0.12", "@kondah/core@^0.0.12":
-  version "0.0.12"
-  resolved "https://registry.yarnpkg.com/@kondah/core/-/core-0.0.12.tgz#f8db0a9104a5f0c960f77196c925f320c10b17d3"
-  integrity sha512-mi93jhWey2TKnP1wrjwyrZ8BXSXTrtnXmKthkI+dFnKf1GH1SvyV6iMmFOJ/0MFWkVXo3DFRRn519bbZU9v0yw==
+"@kondah/core@0.0.14", "@kondah/core@^0.0.14":
+  version "0.0.14"
+  resolved "https://registry.yarnpkg.com/@kondah/core/-/core-0.0.14.tgz#f625adeacdb7042299a2c44ae446994523057068"
+  integrity sha512-Tvx4mplxI+GQG4zWS5LXhPVPFPSD/KOllONa4SCZXQpzeUSkOHbqIfFYiwnCUVmlMefPJ3pA+HgYsC6Fo/GExQ==
   dependencies:
     "@types/express" "^4.17.11"
     chalk "^4.1.1"
     express "^4.17.1"
     reflect-metadata "^0.1.13"
 
-"@kondah/http-context@0.0.9", "@kondah/http-context@^0.0.9":
-  version "0.0.9"
-  resolved "https://registry.yarnpkg.com/@kondah/http-context/-/http-context-0.0.9.tgz#53da8e86f89ea05dbd44cb8ac1b5594fe6b4feb9"
-  integrity sha512-DznJr7fJtENzzlGpQk+M0HFOMBXXkR22az91h/UvBIXwEKifGaCMn3rwg3+VPrZ0hfA57izAtoXxEsL7kcs/pw==
+"@kondah/http-context@0.0.11", "@kondah/http-context@^0.0.11":
+  version "0.0.11"
+  resolved "https://registry.yarnpkg.com/@kondah/http-context/-/http-context-0.0.11.tgz#dcecaf050d7035f5187801e57d61923b5870979f"
+  integrity sha512-NC67rEgFeiIkyP/OAvC52fmdjyIYbNXxMtrGlrsL9x4vgkrHwrUz54ejwdNJVCH1lPbVCboHywKy4exj72L7LQ==
   dependencies:
-    "@kondah/core" "^0.0.12"
+    "@kondah/core" "^0.0.14"
     reflect-metadata "^0.1.13"
 
-"@kondah/http-controller@0.0.13":
-  version "0.0.13"
-  resolved "https://registry.yarnpkg.com/@kondah/http-controller/-/http-controller-0.0.13.tgz#92a9b176218745a290833d3e7d399ec8f4d1da73"
-  integrity sha512-Vtyk0ktgMN6HuXdQudZfZC2WJ0r0IJvJUgfptdrpzOwOcb0fhbc0vOWSc/OdAnv5JanM9YTgQY2hWULXnTFr5g==
+"@kondah/http-controller@0.0.16":
+  version "0.0.16"
+  resolved "https://registry.yarnpkg.com/@kondah/http-controller/-/http-controller-0.0.16.tgz#f272ad8c7dd00874418ae970844a8e719bb54ea7"
+  integrity sha512-snLlzjgOaemGqUc5LaE2kD3Ei2yL+QM5nTnzyLfd/qe6M4pkPJDdDBDA1ai274jZgSWVSI3MPzSY4mEX683i2Q==
   dependencies:
-    "@kondah/core" "^0.0.12"
-    "@kondah/http-context" "^0.0.9"
+    "@kondah/core" "^0.0.14"
+    "@kondah/http-context" "^0.0.11"
     reflect-metadata "^0.1.13"
 
 "@nodelib/fs.scandir@2.1.4":
