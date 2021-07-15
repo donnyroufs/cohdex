@@ -7,6 +7,8 @@ import {
   Unit,
   Command,
 } from '@prisma/client'
+import { Visibility } from '.'
+export { Visibility } from '@prisma/client'
 
 export interface BaseHttpResponse<T, U = string> {
   data: T
@@ -35,7 +37,7 @@ export interface IGetFactionsResponseDto {
 export interface ICreateStrategyDto
   extends Omit<
     Strategy,
-    'id' | 'slug' | 'createdAt' | 'updatedAt' | 'spawnPoint'
+    'id' | 'slug' | 'createdAt' | 'updatedAt' | 'spawnPoint' | 'visibility'
   > {}
 
 export interface ICreateStrategyUnitDto extends Omit<StrategyUnits, 'id'> {}
@@ -47,7 +49,7 @@ export interface ICreateStrategyUnitResponseDto {
 }
 
 export interface ICreateStrategyResponseDto {
-  strategy: Pick<Strategy, 'slug'>
+  strategy: Pick<Strategy, 'slug' | 'id'>
 }
 
 export interface ICreateUserDto {
@@ -65,6 +67,7 @@ export interface IGetAllUserStrategies {
   slug: string
   title: string
   spawnPoint: number | null
+  visibility: Visibility
   Map: {
     name: string
   }
@@ -85,8 +88,10 @@ export interface IGetAllUserStrategies {
 export interface IStrategy {
   id: number
   factionId: number
+  userId: number
   title: string
   spawnPoint: number | null
+  visibility: Visibility
   AxisFaction: {
     id: number
     name: string
@@ -164,4 +169,14 @@ export interface IChooseSpawnpointDto {
 
 export interface IUpdateStrategyUnitColourDto {
   colour: string
+}
+
+export interface IGetStrategyDto {
+  id: number
+  slug: string
+}
+
+export interface IUpdateStrategyVisibilityDto {
+  visibility: Visibility
+  strategyId: number
 }

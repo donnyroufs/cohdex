@@ -14,9 +14,11 @@ export interface IUnitsProps {
   activeUnit?: InteractiveUnit
   updateLocalUnitColour(id: number, colour: string): void
   removeLocalUnit(id: number): void
+  isOwner: boolean
 }
 
 export const Units: React.FC<IUnitsProps> = ({
+  isOwner,
   handleOnAdd,
   gameState,
   handleSelectUnit,
@@ -28,6 +30,8 @@ export const Units: React.FC<IUnitsProps> = ({
   const { strategyService } = useProviders()
 
   function handleClick() {
+    if (!isOwner) return
+
     setIsOpen((curr) => !curr)
   }
 
@@ -41,6 +45,7 @@ export const Units: React.FC<IUnitsProps> = ({
   }
 
   async function handleRemoveUnit(id: number) {
+    if (!isOwner) return
     await strategyService.removeUnitFromStrategy({ id })
     removeLocalUnit(id)
   }
@@ -77,6 +82,7 @@ export const Units: React.FC<IUnitsProps> = ({
           .map(({ id, unit, colour }) => (
             <Unit
               {...unit}
+              isOwner={isOwner}
               colour={colour}
               id={id}
               activeUnit={activeUnit}

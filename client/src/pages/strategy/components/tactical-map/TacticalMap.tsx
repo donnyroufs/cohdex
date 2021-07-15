@@ -41,6 +41,7 @@ export interface ITacticalMapProps {
   playing: boolean
   setTick: React.Dispatch<React.SetStateAction<number>>
   max: number
+  isOwner: boolean
 }
 
 export const TacticalMap: React.FC<ITacticalMapProps> = ({
@@ -56,6 +57,7 @@ export const TacticalMap: React.FC<ITacticalMapProps> = ({
   playing,
   setTick,
   max,
+  isOwner,
 }) => {
   const { strategyService } = useProviders()
   const scale = 700 / mapHeight
@@ -76,7 +78,7 @@ export const TacticalMap: React.FC<ITacticalMapProps> = ({
   }
 
   async function onClickPointPosition(point: IPointPosition) {
-    if (!activeUnit) return
+    if (!activeUnit || !isOwner) return
     if (point.fileName.includes('starting')) return
 
     const alreadyCaptured = activeUnit.unit.commands.find(

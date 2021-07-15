@@ -14,6 +14,7 @@ import { TriangleDownIcon, TriangleUpIcon } from '@chakra-ui/icons'
 import { useTable, useSortBy } from 'react-table'
 import { useHistory } from 'react-router'
 import { useAppSelector } from '../../../store/store'
+import { IGetStrategyDto } from '@cohdex/shared'
 
 interface ITableData {
   id: number
@@ -22,6 +23,7 @@ interface ITableData {
   you: string
   opponent: string
   mapName: string
+  visibility: any
   spawn: string
 }
 
@@ -56,6 +58,10 @@ export const Table: React.FC<ITableProps> = ({ tableData }) => {
         Header: 'Spawn',
         accessor: 'spawn',
       },
+      {
+        Header: 'Visibility',
+        accessor: 'visibility',
+      },
     ],
     []
   )
@@ -63,8 +69,8 @@ export const Table: React.FC<ITableProps> = ({ tableData }) => {
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable({ columns, data }, useSortBy)
 
-  function handleNavigate(slug: string) {
-    history.push('/strategy/' + slug)
+  function handleNavigate({ slug, id }: IGetStrategyDto) {
+    history.push('/strategy/' + id + `/${slug}`)
   }
 
   return (
@@ -125,7 +131,12 @@ export const Table: React.FC<ITableProps> = ({ tableData }) => {
                   cursor="pointer"
                   borderLeft="2px solid"
                   borderColor="transparent"
-                  onClick={() => handleNavigate(row.original.slug)}
+                  onClick={() =>
+                    handleNavigate({
+                      slug: row.original.slug,
+                      id: row.original.id,
+                    })
+                  }
                   transition="all .15s ease"
                   _hover={{
                     borderColor: 'primary.600',

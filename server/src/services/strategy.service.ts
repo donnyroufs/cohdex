@@ -7,18 +7,20 @@ import { Injectable } from '@kondah/core'
 import {
   AddCommandToStrategyUnitDto,
   ChooseSpawnPointDto,
+  GetOneStrategyDto,
   RemoveCommandFromStrategyUnitDto,
+  UpdateStrategyVisibilityDto,
+  UpdateStrategyUnitColourDto,
 } from '../dtos'
-import { UpdateStrategyUnitColourDto } from '../dtos/update-strategy-unit-colour.dto'
 import {
   InvalidFactionsException,
   InvalidTeamsException,
   ChosenFactionDoesNotExistException,
   StrategyAlreadyExistsException,
   UnitDoesNotBelongToFactionException,
+  UnknownStrategyException,
+  IsNotOwnerException,
 } from '../exceptions'
-import { UnitDoesNotExistException } from '../exceptions/domain/unit-does-not-exist.exception'
-import { UnknownStrategyException } from '../exceptions/domain/unknown-strategy.exception'
 import { StrategyRepository } from '../repositories/strategy.repository'
 
 @Injectable()
@@ -29,12 +31,10 @@ export class StrategyService {
     return this._strategyRepo.all(id)
   }
 
-  async findOne(userId: number, slug: string) {
-    return this._strategyRepo.findOne(userId, slug)
+  async findOne(data: GetOneStrategyDto) {
+    return this._strategyRepo.findOne(data)
   }
 
-  // When Kondah middleare is fixed we might want to do some resource ownership validation
-  // on the controller. For now we do it in the repo.
   async addCommandToStrategyUnit(data: AddCommandToStrategyUnitDto) {
     return this._strategyRepo.addCommandToStrategyUnit(data)
   }
@@ -42,7 +42,6 @@ export class StrategyService {
   async removeCommandFromStrategyUnit(data: RemoveCommandFromStrategyUnitDto) {
     return this._strategyRepo.removeCommandFromStrategyUnit(data)
   }
-  // end
 
   async addUnitToStrategy(data: ICreateStrategyUnitDto) {
     const foundFaction = await this._strategyRepo.getFactionByStrategyId(
@@ -122,5 +121,15 @@ export class StrategyService {
 
   async removeUnitFromStrategy(data: IRemoveUnitFromStrategyDto) {
     return this._strategyRepo.removeUnitFromStrategy(data)
+  }
+
+  async updateStrategyVisibility(data: UpdateStrategyVisibilityDto) {
+    const isOwner = this._strategyRepo.getByUserId(data.strategyId, data.userId)
+
+    if (!isOwner) {
+      throw new IsNotOwnerException()
+    }
+
+    return this._strategyRepo.updateStrategyVisibility(data)
   }
 }

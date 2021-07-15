@@ -9,6 +9,7 @@ export interface IUnitColourPickerProps {
   colour: string
   onChange: React.Dispatch<React.SetStateAction<string>>
   updateLocalUnitColour(id: number, colour: string): void
+  isOwner: boolean
 }
 
 export const UnitColourPicker: React.FC<IUnitColourPickerProps> = ({
@@ -16,6 +17,7 @@ export const UnitColourPicker: React.FC<IUnitColourPickerProps> = ({
   onChange,
   updateLocalUnitColour,
   id,
+  isOwner,
 }) => {
   const [value, setValue] = useState(currentColour)
   const [isOpen, setIsOpen] = useState(false)
@@ -41,6 +43,7 @@ export const UnitColourPicker: React.FC<IUnitColourPickerProps> = ({
         background={value}
         width={6}
         onClick={() => {
+          if (!isOwner) return
           setIsOpen((curr) => !curr)
         }}
         _hover={{
@@ -53,6 +56,7 @@ export const UnitColourPicker: React.FC<IUnitColourPickerProps> = ({
         <Box position="absolute" left="90px" zIndex="50" ref={ref}>
           <HexColorPicker
             onChange={(e) => {
+              if (!isOwner) return
               setValue(e.toString())
               updateLocalUnitColour(id, e.toString())
             }}

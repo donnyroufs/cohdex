@@ -52,6 +52,7 @@ export const CreateStrategy = () => {
   const status = useAppSelector((state) => state.strategies.status)
   const error = useAppSelector((state) => state.strategies.error)
   const slug = useAppSelector((state) => state.strategies.slug)
+  const strategyId = useAppSelector((state) => state.strategies.id)
   const history = useHistory()
   const dispatch = useAppDispatch()
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -85,8 +86,8 @@ export const CreateStrategy = () => {
   }, [state, dispatch])
 
   useEffect(() => {
-    if (slug) {
-      history.push('/strategy/' + slug)
+    if (slug && strategyId) {
+      history.push('/strategy/' + strategyId + '/' + slug)
       dispatch(restore())
     }
 
@@ -96,7 +97,7 @@ export const CreateStrategy = () => {
       }))
       onClose()
     }
-  }, [slug, history, dispatch, error, onClose])
+  }, [slug, history, dispatch, error, onClose, strategyId])
 
   function handleFinalStep() {
     const fields = ['axisFactionId', 'alliedFactionId', 'title', 'mapId']

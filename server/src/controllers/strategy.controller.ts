@@ -14,7 +14,9 @@ import {
   ChooseSpawnPointDto,
   CreateStrategyDto,
   CreateStrategyUnitDto,
+  GetOneStrategyDto,
   RemoveCommandFromStrategyUnitDto,
+  UpdateStrategyVisibilityDto,
 } from '../dtos'
 import { IsAuthGuard } from '../guards/is-auth.guard'
 import { ValidateBody } from '../lib'
@@ -43,6 +45,20 @@ export class StrategyController {
     return res.json(
       new BaseHttpResponse<IGetAllUserStrategiesResponseDto>({
         strategies,
+      })
+    )
+  }
+
+  // api/strategy/iamchets/my-slug
+  @Get('/:id/:slug')
+  @Middleware([ValidateBody.with(GetOneStrategyDto, true)])
+  async show({ req, res, data }: HttpContext<GetOneStrategyDto>) {
+    const strategy = await this._strategyService.findOne(data)
+
+    return res.json(
+      new BaseHttpResponse<IGetStrategyResponseDto>({
+        // @ts-ignore
+        strategy: strategy,
       })
     )
   }
@@ -160,19 +176,14 @@ export class StrategyController {
     return ctx.res.sendStatus(204)
   }
 
-  @Get('/:slug')
-  @Middleware([IsAuthGuard])
-  async show({ req, res }: HttpContext) {
-    const strategy = await this._strategyService.findOne(
-      req.user!.id,
-      req.params.slug
-    )
+  @Patch('/:id/visibility')
+  @Middleware([
+    IsAuthGuard,
+    ValidateBody.with(UpdateStrategyVisibilityDto, true),
+  ])
+  async updateVisibility(ctx: HttpContext<UpdateStrategyVisibilityDto>) {
+    await this._strategyService.updateStrategyVisibility(ctx.data)
 
-    return res.json(
-      new BaseHttpResponse<IGetStrategyResponseDto>({
-        // @ts-ignore
-        strategy: strategy,
-      })
-    )
+    return ctx.res.sendStatus(204)
   }
 }

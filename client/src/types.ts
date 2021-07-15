@@ -27,6 +27,7 @@ export interface IStrategySliceState {
 }
 
 export interface IStrategiesState {
+  id: number | null
   status: StrategiesLoadingType
   slug: string | null
   maps: IMap[]

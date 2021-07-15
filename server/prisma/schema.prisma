@@ -57,8 +57,7 @@ model Strategy {
 
   spawnPoint Int?
 
-  // commanderId Int?
-  // tierId Int?
+	visibility  Visibility @default(PRIVATE)
 
   User   User @relation(fields: [userId], references: [id])
   userId Int
@@ -162,4 +161,9 @@ enum UnitCommand {
 enum Team {
   AXIS
   ALLIES
+}
+
+enum Visibility {
+	PUBLIC
+	PRIVATE
 }
