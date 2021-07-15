@@ -16,7 +16,7 @@ export class ValidateBody implements IMiddleware {
   execute({ req }: HttpContext) {
     const [data, errors] = new this._dto({
       ...req.body,
-      userId: req.user!.id,
+      userId: req.user?.id,
       ...this.addParamsIfRequested(req),
     }).validate()
 
@@ -36,8 +36,12 @@ export class ValidateBody implements IMiddleware {
 
     return Object.entries(req.params).reduce(
       (acc: Record<string, any>, [k, v]) => {
-        acc[k] = parseInt(v)
+        if (!k.toLowerCase().includes('id')) {
+          acc[k] = v
+          return acc
+        }
 
+        acc[k] = parseInt(v)
         return acc
       },
       {}

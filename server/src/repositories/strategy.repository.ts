@@ -9,7 +9,9 @@ import slugify from 'slugify'
 import {
   AddCommandToStrategyUnitDto,
   ChooseSpawnPointDto,
+  GetOneStrategyDto,
   RemoveCommandFromStrategyUnitDto,
+  UpdateStrategyVisibilityDto,
 } from '../dtos'
 import { UpdateStrategyUnitColourDto } from '../dtos/update-strategy-unit-colour.dto'
 import { PrismaService } from '../services/prisma.service'
@@ -42,10 +44,10 @@ export class StrategyRepository {
 
   constructor(private readonly _prismaService: PrismaService) {}
 
-  async findOne(userId: number, slug: string) {
+  async findOne({ slug, id }: GetOneStrategyDto) {
     const strategy = await this.strategy.findFirst({
       where: {
-        userId,
+        id,
         slug,
       },
       select: {
@@ -53,6 +55,8 @@ export class StrategyRepository {
         factionId: true,
         title: true,
         spawnPoint: true,
+        userId: true,
+        visibility: true,
         AxisFaction: {
           select: {
             id: true,
@@ -117,6 +121,7 @@ export class StrategyRepository {
         slug: true,
         title: true,
         spawnPoint: true,
+        visibility: true,
         Map: {
           select: {
             name: true,
@@ -159,6 +164,7 @@ export class StrategyRepository {
       },
       select: {
         slug: true,
+        id: true,
       },
     })
 
@@ -198,7 +204,6 @@ export class StrategyRepository {
 
   // TODO: Add user validation
   async addUnit(data: ICreateStrategyUnitDto) {
-    console.log({ data })
     return this.strategyUnits.create({
       data,
       select: {
@@ -313,6 +318,28 @@ export class StrategyRepository {
       },
       select: {
         startingUnit: true,
+      },
+    })
+  }
+
+  async updateStrategyVisibility(data: UpdateStrategyVisibilityDto) {
+    await this.strategy.update({
+      where: {
+        id: data.userId,
+      },
+      data: {
+        visibility: data.visibility,
+      },
+    })
+
+    return true
+  }
+
+  async getByUserId(id: number, userId: number) {
+    return this.strategy.findFirst({
+      where: {
+        id,
+        userId,
       },
     })
   }

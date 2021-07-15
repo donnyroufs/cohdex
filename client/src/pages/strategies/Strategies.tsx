@@ -81,6 +81,7 @@ export const Strategies = () => {
                       slug: strategy.slug,
                       title: strategy.title,
                       you: strategy.Faction.name,
+                      visibility: strategy.visibility,
                       opponent:
                         strategy.AlliedFaction.name === strategy.Faction.name
                           ? strategy.AxisFaction.name

@@ -1,4 +1,4 @@
-import { ICreateStrategyDto } from '@cohdex/shared'
+import { ICreateStrategyDto, IGetStrategyDto } from '@cohdex/shared'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { strategiesApi } from '../../api'
 import { IStrategiesState } from '../../types'
@@ -19,7 +19,7 @@ export const fetchMaps = createAsyncThunk('strategies/fetchMaps', async () =>
 
 export const fetchStrategy = createAsyncThunk(
   'strategies/fetchStrategy',
-  async (slug: string) => strategiesApi.getStrategy(slug)
+  async (data: IGetStrategyDto) => strategiesApi.getStrategy(data)
 )
 
 export const fetchCreateStrategy = createAsyncThunk(
@@ -29,6 +29,7 @@ export const fetchCreateStrategy = createAsyncThunk(
 )
 
 export const initialState: IStrategiesState = {
+  id: null,
   strategies: [],
   status: 'init',
   slug: null,
@@ -83,7 +84,11 @@ export const slice = createSlice({
           return
         }
 
+        // TODO: Refactor
+        // Adds results needed to redirect to new page
+        // This does not belong here.
         state.slug = payload.data.strategy.slug
+        state.id = payload.data.strategy.id
       })
       .addCase(fetchCreateStrategy.rejected, (state, payload) => {
         state.status = 'idle'

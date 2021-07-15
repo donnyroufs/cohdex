@@ -1,9 +1,11 @@
 import {
   IAddCommandToStrategyUnitDto,
+  IGetStrategyDto,
   IRemoveCommandFromStrategyUnit,
   IRemoveUnitFromStrategyDto,
   IUnit,
   IUpdateStrategyUnitColourDto,
+  IUpdateStrategyVisibilityDto,
 } from '@cohdex/shared'
 import { strategiesApi } from '../api'
 import { BaseService } from '../lib'
@@ -11,8 +13,8 @@ import { BaseService } from '../lib'
 export class StrategyService extends BaseService {
   protected api = strategiesApi
 
-  async getStrategy(slug: string) {
-    return this.api.getStrategy(slug)
+  async getStrategy(data: IGetStrategyDto) {
+    return this.api.getStrategy(data)
   }
 
   // TODO: Alternate colour
@@ -47,5 +49,9 @@ export class StrategyService extends BaseService {
 
   async changeUnitColour(data: IUpdateStrategyUnitColourDto, unitId: number) {
     return this.api.changeUnitColour(data, unitId)
+  }
+
+  async updateStrategyVisibility(data: IUpdateStrategyVisibilityDto) {
+    return this.api.updateStrategyVisibility(data)
   }
 }

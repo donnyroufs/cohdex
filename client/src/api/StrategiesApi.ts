@@ -13,6 +13,8 @@ import {
   IRemoveCommandFromStrategyUnit,
   IUpdateStrategyUnitColourDto,
   IRemoveUnitFromStrategyDto,
+  IGetStrategyDto,
+  IUpdateStrategyVisibilityDto,
 } from '@cohdex/shared'
 import { BaseApi } from '../lib/BaseApi'
 
@@ -44,10 +46,13 @@ export const strategiesApi = new (class StrategiesApi extends BaseApi {
     })
   }
 
-  async getStrategy(
-    slug: string
-  ): Promise<BaseHttpResponse<IGetStrategyResponseDto>> {
-    return this.axios.get(this.endpoint('/') + slug).then(({ data }) => data)
+  async getStrategy({
+    id,
+    slug,
+  }: IGetStrategyDto): Promise<BaseHttpResponse<IGetStrategyResponseDto>> {
+    return this.axios
+      .get(this.endpoint('/') + id + `/${slug}`)
+      .then(({ data }) => data)
   }
 
   async getAllUserStrategies(): Promise<
@@ -83,5 +88,12 @@ export const strategiesApi = new (class StrategiesApi extends BaseApi {
 
   async changeUnitColour(data: IUpdateStrategyUnitColourDto, unitId: number) {
     return this.axios.patch(this.endpoint(`/unit/${unitId}/colour`), data)
+  }
+
+  async updateStrategyVisibility(data: IUpdateStrategyVisibilityDto) {
+    return this.axios.patch(
+      this.endpoint(`/${data.strategyId}/visibility`),
+      data
+    )
   }
 })()

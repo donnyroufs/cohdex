@@ -24,9 +24,9 @@ export const routerConfig: IRoute[] = [
     layout: BaseLayout,
   },
   {
-    path: '/strategy/:slug',
+    path: '/strategy/:id/:slug',
     component: Strategy,
-    withAuth: true,
+    withAuth: false,
     exact: false,
     layout: BaseLayout,
   },

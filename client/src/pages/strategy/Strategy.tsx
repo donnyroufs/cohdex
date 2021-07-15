@@ -9,6 +9,7 @@ import {
   SliderTrack,
   SliderThumb,
   SliderFilledTrack,
+  IconButton,
 } from '@chakra-ui/react'
 import { Spinner, Title } from '../../components'
 import { GameState, Tick } from '../../types'
@@ -18,6 +19,9 @@ import { InteractiveUnit } from '../../models/InteractiveUnit'
 import { ReplayableCommand, Vec2 } from '../../models/ReplayableCommand'
 import { debounce } from 'lodash'
 import useWindowSize from '../../hooks/useWindowSize'
+import { LockIcon, UnlockIcon } from '@chakra-ui/icons'
+import { Visibility } from '@cohdex/shared'
+import { useAppSelector } from '../../store/store'
 
 const COLOURS = [
   '#EF1080',
@@ -29,6 +33,7 @@ const COLOURS = [
 ]
 
 export interface IStrategyParams {
+  id: string
   slug: string
 }
 
@@ -37,6 +42,7 @@ export const Strategy = () => {
   const { width } = useWindowSize()
   const [playing, setPlaying] = useState(false)
   const [loading, setLoading] = React.useState(true)
+  const user = useAppSelector((state) => state.auth.user)
   const [error, setError] = React.useState(null)
   const [gameState, setGameState] = useState<GameState>({
     units: [],
@@ -45,15 +51,14 @@ export const Strategy = () => {
   })
   const [tick, setTick] = useState<Tick>(0)
 
-  const { slug } = useParams<IStrategyParams>()
+  const { id, slug } = useParams<IStrategyParams>()
 
   useEffect(() => {
     setLoading(true)
 
     strategyService
-      .getStrategy(slug)
+      .getStrategy({ id: +id, slug })
       .then((res) => {
-        // TODO: add units
         setGameState({
           units: res.data.strategy.StrategyUnits.map(
             (props) => new InteractiveUnit(props)
@@ -66,7 +71,7 @@ export const Strategy = () => {
       .finally(() => {
         setLoading(false)
       })
-  }, [strategyService, slug])
+  }, [strategyService, slug, id])
 
   // TODO: Required to calculate starting location for the first command
   const currentSpawn = useMemo(() => {
@@ -157,6 +162,10 @@ export const Strategy = () => {
   // It will add an empty step, might need to check if last one has commands
   const max = allTicks.length > 0 ? Math.max(...allTicks) / 5 + 1 : 0
 
+  const isOwner = useMemo(() => {
+    return user?.id === gameState.strategyData?.userId
+  }, [user, gameState])
+
   if (loading) {
     return <Spinner withMessage />
   }
@@ -174,6 +183,7 @@ export const Strategy = () => {
   )
 
   async function handleOnAdd(id: number) {
+    if (!isOwner) return
     const unit = gameState.strategyData!.units.find((u) => u.id === id)
 
     if (!unit) return
@@ -222,6 +232,7 @@ export const Strategy = () => {
   }
 
   function removeLocalUnit(id: number) {
+    if (!isOwner) return
     setGameState((curr) => ({
       ...curr,
       units: curr.units.filter((u) => u.id !== id),
@@ -241,6 +252,23 @@ export const Strategy = () => {
     }
 
     setPlaying((curr) => !curr)
+  }
+
+  function handleChangeVisibility(visibility: Visibility) {
+    if (!isOwner) return
+
+    strategyService.updateStrategyVisibility({
+      visibility,
+      strategyId: +id,
+    })
+
+    setGameState((curr) => ({
+      ...curr,
+      strategyData: {
+        ...curr.strategyData!,
+        visibility,
+      },
+    }))
   }
 
   if (width <= 1140) {
@@ -265,6 +293,7 @@ export const Strategy = () => {
         <Flex flexDir="row" flexWrap="wrap" flex="1" justifyContent="center">
           <Flex flexDir="row">
             <Units
+              isOwner={isOwner}
               handleOnAdd={handleOnAdd}
               gameState={gameState}
               handleSelectUnit={handleSelectUnit}
@@ -273,8 +302,31 @@ export const Strategy = () => {
               removeLocalUnit={removeLocalUnit}
             />
             <Box>
-              <Title value={gameState.strategyData!.title} mt={0} mb={6} />
+              <Flex justifyContent="space-between">
+                <Title value={gameState.strategyData!.title} mt={0} mb={6} />
+                {gameState.strategyData?.visibility === Visibility.PRIVATE && (
+                  <IconButton
+                    aria-label="set visibility to public"
+                    background="background.800"
+                    color="vintage.600"
+                    variant="unstyled"
+                    icon={<LockIcon mb={1} />}
+                    onClick={() => handleChangeVisibility(Visibility.PUBLIC)}
+                  />
+                )}
+                {gameState.strategyData?.visibility === Visibility.PUBLIC && (
+                  <IconButton
+                    aria-label="set visibility to private"
+                    variant="unstyled"
+                    color="vintage.600"
+                    icon={<UnlockIcon mb={1} />}
+                    background="background.800"
+                    onClick={() => handleChangeVisibility(Visibility.PRIVATE)}
+                  />
+                )}
+              </Flex>
               <TacticalMap
+                isOwner={isOwner}
                 strategyId={gameState.strategyData!.id}
                 mapHeight={gameState.strategyData!.Map.height}
                 spawnpoint={gameState.spawnpoint}
@@ -311,6 +363,7 @@ export const Strategy = () => {
               className="commands"
             />
             <Commands
+              isOwner={isOwner}
               activeUnit={activeUnit}
               removeCommand={async (id) => {
                 strategyService.removeCommandFromUnit({ id })

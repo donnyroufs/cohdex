@@ -11,11 +11,13 @@ export interface IUnitProps extends IUnitWithCommands {
   colour: string
   updateLocalUnitColour(id: number, colour: string): void
   handleRemoveUnit(id: number): Promise<void>
+  isOwner: boolean
 }
 
 export const Unit: React.FC<IUnitProps> = ({
   handleSelectUnit,
   activeUnit,
+  isOwner,
   id,
   image,
   colour,
@@ -53,6 +55,7 @@ export const Unit: React.FC<IUnitProps> = ({
       />
       <UnitColourPicker
         id={id}
+        isOwner={isOwner}
         updateLocalUnitColour={updateLocalUnitColour}
         colour={currentColour}
         onChange={(e) => {

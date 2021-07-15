@@ -138,14 +138,7 @@ export class StrategyController {
     })
 
     const res = await this.request.post(PREFIX + '/strategies').send(dto)
-
-    expect(res.body).toEqual(
-      new BaseHttpResponse<ICreateStrategyResponseDto>({
-        strategy: {
-          slug: 'some-awesome-title',
-        },
-      })
-    )
+    expect(res.body.data.strategy.slug).toBe('some-awesome-title')
   }
 
   @Test()
@@ -258,7 +251,9 @@ export class StrategyController {
 
     if (!strategy) return
 
-    const res = await this.request.get(PREFIX + `/strategies/${strategy.slug}`)
+    const res = await this.request.get(
+      PREFIX + `/strategies/${strategy.id}/${strategy.slug}`
+    )
 
     expect(res.status).toBe(200)
     expect(res.body.data).toBeDefined()

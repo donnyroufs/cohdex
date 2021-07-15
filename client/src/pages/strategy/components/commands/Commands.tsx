@@ -5,14 +5,17 @@ import { Command } from './components/Command'
 export interface ICommandsProps {
   activeUnit?: InteractiveUnit
   removeCommand(id: number): Promise<void>
+  isOwner: boolean
 }
 
 export const Commands: React.FC<ICommandsProps> = ({
   activeUnit,
   removeCommand,
+  isOwner,
 }) => {
   async function handleClick(e: MouseEvent, id: number) {
     if (e.type !== 'contextmenu') return
+    if (!isOwner) return
     e.preventDefault()
 
     removeCommand(id)
