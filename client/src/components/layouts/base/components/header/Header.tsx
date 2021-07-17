@@ -1,5 +1,13 @@
 import { Link as ReactLink } from 'react-router-dom'
-import { Box, Container, Flex, Heading, Link } from '@chakra-ui/layout'
+import {
+  Box,
+  Container,
+  Flex,
+  Heading,
+  Link,
+  Image,
+  Text,
+} from '@chakra-ui/react'
 import { useAppSelector } from '../../../../../store/store'
 import { Dropdown } from './Dropdown'
 import { FaSteam } from 'react-icons/fa'
@@ -29,10 +37,18 @@ export const Header = () => {
           color="primary.600"
           letterSpacing="wider"
         >
-          <Box as="span" color="text.300">
-            coh
+          <Box
+            as="span"
+            color="text.300"
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+          >
+            <Image src="/images/cohdex-logo.svg" alt="cohdex logo" />
+            <Text fontSize={18} ml={1}>
+              beta
+            </Text>
           </Box>
-          dex
         </Heading>
         <Box>
           {user && (
