@@ -14,4 +14,7 @@ export class GetOneStrategyDto
   @Expose()
   @IsString()
   slug: string
+
+  @Expose()
+  userId?: number
 }

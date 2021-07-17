@@ -2,6 +2,7 @@ import {
   ICreateStrategyDto,
   ICreateStrategyUnitDto,
   IRemoveUnitFromStrategyDto,
+  Visibility,
 } from '@cohdex/shared'
 import { Injectable } from '@kondah/core'
 import {
@@ -20,6 +21,7 @@ import {
   UnitDoesNotBelongToFactionException,
   UnknownStrategyException,
   IsNotOwnerException,
+  StrategyIsNotPublicException,
 } from '../exceptions'
 import { StrategyRepository } from '../repositories/strategy.repository'
 
@@ -32,7 +34,19 @@ export class StrategyService {
   }
 
   async findOne(data: GetOneStrategyDto) {
-    return this._strategyRepo.findOne(data)
+    const strategy = await this._strategyRepo.findOne(data)
+
+    // if (!strategy) {
+    //   throw new UnknownStrategyException()
+    // }
+
+    // const isOwner = data.userId && strategy.userId === data.userId
+
+    // if (!isOwner && strategy.visibility === Visibility.PRIVATE) {
+    //   throw new StrategyIsNotPublicException()
+    // }
+
+    return strategy
   }
 
   async addCommandToStrategyUnit(data: AddCommandToStrategyUnitDto) {

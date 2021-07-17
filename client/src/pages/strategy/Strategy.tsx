@@ -44,7 +44,7 @@ export const Strategy = () => {
   const [playing, setPlaying] = useState(false)
   const [loading, setLoading] = React.useState(true)
   const user = useAppSelector((state) => state.auth.user)
-  const [, setError] = React.useState(null)
+  // const [error, setError] = React.useState(null)
   const [gameState, setGameState] = useState<GameState>({
     units: [],
     spawnpoint: null,
@@ -68,11 +68,15 @@ export const Strategy = () => {
           strategyData: res.data.strategy,
         })
       })
-      .catch((err) => setError(err))
+      .catch((err) => {
+        console.log(err)
+        // TODO: Handle error
+        history.push('/strategies')
+      })
       .finally(() => {
         setLoading(false)
       })
-  }, [strategyService, slug, id])
+  }, [strategyService, slug, id, history])
 
   // TODO: Required to calculate starting location for the first command
   const currentSpawn = useMemo(() => {
@@ -268,7 +272,6 @@ export const Strategy = () => {
   async function handleChangeVisibility(visibility: Visibility) {
     if (!isOwner) return
 
-    console.log(id)
     await strategyService.updateStrategyVisibility({
       visibility,
       strategyId: +id,
