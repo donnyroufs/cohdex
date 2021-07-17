@@ -51,8 +51,10 @@ export class Application extends Kondah {
     const RedisStore = connectRedis(session)
     const store = new RedisStore({ client: redis.createClient() })
 
+    server.set('trust proxy', 1)
+
     server.addMiddleware(
-      '/api/public',
+      '/static',
       express.static(path.join(__dirname, '../public'))
     )
 
@@ -61,8 +63,6 @@ export class Application extends Kondah {
     }
 
     const isProd = process.env.NODE_ENV === 'prod'
-
-    server.set('trust proxy', 1)
 
     server.addGlobalMiddleware(
       cookieParser(),
