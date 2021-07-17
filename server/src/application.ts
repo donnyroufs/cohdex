@@ -78,7 +78,7 @@ export class Application extends Kondah {
           maxAge: milliseconds({ days: 7 }),
           secure: isProd,
           httpOnly: true,
-          sameSite: 'strict',
+          sameSite: 'none',
         },
       }),
       cors({
