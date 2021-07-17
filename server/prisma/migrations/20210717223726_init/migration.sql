@@ -4,12 +4,17 @@ CREATE TYPE "UnitCommand" AS ENUM ('MOVE', 'CAPTURE');
 -- CreateEnum
 CREATE TYPE "Team" AS ENUM ('AXIS', 'ALLIES');
 
+-- CreateEnum
+CREATE TYPE "Visibility" AS ENUM ('PUBLIC', 'PRIVATE');
+
 -- CreateTable
 CREATE TABLE "User" (
     "id" SERIAL NOT NULL,
+    "displayName" TEXT NOT NULL,
     "steamId" TEXT NOT NULL,
     "avatar" TEXT NOT NULL,
     "profileUrl" TEXT NOT NULL,
+    "hasConfirmedDisplayName" BOOLEAN NOT NULL DEFAULT false,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -49,6 +54,8 @@ CREATE TABLE "Strategy" (
     "id" SERIAL NOT NULL,
     "title" TEXT NOT NULL,
     "slug" TEXT NOT NULL,
+    "spawnPoint" INTEGER,
+    "visibility" "Visibility" NOT NULL DEFAULT E'PRIVATE',
     "userId" INTEGER NOT NULL,
     "mapId" INTEGER NOT NULL,
     "factionId" INTEGER NOT NULL,
@@ -92,8 +99,10 @@ CREATE TABLE "Unit" (
 CREATE TABLE "Command" (
     "id" SERIAL NOT NULL,
     "type" "UnitCommand" NOT NULL,
-    "description" TEXT,
-    "strategyUnitsId" INTEGER,
+    "description" TEXT NOT NULL,
+    "targetX" DOUBLE PRECISION NOT NULL,
+    "targetY" DOUBLE PRECISION NOT NULL,
+    "strategyUnitsId" INTEGER NOT NULL,
     "userId" INTEGER NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -105,10 +114,14 @@ CREATE TABLE "Command" (
 CREATE TABLE "StrategyUnits" (
     "id" SERIAL NOT NULL,
     "unitId" INTEGER NOT NULL,
+    "colour" TEXT NOT NULL DEFAULT E'#FF0000',
     "strategyId" INTEGER NOT NULL,
 
     PRIMARY KEY ("id")
 );
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User.displayName_unique" ON "User"("displayName");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User.steamId_unique" ON "User"("steamId");
@@ -131,11 +144,14 @@ CREATE UNIQUE INDEX "Faction.abbreviation_unique" ON "Faction"("abbreviation");
 -- CreateIndex
 CREATE UNIQUE INDEX "Faction.imgUrl_unique" ON "Faction"("imgUrl");
 
--- CreateIndex
-CREATE UNIQUE INDEX "Unit.name_unique" ON "Unit"("name");
-
 -- AddForeignKey
 ALTER TABLE "Unit" ADD FOREIGN KEY ("factionId") REFERENCES "Faction"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Command" ADD FOREIGN KEY ("strategyUnitsId") REFERENCES "StrategyUnits"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Command" ADD FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Strategy" ADD FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -153,16 +169,10 @@ ALTER TABLE "Strategy" ADD FOREIGN KEY ("alliedFactionId") REFERENCES "Faction"(
 ALTER TABLE "Strategy" ADD FOREIGN KEY ("axisFactionId") REFERENCES "Faction"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "PointPosition" ADD FOREIGN KEY ("mapId") REFERENCES "Map"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Command" ADD FOREIGN KEY ("strategyUnitsId") REFERENCES "StrategyUnits"("id") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Command" ADD FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
 ALTER TABLE "StrategyUnits" ADD FOREIGN KEY ("unitId") REFERENCES "Unit"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "StrategyUnits" ADD FOREIGN KEY ("strategyId") REFERENCES "Strategy"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "PointPosition" ADD FOREIGN KEY ("mapId") REFERENCES "Map"("id") ON DELETE CASCADE ON UPDATE CASCADE;
