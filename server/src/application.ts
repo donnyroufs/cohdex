@@ -62,6 +62,8 @@ export class Application extends Kondah {
 
     const isProd = process.env.NODE_ENV === 'prod'
 
+    server.set('trust proxy', 1)
+
     server.addGlobalMiddleware(
       cookieParser(),
       express.json(),
