@@ -69,7 +69,6 @@ export const Strategy = () => {
         })
       })
       .catch((err) => {
-        console.log(err)
         // TODO: Handle error
         history.push('/strategies')
       })

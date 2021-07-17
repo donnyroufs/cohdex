@@ -35,11 +35,6 @@ export class PassportCallback implements IMiddleware {
       async (err: any, user: IUser, info: any) => {
         if (!user) throw new NotAuthenticatedException()
 
-        console.log(this)
-        // const _user = await this._userService.findUser(user.id)
-
-        console.log({ user })
-
         httpContext.req.login(user, (err) => {
           if (err) throw new NotAuthenticatedException()
           return httpContext.res.redirect(process.env.REDIRECT_URI)
