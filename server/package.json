@@ -13,8 +13,7 @@
     "lint": "eslint . --ext .ts",
     "gen:env": "npx gen-env-types .env",
     "seed": "prisma db seed --preview-feature",
-    "build": "tsc",
-    "prebuild": "cd ../shared && yarn build"
+    "build": "tsc"
   },
   "license": "MIT",
   "devDependencies": {
