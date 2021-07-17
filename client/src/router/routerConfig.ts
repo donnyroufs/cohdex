@@ -1,5 +1,12 @@
 import { IRoute } from '../types'
-import { CreateStrategy, Home, NotFound, Strategies, Strategy } from '../pages'
+import {
+  CreateStrategy,
+  Home,
+  NotFound,
+  Settings,
+  Strategies,
+  Strategy,
+} from '../pages'
 import { BaseLayout } from '../components/layouts'
 
 export const routerConfig: IRoute[] = [
@@ -8,6 +15,13 @@ export const routerConfig: IRoute[] = [
     component: Home,
     withAuth: false,
     exact: true,
+  },
+  {
+    path: '/settings',
+    component: Settings,
+    withAuth: true,
+    exact: true,
+    layout: BaseLayout,
   },
   {
     path: '/strategies',

@@ -12,9 +12,12 @@ generator client {
 
 model User {
   id         Int    @id @default(autoincrement())
+	displayName String @unique
   steamId    String @unique
   avatar     String
   profileUrl String
+
+	hasConfirmedDisplayName Boolean @default(false)
 
   strategies Strategy[]
   command    Command[]

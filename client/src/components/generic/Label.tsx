@@ -2,9 +2,10 @@ import { Box } from '@chakra-ui/react'
 export interface ILabelProps {
   value: string
   mb?: string | number
+  my?: string | number
 }
 
-export const Label: React.FC<ILabelProps> = ({ value, mb }) => {
+export const Label: React.FC<ILabelProps> = ({ value, mb, my }) => {
   return (
     <Box
       as="label"
@@ -18,7 +19,7 @@ export const Label: React.FC<ILabelProps> = ({ value, mb }) => {
       pl={4}
       py={1}
       display="block"
-      my={12}
+      my={my != null ? my : 12}
       mb={mb}
     >
       {value}

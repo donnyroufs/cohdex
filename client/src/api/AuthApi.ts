@@ -1,4 +1,8 @@
-import { IGetMeResponseDto, BaseHttpResponse } from '@cohdex/shared'
+import {
+  IGetMeResponseDto,
+  BaseHttpResponse,
+  IConfirmUserDisplayNameDto,
+} from '@cohdex/shared'
 import { BaseApi } from '../lib/BaseApi'
 
 export const authApi = new (class AuthApi extends BaseApi {
@@ -11,5 +15,9 @@ export const authApi = new (class AuthApi extends BaseApi {
 
   public async logout(): Promise<void> {
     await this.axios.delete(this.endpoint('/logout'))
+  }
+
+  public async confirmDisplayName(data: IConfirmUserDisplayNameDto) {
+    return this.axios.patch(this.endpoint('/confirm-display-name'), data)
   }
 })()

@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { authApi } from '../../api'
 import { IAuthState } from '../../types'
 
@@ -22,7 +22,17 @@ export const initialState: IAuthState = {
 export const slice = createSlice({
   name: 'auth',
   initialState,
-  reducers: {},
+  reducers: {
+    confirmedDisplayName(
+      state,
+      { payload }: PayloadAction<{ displayName: string }>
+    ) {
+      if (!state.user) return
+
+      state.user.displayName = payload.displayName
+      state.user.hasConfirmedDisplayName = true
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(fetchMe.pending, (state) => {
       state.isLoading = true
@@ -48,4 +58,4 @@ export const slice = createSlice({
 })
 
 export const authReducer = slice.reducer
-export const actions = slice.actions
+export const { confirmedDisplayName } = slice.actions

@@ -1,7 +1,7 @@
 import { HttpContext } from '@kondah/http-context'
 import { IMiddleware } from '@kondah/http-controller'
-import { User } from '@prisma/client'
 import passport from 'passport'
+import { IUser } from '../../../shared/dist'
 import { NotAuthenticatedException } from '../exceptions'
 
 export class PassportAdapter implements IMiddleware {
@@ -32,8 +32,13 @@ export class PassportCallback implements IMiddleware {
   async execute(httpContext: HttpContext) {
     await passport.authenticate(
       this._strategy,
-      (err: any, user: User, info: any) => {
+      async (err: any, user: IUser, info: any) => {
         if (!user) throw new NotAuthenticatedException()
+
+        console.log(this)
+        // const _user = await this._userService.findUser(user.id)
+
+        console.log({ user })
 
         httpContext.req.login(user, (err) => {
           if (err) throw new NotAuthenticatedException()

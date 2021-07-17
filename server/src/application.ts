@@ -113,6 +113,7 @@ export class Application extends Kondah {
         async (_: string, profile: SteamProfile, done: DoneFn) => {
           const user = await userService.createOrUpdate(
             new CreateUserDto({
+              displayName: profile.displayName,
               avatar: profile._json.avatarfull,
               profileUrl: profile._json.profileurl,
               steamId: profile._json.steamid,

@@ -10,7 +10,6 @@ import { BaseHttpResponse } from '../src/lib/base-http-response'
 import {
   IAddCommandToStrategyUnitDto,
   IChooseSpawnpointDto,
-  ICreateStrategyResponseDto,
   ICreateStrategyUnitDto,
   IGetFactionsResponseDto,
   IGetMapsResponseDto,
@@ -18,13 +17,7 @@ import {
   IUpdateStrategyUnitColourDto,
 } from '@cohdex/shared'
 import { CreateStrategyDto } from '../src/dtos'
-import {
-  AfterAll,
-  BeforeAll,
-  BeforeEach,
-  Describe,
-  Test,
-} from '@jest-decorated/core'
+import { AfterAll, BeforeAll, Describe, Test } from '@jest-decorated/core'
 
 const PREFIX = '/api/v' + API_VERSION
 
@@ -69,6 +62,7 @@ export class StrategyController {
         avatar: '/',
         profileUrl: '/',
         steamId: '/',
+        displayName: 'wajow',
       },
     })
 

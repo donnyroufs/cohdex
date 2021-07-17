@@ -4,6 +4,9 @@ import { User } from '.prisma/client'
 
 declare module 'express' {
   interface Request {
-    user?: Pick<User, 'id' | 'avatar' | 'profileUrl'>
+    user?: Pick<
+      User,
+      'id' | 'avatar' | 'profileUrl' | 'displayName' | 'hasConfirmedDisplayName'
+    >
   }
 }

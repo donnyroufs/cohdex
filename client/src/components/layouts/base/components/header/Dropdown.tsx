@@ -5,7 +5,7 @@ import {
   MenuItem,
   MenuList,
 } from '@chakra-ui/react'
-import { FaSignOutAlt, FaPlus, FaHome } from 'react-icons/fa'
+import { FaSignOutAlt, FaPlus, FaHome, FaCog } from 'react-icons/fa'
 import { useHistory } from 'react-router'
 import { logout } from '../../../../../store/slices/authSlice'
 import { useAppDispatch } from '../../../../../store/store'
@@ -22,6 +22,10 @@ export const Dropdown = () => {
 
   function onCreateStrategy() {
     history.push('/strategies/create')
+  }
+
+  function onSettings() {
+    history.push('/settings')
   }
 
   function onLogout() {
@@ -78,6 +82,22 @@ export const Dropdown = () => {
           }}
         >
           Create Strategy
+        </MenuItem>
+        <MenuItem
+          backgroundColor="background.800"
+          icon={<FaCog />}
+          onClick={onSettings}
+          _hover={{
+            background: 'background.700',
+          }}
+          _active={{
+            background: 'none',
+          }}
+          _focus={{
+            background: 'none',
+          }}
+        >
+          Settings
         </MenuItem>
         <MenuItem
           backgroundColor="background.800"

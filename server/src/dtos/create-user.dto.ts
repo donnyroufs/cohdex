@@ -10,6 +10,10 @@ export class CreateUserDto
 {
   @Expose()
   @IsString()
+  displayName: string
+
+  @Expose()
+  @IsString()
   steamId: string
 
   @Expose()

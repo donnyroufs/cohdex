@@ -15,7 +15,11 @@ export interface BaseHttpResponse<T, U = string> {
   error: U
 }
 
-export interface IUser extends Pick<User, 'id' | 'avatar' | 'profileUrl'> {}
+export interface IUser
+  extends Pick<
+    User,
+    'id' | 'avatar' | 'profileUrl' | 'displayName' | 'hasConfirmedDisplayName'
+  > {}
 export interface IMap extends Pick<Map, 'id' | 'name'> {}
 export interface IUnit extends Unit {}
 
@@ -53,6 +57,7 @@ export interface ICreateStrategyResponseDto {
 }
 
 export interface ICreateUserDto {
+  displayName: string
   steamId: string
   avatar: string
   profileUrl: string
@@ -179,4 +184,8 @@ export interface IGetStrategyDto {
 export interface IUpdateStrategyVisibilityDto {
   visibility: Visibility
   strategyId: number
+}
+
+export interface IConfirmUserDisplayNameDto {
+  displayName: string
 }
