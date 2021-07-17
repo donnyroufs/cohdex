@@ -54,7 +54,7 @@ export class Application extends Kondah {
     server.set('trust proxy', 1)
 
     server.addMiddleware(
-      '/static',
+      '/assets',
       express.static(path.join(__dirname, '../public'))
     )
 

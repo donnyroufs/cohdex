@@ -43,7 +43,7 @@ export const Unit: React.FC<IUnitProps> = ({
         w="74px"
         border="2px solid"
         borderColor={activeUnit?.id === id ? 'primary.600' : 'border'}
-        src={process.env.REACT_APP_BASE_URL + '/static' + image}
+        src={process.env.REACT_APP_BASE_URL + '/assets' + image}
         alt="unit portrait"
         opacity={activeUnit?.id === id ? 1 : 0.7}
         transition="all .15s ease-in-out"
