@@ -11,7 +11,7 @@ export const ConfirmDisplay = () => {
   const [error, setError] = useState<boolean>(false)
   const [value, setValue] = useState<string>(auth.user?.displayName || '')
 
-  const { isOpen, onOpen, onClose } = useDisclosure({
+  const { isOpen, onClose } = useDisclosure({
     isOpen: true,
   })
 

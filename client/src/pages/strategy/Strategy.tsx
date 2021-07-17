@@ -43,7 +43,7 @@ export const Strategy = () => {
   const [playing, setPlaying] = useState(false)
   const [loading, setLoading] = React.useState(true)
   const user = useAppSelector((state) => state.auth.user)
-  const [error, setError] = React.useState(null)
+  const [, setError] = React.useState(null)
   const [gameState, setGameState] = useState<GameState>({
     units: [],
     spawnpoint: null,
@@ -106,6 +106,7 @@ export const Strategy = () => {
     return () => {
       clearInterval(id)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [playing, tick])
 
   function calcPreviousLocation(iteration: number, unitId: number) {
@@ -146,6 +147,7 @@ export const Strategy = () => {
         )
       })
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gameState.units, currentSpawn])
 
   const currentReplayData = useMemo(() => {

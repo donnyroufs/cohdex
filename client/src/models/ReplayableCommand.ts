@@ -1,6 +1,4 @@
-import { IUnitWithCommands } from '../../../shared/dist'
 import { Tick } from '../types'
-// export type Tick = number
 
 export class Vec2 {
   constructor(public x: number, public y: number) {}
