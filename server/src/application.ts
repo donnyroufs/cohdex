@@ -76,7 +76,7 @@ export class Application extends Kondah {
         proxy: true,
         cookie: {
           maxAge: milliseconds({ days: 7 }),
-          secure: isProd,
+          secure: false,
           httpOnly: true,
           sameSite: 'none',
         },
