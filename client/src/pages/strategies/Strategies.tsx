@@ -40,8 +40,9 @@ export const Strategies = () => {
               borderColor="primary.700"
             >
               <Text color="vintage.500">
-                We are currently in beta therefore you can only view your own
-                strategies which requires an account
+                We are currently in beta therefore you cannot see posts by
+                others on this page. If you want too you can ask others to share
+                the url of their strategy!
               </Text>
             </Box>
           )}
