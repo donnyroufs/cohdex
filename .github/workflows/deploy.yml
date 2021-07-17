@@ -13,7 +13,11 @@ jobs:
         node-version: [14.x]
 
     steps:
-      - name: Set Environment Variables
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
         env:
           API_KEY_STEAM: ${{ secrets.API_KEY_STEAM }}
           BASE_URI: ${{ secrets.BASE_URI }}
@@ -30,10 +34,5 @@ jobs:
           REACT_APP_DISCORD_URL: ${{ secrets.REACT_APP_DISCORD_URL }}
           REDIRECT_URI: ${{ secrets.REDIRECT_URI }}
           SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
-      - uses: actions/checkout@v2
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
-        with:
-          node-version: ${{ matrix.node-version }}
       - run: yarn
       - run: yarn build
