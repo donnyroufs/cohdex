@@ -5,6 +5,8 @@
     "server": "yarn workspace @cohdex/server dev",
     "shared": "yarn workspace @cohdex/shared watch",
     "test:watch": "yarn workspace @cohdex/server test:watch --silent",
+    "prebuild": "yarn workspace @codhex/shared build",
+    "build": "yarn workspace @cohdex/server build && yarn workspace @cohdex/client build",
     "prepare": "husky install"
   },
   "workspaces": [
