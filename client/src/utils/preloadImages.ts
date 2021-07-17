@@ -5,7 +5,7 @@ export async function preloadImages(imgUrls: string[]) {
 export async function preloadImage(imgUrl: string) {
   return new Promise((res) => {
     const img = new Image()
-    img.src = process.env.REACT_APP_BASE_URL + imgUrl
+    img.src = '/images' + imgUrl
     img.onload = () => res(true)
   })
 }

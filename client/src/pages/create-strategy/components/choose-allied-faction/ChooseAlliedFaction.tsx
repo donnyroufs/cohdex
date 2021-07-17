@@ -32,8 +32,6 @@ export const ChooseAlliedFaction: React.FC<IChooseAlliedFaction> = ({
     [factions]
   )
 
-  console.log({ alliesOptions })
-
   return (
     <>
       <Label value="Allies" mb={6} />

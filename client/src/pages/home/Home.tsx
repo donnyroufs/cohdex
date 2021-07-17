@@ -23,7 +23,7 @@ export const Home = () => {
 
   useEffect(() => {
     const img = new Image()
-    img.src = 'landing-img.png'
+    img.src = 'images/landing-img.png'
     img.onload = () => setLoading(false)
   }, [])
 
@@ -43,7 +43,7 @@ export const Home = () => {
         <Box
           animation={animation}
           alt="coh2 wallpaper"
-          background="radial-gradient(40.26% 51.11% at 50% 50%, rgba(15, 18, 24, 0) 0%, #0a0c10 100%), url(landing-img.png)"
+          background="radial-gradient(40.26% 51.11% at 50% 50%, rgba(15, 18, 24, 0) 0%, #0a0c10 100%), url(images/landing-img.png)"
           opacity="0.45"
           width={{ lg: '960px', xl: '1280px' }}
           height={{ lg: '500px', xl: '720px' }}

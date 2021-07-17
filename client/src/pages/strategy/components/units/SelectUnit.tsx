@@ -46,10 +46,8 @@ export const SelectUnit: React.FC<ISelectUnitProps> = ({
           w="74px"
           bgColor="background.800"
           border="2px solid transparent"
-          // borderColor={activeUnit?.id === id ? 'primary.600' : 'border'}
-          src={process.env.REACT_APP_BASE_URL + '/public' + u.image}
+          src={'/images/' + u.image}
           alt="unit portrait"
-          // opacity={activeUnit?.id === id ? 1 : 0.7}
           transition="all .15s ease-in-out"
           _hover={{
             cursor: 'pointer',

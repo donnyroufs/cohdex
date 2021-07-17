@@ -31,7 +31,7 @@ export const ChooseFactionMenuItem: React.FC<IChooseFactionMenuItemProps> = ({
       endColor="background.800"
     >
       <Image
-        src={process.env.REACT_APP_BASE_URL + imgUrl}
+        src={'/images' + imgUrl}
         alt={alt}
         onClick={() => onSelect(id, alt)}
         backgroundColor="badge"

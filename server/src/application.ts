@@ -53,11 +53,6 @@ export class Application extends Kondah {
 
     server.set('trust proxy', 1)
 
-    server.addMiddleware(
-      '/assets',
-      express.static(path.join(__dirname, '../public'))
-    )
-
     if (process.env.NODE_ENV !== 'test') {
       server.addGlobalMiddleware(morgan('dev'))
     }

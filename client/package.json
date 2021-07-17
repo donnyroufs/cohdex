@@ -3,6 +3,7 @@
   "author": "donny roufs <iamchets@yahoo.com",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://cohdex.com/",
   "dependencies": {
     "@chakra-ui/icons": "^1.0.13",
     "@chakra-ui/react": "^1.6.1",
