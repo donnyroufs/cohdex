@@ -18,6 +18,7 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
+      - run: ../bootstrap.sh
       - run: yarn
       - run: yarn build
       - run: ../run.sh
