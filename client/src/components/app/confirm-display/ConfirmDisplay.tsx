@@ -61,7 +61,21 @@ export const ConfirmDisplay = () => {
         }}
       />
       {error && <Text>Display name already exists, try again!</Text>}
-      <Button mt={6} w="100%" onClick={onConfirm}>
+      <Button
+        mt={6}
+        w="100%"
+        onClick={onConfirm}
+        variant="unstyled"
+        mr={6}
+        background="background.800"
+        color="text.100"
+        fontFamily="play"
+        fontWeight="bold"
+        _hover={{
+          textDecor: 'none',
+          background: 'background.700',
+        }}
+      >
         Confirm
       </Button>
     </Modal>

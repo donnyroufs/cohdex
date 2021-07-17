@@ -1,4 +1,4 @@
-import { PrismaClient, Map, Prisma } from '@prisma/client'
+import { PrismaClient } from '@prisma/client'
 
 export async function seedFactions(prisma: PrismaClient | any) {
   if ((await prisma.faction.count()) <= 0) {
@@ -9,35 +9,35 @@ export async function seedFactions(prisma: PrismaClient | any) {
           name: 'Wehrmacht',
           abbreviation: 'WEHR',
           team: 'AXIS',
-          imgUrl: '/public/wehr.svg',
+          imgUrl: '/api/public/wehr.svg',
         },
         {
           id: 2,
           name: 'Oberkommando West',
           abbreviation: 'OKW',
           team: 'AXIS',
-          imgUrl: '/public/okw.svg',
+          imgUrl: '/api/public/okw.svg',
         },
         {
           id: 3,
           name: 'US Forces',
           abbreviation: 'USF',
           team: 'ALLIES',
-          imgUrl: '/public/usf.svg',
+          imgUrl: '/api/public/usf.svg',
         },
         {
           id: 4,
           name: 'British Forces',
           abbreviation: 'UKF',
           team: 'ALLIES',
-          imgUrl: '/public/ukf.svg',
+          imgUrl: '/api/public/ukf.svg',
         },
         {
           id: 5,
           name: 'Soviet Union',
           abbreviation: 'SOV',
           team: 'ALLIES',
-          imgUrl: '/public/soviets.svg',
+          imgUrl: '/api/public/soviets.svg',
         },
       ],
     })

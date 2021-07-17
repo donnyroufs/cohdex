@@ -52,7 +52,7 @@ export class Application extends Kondah {
     const store = new RedisStore({ client: redis.createClient() })
 
     server.addMiddleware(
-      '/public',
+      '/api/public',
       express.static(path.join(__dirname, '../public'))
     )
 
