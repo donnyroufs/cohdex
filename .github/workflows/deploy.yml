@@ -13,6 +13,23 @@ jobs:
         node-version: [14.x]
 
     steps:
+      env: 
+        API_KEY_STEAM: ${{ secrets.API_KEY_STEAM }}
+        BASE_URI: ${{ secrets.BASE_URI }}
+        CALLBACK_URI: ${{ secrets.CALLBACK_URI }}
+        CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
+        CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
+        CLOUDINARY_CLOUD_NAME: ${{ secrets.CLOUDINARY_CLOUD_NAME }}
+        DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        DOMAIN: ${{ secrets.DOMAIN }}
+        NODE_ENV: ${{ secrets.NODE_ENV }}
+        ORIGIN: ${{ secrets.ORIGIN }}
+        PORT: ${{ secrets.PORT }}
+        REACT_APP_BASE_URL: ${{ secrets.REACT_APP_BASE_URL }}
+        REACT_APP_DISCORD_URL: ${{ secrets.REACT_APP_DISCORD_URL }}
+        REDIRECT_URI: ${{ secrets.REDIRECT_URI }}
+        SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
+        
       - uses: actions/checkout@v2
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v2
