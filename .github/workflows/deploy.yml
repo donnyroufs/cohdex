@@ -29,7 +29,6 @@ jobs:
         REACT_APP_DISCORD_URL: ${{ secrets.REACT_APP_DISCORD_URL }}
         REDIRECT_URI: ${{ secrets.REDIRECT_URI }}
         SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
-        
       - uses: actions/checkout@v2
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v2
