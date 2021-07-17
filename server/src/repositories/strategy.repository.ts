@@ -325,7 +325,7 @@ export class StrategyRepository {
   async updateStrategyVisibility(data: UpdateStrategyVisibilityDto) {
     await this.strategy.update({
       where: {
-        id: data.userId,
+        id: data.strategyId,
       },
       data: {
         visibility: data.visibility,

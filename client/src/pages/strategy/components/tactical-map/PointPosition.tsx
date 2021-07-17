@@ -12,8 +12,6 @@ export const PointPosition: React.FC<IPointPositionProps> = ({
   onClickPointPosition,
   scale,
 }) => {
-  console.log(process.env)
-
   const imageUrl = '/images/' + point.fileName + '.png'
 
   const x = 350 - point.x * scale - 16

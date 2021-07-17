@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 import React, { useMemo, useEffect, useState } from 'react'
 import { BaseLayout } from '../../components/layouts'
 import {
@@ -38,6 +38,7 @@ export interface IStrategyParams {
 }
 
 export const Strategy = () => {
+  const history = useHistory()
   const { strategyService } = useProviders()
   const { width } = useWindowSize()
   const [playing, setPlaying] = useState(false)
@@ -168,6 +169,14 @@ export const Strategy = () => {
     return user?.id === gameState.strategyData?.userId
   }, [user, gameState])
 
+  useEffect(() => {
+    if (!gameState || !gameState.strategyData) return
+
+    if (!isOwner && gameState.strategyData.visibility === Visibility.PRIVATE) {
+      history.push('/strategies')
+    }
+  }, [loading, gameState, isOwner, history])
+
   if (loading) {
     return <Spinner withMessage />
   }
@@ -256,10 +265,11 @@ export const Strategy = () => {
     setPlaying((curr) => !curr)
   }
 
-  function handleChangeVisibility(visibility: Visibility) {
+  async function handleChangeVisibility(visibility: Visibility) {
     if (!isOwner) return
 
-    strategyService.updateStrategyVisibility({
+    console.log(id)
+    await strategyService.updateStrategyVisibility({
       visibility,
       strategyId: +id,
     })
