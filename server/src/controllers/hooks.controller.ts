@@ -5,6 +5,7 @@ import { Controller, Post } from '@kondah/http-controller'
 export class HooksController {
   @Post('/assets')
   syncAssets(ctx: HttpContext) {
-    ctx.logger.info(ctx.req.body, 'CLOUDINARY WEB HOOK')
+    // TODO: Implement: Hook is working
+    // ctx.logger.info(JSON.stringify(ctx.req.body), 'CLOUDINARY WEB HOOK')
   }
 }
