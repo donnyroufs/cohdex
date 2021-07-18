@@ -110,6 +110,9 @@ export interface IStrategy {
   Map: IStrategyMap
   StrategyUnits: IStrategyUnit[]
   units: IUnit[]
+  User: {
+    displayName: string
+  }
 }
 
 export interface IStrategyUnit {

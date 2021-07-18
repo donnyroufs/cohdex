@@ -318,25 +318,45 @@ export const Strategy = () => {
             <Box>
               <Flex justifyContent="space-between">
                 <Title value={gameState.strategyData!.title} mt={0} mb={6} />
-                {gameState.strategyData?.visibility === Visibility.PRIVATE && (
-                  <IconButton
-                    aria-label="set visibility to public"
-                    background="background.800"
-                    color="vintage.600"
-                    variant="unstyled"
-                    icon={<LockIcon mb={1} />}
-                    onClick={() => handleChangeVisibility(Visibility.PUBLIC)}
-                  />
-                )}
-                {gameState.strategyData?.visibility === Visibility.PUBLIC && (
-                  <IconButton
-                    aria-label="set visibility to private"
-                    variant="unstyled"
-                    color="vintage.600"
-                    icon={<UnlockIcon mb={1} />}
-                    background="background.800"
-                    onClick={() => handleChangeVisibility(Visibility.PRIVATE)}
-                  />
+                {gameState.strategyData?.visibility === Visibility.PRIVATE &&
+                  isOwner && (
+                    <Box display="flex" alignItems="center" mb={4}>
+                      <Text mr={4}>Currently not sharing</Text>
+                      <IconButton
+                        aria-label="set visibility to public"
+                        background="background.800"
+                        color="vintage.600"
+                        variant="unstyled"
+                        icon={<LockIcon mb={1} />}
+                        onClick={() =>
+                          handleChangeVisibility(Visibility.PUBLIC)
+                        }
+                      />
+                    </Box>
+                  )}
+                {gameState.strategyData?.visibility === Visibility.PUBLIC &&
+                  isOwner && (
+                    <Box display="flex" alignItems="center" mb={4}>
+                      <Text mr={4}>Shared with others</Text>
+                      <IconButton
+                        aria-label="set visibility to private"
+                        variant="unstyled"
+                        color="vintage.600"
+                        icon={<UnlockIcon mb={1} />}
+                        background="background.800"
+                        onClick={() =>
+                          handleChangeVisibility(Visibility.PRIVATE)
+                        }
+                      />
+                    </Box>
+                  )}
+                {!isOwner && (
+                  <Text>
+                    strategy by{' '}
+                    <Box as="b" color="primary.600">
+                      {gameState.strategyData?.User.displayName}
+                    </Box>
+                  </Text>
                 )}
               </Flex>
               <TacticalMap

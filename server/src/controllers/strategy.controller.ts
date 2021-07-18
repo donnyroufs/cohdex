@@ -6,7 +6,6 @@ import {
   Middleware,
   Patch,
   Post,
-  Put,
 } from '@kondah/http-controller'
 import { StrategyService } from '../services/strategy.service'
 import {

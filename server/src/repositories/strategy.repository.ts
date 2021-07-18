@@ -88,6 +88,11 @@ export class StrategyRepository {
             colour: true,
           },
         },
+        User: {
+          select: {
+            displayName: true,
+          },
+        },
       },
     })
 
