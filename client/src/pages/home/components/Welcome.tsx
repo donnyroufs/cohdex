@@ -1,21 +1,11 @@
-import {
-  Box,
-  Heading,
-  Text,
-  keyframes,
-  usePrefersReducedMotion,
-} from '@chakra-ui/react'
+import { Box, Heading, Text, keyframes } from '@chakra-ui/react'
 
 const slide = keyframes`
   from { transform: translateX(-30%); opacity: 0; }
   to { transform: translateX(0%); opacity: 1; }
 `
 export const Welcome = () => {
-  const prefersReducedMotion = usePrefersReducedMotion()
-
-  const animation = prefersReducedMotion
-    ? undefined
-    : `${slide} forwards 0.25s linear 0.75s`
+  const animation = `${slide} forwards 0.25s linear 0.75s`
 
   return (
     <Box

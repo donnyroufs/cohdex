@@ -1,10 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import {
-  Box,
-  Container,
-  usePrefersReducedMotion,
-  keyframes,
-} from '@chakra-ui/react'
+import { useEffect, useState } from 'react'
+import { Box, Container, keyframes } from '@chakra-ui/react'
 import { Menu, Welcome } from './components'
 import { Spinner } from '../../components'
 
@@ -16,10 +11,7 @@ const spin = keyframes`
 export const Home = () => {
   const [loading, setLoading] = useState(true)
 
-  const prefersReducedMotion = usePrefersReducedMotion()
-  const animation = prefersReducedMotion
-    ? undefined
-    : `${spin}  forwards 1s linear`
+  const animation = `${spin}  forwards 1s linear`
 
   useEffect(() => {
     const img = new Image()

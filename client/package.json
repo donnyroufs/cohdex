@@ -6,7 +6,7 @@
   "homepage": "https://cohdex.com/",
   "dependencies": {
     "@chakra-ui/icons": "^1.0.13",
-    "@chakra-ui/react": "^1.6.1",
+    "@chakra-ui/react": "^1.6.5",
     "@cohdex/shared": "1.0.0",
     "@emotion/react": "^11",
     "@emotion/styled": "^11",

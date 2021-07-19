@@ -1,5 +1,5 @@
 import { Link as ReactLink } from 'react-router-dom'
-import { Box, Link, keyframes, usePrefersReducedMotion } from '@chakra-ui/react'
+import { Box, Link, keyframes } from '@chakra-ui/react'
 import { useAppSelector } from '../../../store/store'
 
 const slide = keyframes`
@@ -9,14 +9,9 @@ const slide = keyframes`
 
 export const Menu = () => {
   const user = useAppSelector((state) => state.auth.user)
-  const prefersReducedMotion = usePrefersReducedMotion()
 
-  const animation = prefersReducedMotion
-    ? undefined
-    : `${slide} forwards 0.25s linear 0.75s`
-  const animation1 = prefersReducedMotion
-    ? undefined
-    : `${slide} forwards 0.25s linear 0.85s`
+  const animation = `${slide} forwards 0.25s linear 0.75s`
+  const animation1 = `${slide} forwards 0.25s linear 0.85s`
 
   return (
     <Box
