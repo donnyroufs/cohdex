@@ -289,6 +289,7 @@ export const Strategy = () => {
     return (
       <Box
         bgColor="table"
+        mx={4}
         p={6}
         border="1px solid"
         borderColor="primary.700"

@@ -15,6 +15,7 @@ import {
   IRemoveUnitFromStrategyDto,
   IGetStrategyDto,
   IUpdateStrategyVisibilityDto,
+  IGetAllRecentPublicStrategies,
 } from '@cohdex/shared'
 import { BaseApi } from '../lib/BaseApi'
 
@@ -95,5 +96,11 @@ export const strategiesApi = new (class StrategiesApi extends BaseApi {
       this.endpoint(`/${data.strategyId}/visibility`),
       data
     )
+  }
+
+  async getRecentPublicStrategies(): Promise<IGetAllRecentPublicStrategies> {
+    return this.axios
+      .get(this.endpoint('/public/recent'))
+      .then(({ data }) => data.data)
   }
 })()

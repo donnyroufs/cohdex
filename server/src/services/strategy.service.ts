@@ -21,7 +21,6 @@ import {
   UnitDoesNotBelongToFactionException,
   UnknownStrategyException,
   IsNotOwnerException,
-  StrategyIsNotPublicException,
 } from '../exceptions'
 import { StrategyRepository } from '../repositories/strategy.repository'
 
@@ -145,5 +144,9 @@ export class StrategyService {
     }
 
     return this._strategyRepo.updateStrategyVisibility(data)
+  }
+
+  async getRecentPublicStrategies() {
+    return this._strategyRepo.getRecentPublicStrategies()
   }
 }

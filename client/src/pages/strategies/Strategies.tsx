@@ -4,12 +4,15 @@ import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { Title } from '../../components'
 import { BaseLayout } from '../../components/layouts'
+import useWindowSize from '../../hooks/useWindowSize'
 import { fetchUserSrategies } from '../../store/slices/strategiesSlice'
 import { useAppDispatch, useAppSelector } from '../../store/store'
 import { Table } from './components'
+import { RecentStrategies } from './components/RecentStrategies'
 
 export const Strategies = () => {
   const dispatch = useAppDispatch()
+  const { width } = useWindowSize()
   const strategies = useAppSelector((state) => state.strategies.strategies)
   const user = useAppSelector((state) => state.auth.user)
   const status = useAppSelector((state) => state.strategies.status)
@@ -17,6 +20,23 @@ export const Strategies = () => {
   useEffect(() => {
     dispatch(fetchUserSrategies())
   }, [dispatch])
+
+  if (width <= 1140) {
+    return (
+      <Box
+        bgColor="table"
+        p={6}
+        mx={4}
+        border="1px solid"
+        borderColor="primary.700"
+        mt={20}
+      >
+        <Text color="vintage.500">
+          Sorry but we do not support this resolution.
+        </Text>
+      </Box>
+    )
+  }
 
   return (
     <BaseLayout.Container>
@@ -99,6 +119,9 @@ export const Strategies = () => {
             </Skeleton>
           )}
         </Box>
+        <Flex>
+          <RecentStrategies />
+        </Flex>
       </Flex>
     </BaseLayout.Container>
   )

@@ -192,3 +192,16 @@ export interface IUpdateStrategyVisibilityDto {
 export interface IConfirmUserDisplayNameDto {
   displayName: string
 }
+
+export interface IRecentStrategy extends IStrategy {
+  slug: string
+  Faction: {
+    id: number
+    name: string
+    abbreviation: string
+  }
+}
+
+export interface IGetAllRecentPublicStrategies {
+  strategies: IRecentStrategy[]
+}

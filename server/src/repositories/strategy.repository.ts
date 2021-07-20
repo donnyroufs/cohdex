@@ -4,7 +4,7 @@ import {
   IRemoveUnitFromStrategyDto,
 } from '@cohdex/shared'
 import { Injectable } from '@kondah/core'
-import { Unit } from '@prisma/client'
+import { Unit, Visibility } from '@prisma/client'
 import slugify from 'slugify'
 import {
   AddCommandToStrategyUnitDto,
@@ -346,6 +346,55 @@ export class StrategyRepository {
         id,
         userId,
       },
+    })
+  }
+
+  async getRecentPublicStrategies() {
+    return this.strategy.findMany({
+      where: {
+        visibility: Visibility.PUBLIC,
+      },
+      select: {
+        id: true,
+        slug: true,
+        title: true,
+        spawnPoint: true,
+        Map: {
+          select: {
+            name: true,
+          },
+        },
+        Faction: {
+          select: {
+            id: true,
+            name: true,
+            abbreviation: true,
+          },
+        },
+        AxisFaction: {
+          select: {
+            id: true,
+            name: true,
+            abbreviation: true,
+          },
+        },
+        AlliedFaction: {
+          select: {
+            id: true,
+            name: true,
+            abbreviation: true,
+          },
+        },
+        User: {
+          select: {
+            displayName: true,
+          },
+        },
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+      take: 10,
     })
   }
 }

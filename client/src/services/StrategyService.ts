@@ -17,7 +17,6 @@ export class StrategyService extends BaseService {
     return this.api.getStrategy(data)
   }
 
-  // TODO: Alternate colour
   async addUnit(id: number, unit: IUnit, colour: string) {
     const res = await this.api.addUnitToStrategy({
       strategyId: id,
@@ -53,5 +52,9 @@ export class StrategyService extends BaseService {
 
   async updateStrategyVisibility(data: IUpdateStrategyVisibilityDto) {
     return this.api.updateStrategyVisibility(data)
+  }
+
+  async getRecentPublicStrategies() {
+    return this.api.getRecentPublicStrategies()
   }
 }

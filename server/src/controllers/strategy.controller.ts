@@ -29,6 +29,7 @@ import {
   IGetStrategyResponseDto,
   ICreateStrategyUnitResponseDto,
   IAddCommandToStrategyUnitResponseDto,
+  IGetAllRecentPublicStrategies,
 } from '@cohdex/shared'
 import { UpdateStrategyUnitColourDto } from '../dtos/update-strategy-unit-colour.dto'
 import { RemoveUnitFromStrategyDto } from '../dtos/remove-unit-from-strategy.dto'
@@ -48,7 +49,19 @@ export class StrategyController {
     )
   }
 
-  // api/strategy/iamchets/my-slug
+  @Get('/public/recent')
+  async getRecentPublicStrategies(ctx: HttpContext) {
+    const strategies = await this._strategyService.getRecentPublicStrategies()
+
+    return ctx.res.json(
+      new BaseHttpResponse<IGetAllRecentPublicStrategies>({
+        // TODO: Implement mapping
+        // @ts-ignore
+        strategies,
+      })
+    )
+  }
+
   @Get('/:id/:slug')
   @Middleware([ValidateBody.with(GetOneStrategyDto, true)])
   async show({ req, res, data }: HttpContext<GetOneStrategyDto>) {
@@ -56,6 +69,7 @@ export class StrategyController {
 
     return res.json(
       new BaseHttpResponse<IGetStrategyResponseDto>({
+        // TODO: Implement mapping
         // @ts-ignore
         strategy: strategy,
       })
