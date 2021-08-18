@@ -4,7 +4,6 @@ import cors from 'cors'
 import morgan from 'morgan'
 import cookieParser from 'cookie-parser'
 import session from 'express-session'
-import path from 'path'
 import redis from 'redis'
 import connectRedis from 'connect-redis'
 import { milliseconds } from 'date-fns'
@@ -71,7 +70,7 @@ export class Application extends Kondah {
         proxy: true,
         cookie: {
           maxAge: milliseconds({ days: 7 }),
-          secure: false, // temporary
+          secure: true,
           httpOnly: true,
           sameSite: 'strict',
         },
